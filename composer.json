@@ -1,0 +1,54 @@
+{
+    "name": "sylius/twig-hooks",
+    "description": "Composable Twig layouts",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sylius project",
+            "homepage": "https://sylius.com"
+        },
+        {
+            "name": "Community contributions",
+            "homepage": "https://github.com/Sylius/Stack/contributors"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "laminas/laminas-stdlib": "^3.18",
+        "symfony/config": "^5.4 || ^6.0",
+        "symfony/dependency-injection": "^5.4 || ^6.0",
+        "symfony/http-kernel": "^5.4 || ^6.0",
+        "symfony/stopwatch": "^5.4 || ^6.0",
+        "symfony/ux-twig-component": "^2.12",
+        "twig/twig": "^2.15 || ^3.0"
+    },
+    "require-dev": {
+        "symfony/console": "^5.4 || ^6.0",
+        "symfony/dom-crawler": "^5.4 || ^6.0",
+        "symfony/dotenv": "^5.4 || ^6.0",
+        "symfony/framework-bundle": "^5.4 || ^6.0",
+        "symfony/runtime": "^5.4 || ^6.0",
+        "symfony/translation": "^5.4 || ^6.0",
+        "symfony/twig-bundle": "^5.4 || ^6.0",
+        "symfony/web-profiler-bundle": "^5.4 || ^6.0",
+        "symfony/yaml": "^5.4 || ^6.0 ",
+        "matthiasnoback/symfony-config-test": "^4.3",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.3.1",
+        "phpunit/phpunit": "^9.6"
+    },
+    "suggest": {
+        "symfony/ux-twig-component": "Symfony's package providing Twig components."
+    },
+    "autoload": {
+        "psr-4": {
+            "Sylius\\TwigHooks\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TestApplication\\Sylius\\TwigHooks\\": "tests/Functional/.application/src/",
+            "Tests\\Sylius\\TwigHooks\\": "tests/"
+        }
+    }
+}
