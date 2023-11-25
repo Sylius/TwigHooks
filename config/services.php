@@ -6,6 +6,7 @@ use Sylius\TwigHooks\Provider\DefaultConfigurationProvider;
 use Sylius\TwigHooks\Provider\DefaultDataProvider;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
 use Sylius\TwigHooks\Twig\HooksExtension;
+use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
 
 return static function (ContainerConfigurator $configurator): void {
     $configurator->import(__DIR__ . '/services/*.php');
@@ -25,7 +26,21 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(HooksExtension::class)
         ->args([
             service('twig_hooks.renderer.hook'),
+            service('twig_hooks.registry.hookables'),
+            service('twig_hooks.renderer.hookable'),
+            service('twig_hooks.profiler.profile')->nullOnInvalid(),
+            service('debug.stopwatch')->nullOnInvalid(),
         ])
         ->tag('twig.extension')
+    ;
+
+    $services->set(HooksRuntime::class)
+        ->args([
+            service('twig_hooks.registry.hookables'),
+            service('twig_hooks.renderer.hookable'),
+            service('twig_hooks.profiler.profile')->nullOnInvalid(),
+            param('kernel.debug'),
+        ])
+        ->tag('twig.runtime')
     ;
 };

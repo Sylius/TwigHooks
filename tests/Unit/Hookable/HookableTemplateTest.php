@@ -104,6 +104,13 @@ final class HookableTemplateTest extends TestCase
         $this->assertTrue($overwrittenTestSubject->isEnabled());
     }
 
+    public function testItReturnsItsTypeName(): void
+    {
+        $testSubject = $this->getTestSubject();
+
+        $this->assertSame('template', $testSubject->getTypeName());
+    }
+
     private function getTestSubject(): HookableTemplate
     {
         return HookableTemplateMotherObject::some();

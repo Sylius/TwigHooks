@@ -6,5 +6,9 @@ namespace Sylius\TwigHooks\Hook\Renderer;
 
 interface HookRendererInterface
 {
-    public function render(string|array $hooksNames, array $data = []): string;
+    /**
+     * @param array<string> $hooksNames
+     * @param array<string, mixed> $data
+     */
+    public function render(array $hooksNames, array $data = []): string;
 }

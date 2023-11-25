@@ -1,0 +1,90 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+
+    <style>
+        #twig-dump pre {
+            font-size: var(--font-size-monospace);
+            line-height: 1.7;
+            background-color: var(--page-background);
+            border: var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 0 0 1px rgba(128, 128, 128, .2);
+        }
+        #twig-dump span {
+            border-radius: 2px;
+            padding: 1px 2px;
+        }
+        #twig-dump .status-error { background: transparent; color: var(--color-error); }
+        #twig-dump .status-warning { background: rgba(240, 181, 24, 0.3); }
+        #twig-dump .status-success { background: rgba(100, 189, 99, 0.2); }
+        #twig-dump .status-info { background: var(--info-background); }
+        .theme-dark #twig-dump .status-warning { color: var(--yellow-200); }
+        .theme-dark #twig-dump .status-success { color: var(--green-200); }
+    </style>
+{% endblock %}
+
+{% block toolbar %}
+    <div class="sf-toolbar-block">
+        <a href="{{ path('_profiler', { 'token': token, 'panel': name }) }}">
+            <div class="sf-toolbar-icon">
+                {{ include('@TwigHooks/data_collector/icon.svg') }}
+                <span class="sf-toolbar-value">{{ collector.totalDuration }}</span>
+                <span class="sf-toolbar-label">ms</span>
+            </div>
+        </a>
+
+        <div class="sf-toolbar-info">
+            <div class="sf-toolbar-info-piece">
+                <b>{{ 'sylius_twig_hooks.profiler.metrics.render_time'|trans }}</b>
+                <span>{{ collector.totalDuration }} ms</span>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>{{ 'sylius_twig_hooks.profiler.metrics.rendered_hooks'|trans }}</b>
+                <span class="sf-toolbar-status">{{ collector.numberOfHooks }}</span>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>{{ 'sylius_twig_hooks.profiler.metrics.rendered_hookables'|trans }}</b>
+                <span class="sf-toolbar-status">{{ collector.numberOfHookables }}</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon">
+            {{ include('@TwigHooks/data_collector/icon.svg') }}
+        </span>
+        <strong>{{ 'sylius_twig_hooks.profiler.menu.title'|trans }}</strong>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    <h2>{{ 'sylius_twig_hooks.profiler.metrics.title'|trans }}</h2>
+
+    <div class="metrics">
+        <div class="metric">
+            <span class="value">{{ collector.totalDuration }} <span class="unit">ms</span></span>
+            <span class="label">{{ 'sylius_twig_hooks.profiler.metrics.total_execution_time'|trans }}</span>
+        </div>
+
+        <div class="metric">
+            <span class="value">{{ collector.numberOfHooks }}</span>
+            <span class="label">{{ 'sylius_twig_hooks.profiler.metrics.rendered_hooks'|trans }}</span>
+        </div>
+
+        <div class="metric">
+            <span class="value">{{ collector.numberOfHookables }}</span>
+            <span class="label">{{ 'sylius_twig_hooks.profiler.metrics.rendered_hookables'|trans }}</span>
+        </div>
+    </div>
+
+    <h2>{{ 'sylius_twig_hooks.profiler.call_graph.title'|trans }}</h2>
+
+    <div id="twig-dump">
+        {{ collector.callGraph }}
+    </div>
+{% endblock %}

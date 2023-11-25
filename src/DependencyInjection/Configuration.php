@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\DependencyInjection;
 
+use Sylius\TwigHooks\Hookable\HookableComponent;
+use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -28,7 +30,10 @@ final class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('supported_hookable_types')
                     ->useAttributeAsKey('type')
-                    ->defaultValue([])
+                    ->defaultValue([
+                        'template' => HookableTemplate::class,
+                        'component' => HookableComponent::class,
+                    ])
                     ->scalarPrototype()->end()
                 ->end()
             ->end()

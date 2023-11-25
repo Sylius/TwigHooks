@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Twig\Node;
 
-use Sylius\TwigHooks\Twig\HooksExtension;
+use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
 use Twig\Compiler;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Node;
@@ -33,16 +33,14 @@ final class HookNode extends Node
         $compiler->addDebugInfo($this);
 
         $compiler->raw(sprintf(
-            'echo $this->env->getExtension(\'%s\')->render(',
-            HooksExtension::class,
-        ));
+            '$hooksRuntime = $this->env->getRuntime(\'%s\');',
+            HooksRuntime::class,
+        ))->raw("\n");
 
+        $compiler->raw('echo $hooksRuntime->renderHook(');
         $compiler->subcompile($this->getNode('hook_names'));
-
         $compiler->raw(', ');
-
         $compiler->subcompile($this->getNode('parameters'));
-
-        $compiler->raw(');');
+        $compiler->raw(");\n");
     }
 }

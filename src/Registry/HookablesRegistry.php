@@ -67,9 +67,7 @@ class HookablesRegistry
             $hookables = $this->hookables[$hookName] ?? [];
 
             foreach ($hookables as $hookableName => $hookable) {
-                ray('hookableName', $hookableName);
                 if (array_key_exists($hookableName, $mergedHookables)) {
-                    ray('overwrite', $hookableName);
                     $hookable = $mergedHookables[$hookableName]->overwriteWith($hookable);
                 }
 

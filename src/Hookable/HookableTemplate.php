@@ -22,4 +22,9 @@ class HookableTemplate extends AbstractHookable
             $hookable->enabled ?? $this->isEnabled(),
         );
     }
+
+    public function getTypeName(): string
+    {
+        return 'template';
+    }
 }

@@ -24,7 +24,7 @@ final class HookDebugCommentRendererTest extends TestCase
         $this->innerRenderer
             ->expects($this->once())
             ->method('render')
-            ->with('some-hook', [])
+            ->with(['some-hook'], [])
             ->willReturn('some-rendered-hook')
         ;
 
@@ -34,7 +34,7 @@ final class HookDebugCommentRendererTest extends TestCase
         <!--  END HOOK  | name: "some-hook" -->
         HOOK;
 
-        $this->assertSame($expectedRenderedHookable, $this->getTestSubject()->render('some-hook', []));
+        $this->assertSame($expectedRenderedHookable, $this->getTestSubject()->render(['some-hook'], []));
     }
 
     public function testIdAddsDebugCommentForMultipleHooksNames(): void

@@ -9,14 +9,19 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class UnregisterDebugServicesPass implements CompilerPassInterface
 {
+    public const DEBUG_TAG = 'sylius_twig_hooks.debug';
+
     public function process(ContainerBuilder $container): void
     {
-        $debug = $container->getParameter('kernel.debug');
+        $debug = !$container->hasParameter('kernel.debug') || $container->getParameter('kernel.debug');
         if (true === $debug) {
             return;
         }
 
-        $container->removeDefinition('twig_hooks.renderer.hook.debug');
-        $container->removeDefinition('twig_hooks.renderer.hookable.debug');
+        $debugServices = $container->findTaggedServiceIds(self::DEBUG_TAG);
+
+        foreach ($debugServices as $id => $tags) {
+            $container->removeDefinition($id);
+        }
     }
 }

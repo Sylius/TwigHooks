@@ -12,7 +12,7 @@ final class HookDebugCommentRenderer implements HookRendererInterface
     {
     }
 
-    public function render(array|string $hooksNames, array $data = []): string
+    public function render(array $hooksNames, array $data = []): string
     {
         $renderedParts = [];
         $renderedParts[] = $this->getOpeningDebugComment($hooksNames);

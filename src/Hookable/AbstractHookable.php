@@ -33,6 +33,11 @@ abstract class AbstractHookable
         return $this->name;
     }
 
+    public function getId(): string
+    {
+        return sprintf('%s#%s', $this->hookName, $this->name);
+    }
+
     public function getTarget(): string
     {
         return $this->target;
@@ -61,4 +66,6 @@ abstract class AbstractHookable
     }
 
     abstract public function overwriteWith(self $hookable): self;
+
+    abstract public function getTypeName(): string;
 }

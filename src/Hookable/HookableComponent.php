@@ -22,4 +22,9 @@ final class HookableComponent extends AbstractHookable
             $hookable->enabled ?? $this->isEnabled(),
         );
     }
+
+    public function getTypeName(): string
+    {
+        return 'component';
+    }
 }

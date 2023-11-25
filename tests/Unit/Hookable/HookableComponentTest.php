@@ -104,6 +104,13 @@ final class HookableComponentTest extends TestCase
         $this->assertTrue($overwrittenTestSubject->isEnabled());
     }
 
+    public function testItReturnsItsTypeName(): void
+    {
+        $testSubject = $this->getTestSubject();
+
+        $this->assertSame('component', $testSubject->getTypeName());
+    }
+
     private function getTestSubject(): HookableComponent
     {
         return HookableComponentMotherObject::some();
