@@ -13,6 +13,10 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class HooksRuntime implements RuntimeExtensionInterface
 {
+    public const HOOKABLE_CONFIGURATION_PARAMETER = 'hookable_configuration';
+
+    public const HOOKABLE_DATA_PARAMETER = 'hookable_data';
+
     private ?Stopwatch $stopwatch = null;
 
     public function __construct (
@@ -27,21 +31,21 @@ final class HooksRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param array{hook_data?: array<string, string>} $context
+     * @param array{hookable_data?: array<string, string>} $context
      * @return array<string, string>
      */
-    public function getHookData(array $context): array
+    public function getHookableData(array $context): array
     {
-        return $context['hook_data'] ?? [];
+        return $context[self::HOOKABLE_DATA_PARAMETER] ?? [];
     }
 
     /**
-     * @param array{hook_configuration?: array<string, string>} $context
+     * @param array{hookable_configuration?: array<string, string>} $context
      * @return array<string, string>
      */
-    public function getHookConfiguration(array $context): array
+    public function getHookableConfiguration(array $context): array
     {
-        return $context['hook_configuration'] ?? [];
+        return $context[self::HOOKABLE_CONFIGURATION_PARAMETER] ?? [];
     }
 
     /**
