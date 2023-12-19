@@ -14,6 +14,7 @@ final class UnregisterDebugServicesPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $debug = !$container->hasParameter('kernel.debug') || $container->getParameter('kernel.debug');
+
         if (true === $debug) {
             return;
         }

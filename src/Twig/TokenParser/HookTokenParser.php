@@ -17,7 +17,7 @@ final class HookTokenParser extends AbstractTokenParser
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
-        $hookNames = $this->parser->getExpressionParser()->parseMultitargetExpression();
+        $hookNames = $this->parser->getExpressionParser()->parseExpression();
 
         $variables = null;
         if ($stream->nextIf(Token::NAME_TYPE, 'with')) {

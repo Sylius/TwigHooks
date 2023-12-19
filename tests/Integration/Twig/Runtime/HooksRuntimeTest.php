@@ -7,6 +7,9 @@ namespace Tests\Sylius\TwigHooks\Integration\Twig\Runtime;
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+/**
+ * @group kernel-required
+ */
 final class HooksRuntimeTest extends KernelTestCase
 {
     /**

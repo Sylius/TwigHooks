@@ -36,10 +36,7 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(HooksRuntime::class)
         ->args([
-            service('twig_hooks.registry.hookables'),
-            service('twig_hooks.renderer.hookable'),
-            service('twig_hooks.profiler.profile')->nullOnInvalid(),
-            param('kernel.debug'),
+            service('twig_hooks.renderer.hook'),
         ])
         ->tag('twig.runtime')
     ;
