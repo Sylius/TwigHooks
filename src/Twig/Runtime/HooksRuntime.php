@@ -51,7 +51,9 @@ final class HooksRuntime implements RuntimeExtensionInterface
         foreach ($parts as $part) {
             $resultPart = trim($part, '_');
             $resultPart = str_replace(['@', '.html.twig'], '', $resultPart);
-            $resultPart = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $resultPart));
+            /** @var string $resultPart */
+            $resultPart = preg_replace('/(?<!^)[A-Z]/', '_$0', $resultPart);
+            $resultPart = strtolower($resultPart);
             $resultParts[] = $resultPart;
         }
 
@@ -59,6 +61,8 @@ final class HooksRuntime implements RuntimeExtensionInterface
     }
 
     /**
+     * @param array<string, mixed> $context
+     *
      * @return array<string, string>
      */
     public function getHookableData(array $context): array
@@ -67,6 +71,8 @@ final class HooksRuntime implements RuntimeExtensionInterface
     }
 
     /**
+     * @param array<string, mixed> $context
+     *
      * @return array<string, string>
      */
     public function getHookableConfiguration(array $context): array
