@@ -30,8 +30,35 @@ final class HooksRuntime implements RuntimeExtensionInterface
         }
     }
 
+    public function createHookName(string $base, string ...$parts): string
+    {
+        if ([] === $parts) {
+            return $this->formatBaseString($base);
+        }
+
+        return sprintf(
+            '%s.%s',
+            $this->formatBaseString($base),
+            implode('.', $parts),
+        );
+    }
+
+    private function formatBaseString(string $base): string
+    {
+        $parts = explode('/', $base);
+        $resultParts = [];
+
+        foreach ($parts as $part) {
+            $resultPart = trim($part, '_');
+            $resultPart = str_replace(['@', '.html.twig'], '', $resultPart);
+            $resultPart = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $resultPart));
+            $resultParts[] = $resultPart;
+        }
+
+        return implode('.', $resultParts);
+    }
+
     /**
-     * @param array{hookable_data?: array<string, string>} $context
      * @return array<string, string>
      */
     public function getHookableData(array $context): array
@@ -40,7 +67,6 @@ final class HooksRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param array{hookable_configuration?: array<string, string>} $context
      * @return array<string, string>
      */
     public function getHookableConfiguration(array $context): array
