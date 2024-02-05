@@ -49,6 +49,8 @@ final class ConfigurationTest extends TestCase
                             'configuration' => [],
                             'priority' => 0,
                             'enabled' => true,
+                            'component' => null,
+                            'template' => null,
                         ],
                     ],
                 ],
@@ -75,6 +77,93 @@ final class ConfigurationTest extends TestCase
                 ],
             ],
             'supported_hookable_types'
+        );
+    }
+
+    public function testItAllowsToUseComponentShortcut(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                [
+                    'hooks' => [
+                        'some_hook' => [
+                            'some_hookable' => [
+                                'component' => 'MyAwesomeComponent',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'hooks' => [
+                    'some_hook' => [
+                        'some_hookable' => [
+                            'type' => 'component',
+                            'target' => 'MyAwesomeComponent',
+                            'data' => [],
+                            'configuration' => [],
+                            'priority' => 0,
+                            'enabled' => true,
+                            'component' => 'MyAwesomeComponent',
+                            'template' => null,
+                        ],
+                    ],
+                ],
+            ],
+            'hooks.*'
+        );
+    }
+
+    public function testItAllowsToUseTemplateShortcut(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                [
+                    'hooks' => [
+                        'some_hook' => [
+                            'some_hookable' => [
+                                'template' => 'some_target.html.twig',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'hooks' => [
+                    'some_hook' => [
+                        'some_hookable' => [
+                            'type' => 'template',
+                            'target' => 'some_target.html.twig',
+                            'data' => [],
+                            'configuration' => [],
+                            'priority' => 0,
+                            'enabled' => true,
+                            'component' => null,
+                            'template' => 'some_target.html.twig',
+                        ],
+                    ],
+                ],
+            ],
+            'hooks.*'
+        );
+    }
+
+    public function testItThrowsExceptionWhenBothTemplateAndComponentShortcutsAreDefined(): void
+    {
+        $this->assertConfigurationIsInvalid(
+            [
+                [
+                    'hooks' => [
+                        'some_hook' => [
+                            'some_hookable' => [
+                                'component' => 'MyAwesomeComponent',
+                                'template' => 'some_target.html.twig',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'You cannot define both "component" and "template" at the same time.'
         );
     }
 
