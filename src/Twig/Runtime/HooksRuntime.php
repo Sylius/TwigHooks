@@ -49,26 +49,6 @@ final class HooksRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param array<string, mixed> $context
-     *
-     * @return array<string, string>
-     */
-    public function getHookableData(array $context): array
-    {
-        return $context[self::HOOKABLE_DATA_PARAMETER] ?? [];
-    }
-
-    /**
-     * @param array<string, mixed> $context
-     *
-     * @return array<string, string>
-     */
-    public function getHookableConfiguration(array $context): array
-    {
-        return $context[self::HOOKABLE_CONFIGURATION_PARAMETER] ?? [];
-    }
-
-    /**
      * @param array<string> $hooksNames
      * @param array<string, mixed> $data
      */

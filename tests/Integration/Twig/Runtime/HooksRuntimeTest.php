@@ -20,32 +20,6 @@ final class HooksRuntimeTest extends KernelTestCase
         $this->assertSame($expectedOutput, $this->getTestSubject()->createHookName($input, ...$suffix));
     }
 
-    public function testItReturnsHookableData(): void
-    {
-        $context = [
-            'hookable_data' => ['foo' => 'bar'],
-            'other' => 'data',
-        ];
-
-        $this->assertSame(
-            ['foo' => 'bar'],
-            $this->getTestSubject()->getHookableData($context)
-        );
-    }
-
-    public function testItReturnsHookableConfiguration(): void
-    {
-        $context = [
-            'hookable_configuration' => ['foo' => 'bar'],
-            'other' => 'data',
-        ];
-
-        $this->assertSame(
-            ['foo' => 'bar'],
-            $this->getTestSubject()->getHookableConfiguration($context)
-        );
-    }
-
     public function testItRendersHook(): void
     {
         $this->markTestSkipped('Not implemented yet.');
