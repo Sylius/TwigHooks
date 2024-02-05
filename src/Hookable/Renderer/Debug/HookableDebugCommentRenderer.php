@@ -25,12 +25,10 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface
 
     private function getOpeningDebugComment(AbstractHookable $hookable): string
     {
-        $reflectionClass = new \ReflectionClass($hookable);
-
         return sprintf(
             '<!-- BEGIN HOOKABLE | hook: "%s", type: "%s", name: "%s", target: "%s", priority: %d -->',
             $hookable->getHookName(),
-            $reflectionClass->getShortName(),
+            $hookable->getType(),
             $hookable->getName(),
             $hookable->getTarget(),
             $hookable->getPriority(),
@@ -39,12 +37,10 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface
 
     private function getClosingDebugComment(AbstractHookable $hookable): string
     {
-        $reflectionClass = new \ReflectionClass($hookable);
-
         return sprintf(
             '<!--  END HOOKABLE  | hook: "%s", type: "%s", name: "%s", target: "%s", priority: %d -->',
             $hookable->getHookName(),
-            $reflectionClass->getShortName(),
+            $hookable->getType(),
             $hookable->getName(),
             $hookable->getTarget(),
             $hookable->getPriority(),

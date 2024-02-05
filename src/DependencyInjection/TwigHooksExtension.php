@@ -78,6 +78,7 @@ final class TwigHooksExtension extends Extension
             ->setArguments([
                 $hookName,
                 $hookableName,
+                $hookable['type'],
                 $hookable['target'],
                 $hookable['data'],
                 $hookable['configuration'],

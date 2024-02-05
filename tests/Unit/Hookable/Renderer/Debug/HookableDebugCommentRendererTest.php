@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\Renderer\Debug\HookableDebugCommentRenderer;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 
 final class HookableDebugCommentRendererTest extends TestCase
@@ -22,7 +23,7 @@ final class HookableDebugCommentRendererTest extends TestCase
 
     public function testItAddsDebugCommentsToRenderedHookable(): void
     {
-        $hookable = HookableTemplateMotherObject::some();
+        $hookable = BaseHookableMotherObject::some();
 
         $this->innerRenderer
             ->expects($this->once())
@@ -32,9 +33,9 @@ final class HookableDebugCommentRendererTest extends TestCase
         ;
 
         $expectedRenderedHookable = <<<HOOKABLE
-        <!-- BEGIN HOOKABLE | hook: "some_hook", type: "HookableTemplate", name: "some_name", target: "some_target", priority: 0 -->
+        <!-- BEGIN HOOKABLE | hook: "some_hook", type: "template", name: "some_name", target: "some_target", priority: 0 -->
         some-rendered-hookable
-        <!--  END HOOKABLE  | hook: "some_hook", type: "HookableTemplate", name: "some_name", target: "some_target", priority: 0 -->
+        <!--  END HOOKABLE  | hook: "some_hook", type: "template", name: "some_name", target: "some_target", priority: 0 -->
         HOOKABLE;
 
         $this->assertSame($expectedRenderedHookable, $this->getTestSubject()->render($hookable));

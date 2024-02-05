@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Tests\Sylius\TwigHooks\Unit\Hookable;
 
 use PHPUnit\Framework\TestCase;
-use Sylius\TwigHooks\Hookable\HookableComponent;
-use Sylius\TwigHooks\Hookable\HookableTemplate;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableComponentMotherObject;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
+use Sylius\TwigHooks\Hookable\BaseHookable;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
 
-final class HookableTemplateTest extends TestCase
+final class BaseHookableTest extends TestCase
 {
     public function testItReturnsHookName(): void
     {
@@ -61,39 +59,21 @@ final class HookableTemplateTest extends TestCase
         $this->assertTrue($testSubject->isEnabled());
     }
 
-    public function testItThrowsAnExceptionWhenTryingToOverrideHookableWithDifferentType(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf(
-            'Hookable "%s" cannot be overwritten with "%s".',
-            HookableTemplate::class,
-            HookableComponent::class,
-        ));
-
-        $testSubject = $this->getTestSubject();
-
-        $testSubject->overwriteWith(HookableComponentMotherObject::some());
-    }
-
     public function testItThrowsAnExceptionWhenTryingToOverrideHookableWithDifferentName(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf(
-            'Hookable "%s" cannot be overwritten with "%s".',
-            HookableTemplate::class,
-            HookableTemplate::class,
-        ));
+        $this->expectExceptionMessage('Hookable cannot be overwritten with different name.');
 
         $testSubject = $this->getTestSubject();
 
-        $testSubject->overwriteWith(HookableTemplateMotherObject::withName('some_other_name'));
+        $testSubject->overwriteWith(BaseHookableMotherObject::withName('some_other_name'));
     }
 
     public function testItOverwritesHookableWithGivenHookable(): void
     {
         $testSubject = $this->getTestSubject();
 
-        $overwrittenTestSubject = $testSubject->overwriteWith(HookableTemplateMotherObject::withTarget('some_other_target'));
+        $overwrittenTestSubject = $testSubject->overwriteWith(BaseHookableMotherObject::withTarget('some_other_target'));
 
         $this->assertSame('some_hook', $overwrittenTestSubject->getHookName());
         $this->assertSame('some_name', $overwrittenTestSubject->getName());
@@ -104,16 +84,26 @@ final class HookableTemplateTest extends TestCase
         $this->assertTrue($overwrittenTestSubject->isEnabled());
     }
 
+    public function testItAllowsToOverwriteHookableWithAnotherType(): void
+    {
+        $testSubject = $this->getTestSubject();
+
+        $this->assertSame('template', $testSubject->getType());
+
+        $overwrittenTestSubject = $testSubject->overwriteWith(BaseHookableMotherObject::withType('component'));
+
+        $this->assertSame('component', $overwrittenTestSubject->getType());
+    }
+
     public function testItReturnsItsTypeName(): void
     {
         $testSubject = $this->getTestSubject();
 
-        $this->assertSame('template', $testSubject->getTypeName());
+        $this->assertSame('template', $testSubject->getType());
     }
 
-    private function getTestSubject(): HookableTemplate
+    private function getTestSubject(): BaseHookable
     {
-        return HookableTemplateMotherObject::some();
+        return BaseHookableMotherObject::some();
     }
-
 }

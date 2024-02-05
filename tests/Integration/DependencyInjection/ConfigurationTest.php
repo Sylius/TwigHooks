@@ -7,8 +7,6 @@ namespace Tests\Sylius\TwigHooks\Integration\DependencyInjection;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\DependencyInjection\Configuration;
-use Sylius\TwigHooks\Hookable\HookableComponent;
-use Sylius\TwigHooks\Hookable\HookableTemplate;
 
 final class ConfigurationTest extends TestCase
 {

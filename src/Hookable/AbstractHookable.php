@@ -8,6 +8,10 @@ abstract class AbstractHookable
 {
     public const DEFAULT_PRIORITY = 0;
 
+    public const TYPE_COMPONENT = 'component';
+
+    public const TYPE_TEMPLATE = 'template';
+
     /**
      * @param array<string, mixed> $data
      * @param array<string, mixed> $configuration
@@ -15,6 +19,7 @@ abstract class AbstractHookable
     public function __construct (
         protected string $hookName,
         protected string $name,
+        protected string $type,
         protected string $target,
         protected ?array $data = null,
         protected ?array $configuration = null,
@@ -31,6 +36,26 @@ abstract class AbstractHookable
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function isType(string $type): bool
+    {
+        return $this->type === $type;
+    }
+
+    public function isComponentType(): bool
+    {
+        return $this->isType(self::TYPE_COMPONENT);
+    }
+
+    public function isTemplateType(): bool
+    {
+        return $this->isType(self::TYPE_TEMPLATE);
     }
 
     public function getId(): string
@@ -65,7 +90,21 @@ abstract class AbstractHookable
         return $this->enabled ?? true;
     }
 
-    abstract public function overwriteWith(self $hookable): self;
+    public function overwriteWith(self $hookable): self
+    {
+        if ($hookable->getName() !== $this->getName()) {
+            throw new \InvalidArgumentException('Hookable cannot be overwritten with different name.');
+        }
 
-    abstract public function getTypeName(): string;
+        return new static(
+            $hookable->getHookName(),
+            $hookable->getName(),
+            $hookable->getType(),
+            $hookable->getTarget(),
+            $hookable->data ?? $this->getData(),
+            $hookable->configuration ?? $this->getConfiguration(),
+            $hookable->priority ?? $this->getPriority(),
+            $hookable->enabled ?? $this->isEnabled(),
+        );
+    }
 }

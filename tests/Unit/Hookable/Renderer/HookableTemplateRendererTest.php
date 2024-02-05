@@ -6,12 +6,13 @@ namespace Tests\Sylius\TwigHooks\Unit\Hookable\Renderer;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Sylius\TwigHooks\Hookable\Renderer\HookableTemplateRenderer;
 use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
 use Sylius\TwigHooks\Provider\DataProviderInterface;
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableComponentMotherObject;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 use Twig\Environment as Twig;
 
@@ -35,8 +36,8 @@ final class HookableTemplateRendererTest extends TestCase
 
     public function testItSupportsOnlyHookableTemplates(): void
     {
-        $hookableTemplate = HookableTemplateMotherObject::some();
-        $hookableComponent = HookableComponentMotherObject::some();
+        $hookableTemplate = BaseHookableMotherObject::withType(AbstractHookable::TYPE_TEMPLATE);
+        $hookableComponent = BaseHookableMotherObject::withType(AbstractHookable::TYPE_COMPONENT);
 
         $this->assertTrue($this->getTestSubject()->supports($hookableTemplate));
         $this->assertFalse($this->getTestSubject()->supports($hookableComponent));
@@ -44,12 +45,10 @@ final class HookableTemplateRendererTest extends TestCase
 
     public function testItThrowsAnExceptionWhenTryingToRenderUnsupportedHookable(): void
     {
-        $hookableComponent = HookableComponentMotherObject::some();
+        $hookableComponent = BaseHookableMotherObject::withType(AbstractHookable::TYPE_COMPONENT);
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            sprintf('Hookable must be an instance of "%s".', HookableTemplate::class)
-        );
+        $this->expectExceptionMessage('Hookable must be the "template" type, but "component" given.');
 
         $this->getTestSubject()->render($hookableComponent);
     }
@@ -64,7 +63,7 @@ final class HookableTemplateRendererTest extends TestCase
             HooksRuntime::HOOKABLE_CONFIGURATION_PARAMETER => ['some' => 'configuration'],
         ])->willReturn('some-rendered-template');
 
-        $hookable = HookableTemplateMotherObject::withTarget('some-template');
+        $hookable = BaseHookableMotherObject::withTarget('some-template');
         $renderedTemplate = $this->getTestSubject()->render($hookable);
 
         $this->assertSame('some-rendered-template', $renderedTemplate);

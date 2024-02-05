@@ -6,14 +6,12 @@ namespace Tests\Sylius\TwigHooks\Unit\Hookable\Renderer;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Sylius\TwigHooks\Hookable\HookableComponent;
+use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Hookable\Renderer\HookableComponentRenderer;
 use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
 use Sylius\TwigHooks\Provider\DataProviderInterface;
 use Symfony\UX\TwigComponent\ComponentRendererInterface;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableComponentMotherObject;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableMotherObject;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
 
 final class HookableComponentRendererTest extends TestCase
 {
@@ -35,8 +33,8 @@ final class HookableComponentRendererTest extends TestCase
 
     public function testItSupportsOnlyHookableComponents(): void
     {
-        $hookableTemplate = HookableTemplateMotherObject::some();
-        $hookableComponent = HookableComponentMotherObject::some();
+        $hookableTemplate = BaseHookableMotherObject::withType(AbstractHookable::TYPE_TEMPLATE);
+        $hookableComponent = BaseHookableMotherObject::withType(AbstractHookable::TYPE_COMPONENT);
 
         $this->assertTrue($this->getTestSubject()->supports($hookableComponent));
         $this->assertFalse($this->getTestSubject()->supports($hookableTemplate));
@@ -44,12 +42,10 @@ final class HookableComponentRendererTest extends TestCase
 
     public function testItThrowsAnExceptionWhenTryingToRenderUnsupportedHookable(): void
     {
-        $hookableTemplate = HookableTemplateMotherObject::some();
+        $hookableTemplate = BaseHookableMotherObject::withType(AbstractHookable::TYPE_TEMPLATE);
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            sprintf('Hookable must be an instance of "%s".', HookableComponent::class)
-        );
+        $this->expectExceptionMessage('Hookable must be the "component" type, but "template" given.');
 
         $this->getTestSubject()->render($hookableTemplate);
     }
@@ -67,7 +63,7 @@ final class HookableComponentRendererTest extends TestCase
             ]
         )->willReturn('some-rendered-component');
 
-        $hookable = HookableComponentMotherObject::withTarget('some-component');
+        $hookable = BaseHookableMotherObject::withTypeAndTarget(AbstractHookable::TYPE_COMPONENT, 'some-component');
         $renderedComponent = $this->getTestSubject()->render($hookable);
 
         $this->assertSame('some-rendered-component', $renderedComponent);

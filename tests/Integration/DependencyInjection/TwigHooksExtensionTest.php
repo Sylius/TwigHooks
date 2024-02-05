@@ -6,8 +6,6 @@ namespace Tests\Sylius\TwigHooks\Integration\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\TwigHooks\DependencyInjection\TwigHooksExtension;
-use Sylius\TwigHooks\Hookable\HookableComponent;
-use Sylius\TwigHooks\Hookable\HookableTemplate;
 
 final class TwigHooksExtensionTest extends AbstractExtensionTestCase
 {

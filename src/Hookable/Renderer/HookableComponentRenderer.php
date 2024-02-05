@@ -27,7 +27,7 @@ final class HookableComponentRenderer implements SupportableHookableRendererInte
     {
         if (!$this->supports($hookable)) {
             throw new \InvalidArgumentException(
-                sprintf('Hookable must be an instance of "%s".', HookableComponent::class)
+                sprintf('Hookable must be the "%s" type, but "%s" given.', AbstractHookable::TYPE_COMPONENT, $hookable->getType()),
             );
         }
 
@@ -42,6 +42,6 @@ final class HookableComponentRenderer implements SupportableHookableRendererInte
 
     public function supports(AbstractHookable $hookable): bool
     {
-        return is_a($hookable, HookableComponent::class, true);
+        return $hookable->isComponentType();
     }
 }

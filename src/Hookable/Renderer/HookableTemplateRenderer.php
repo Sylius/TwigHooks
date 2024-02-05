@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Hookable\Renderer;
 
 use Sylius\TwigHooks\Hookable\AbstractHookable;
-use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
 use Sylius\TwigHooks\Provider\DataProviderInterface;
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
@@ -24,7 +23,7 @@ final class HookableTemplateRenderer implements SupportableHookableRendererInter
     {
         if (!$this->supports($hookable)) {
             throw new \InvalidArgumentException(
-                sprintf('Hookable must be an instance of "%s".', HookableTemplate::class)
+                sprintf('Hookable must be the "%s" type, but "%s" given.', AbstractHookable::TYPE_TEMPLATE, $hookable->getType()),
             );
         }
 
@@ -39,6 +38,6 @@ final class HookableTemplateRenderer implements SupportableHookableRendererInter
 
     public function supports(AbstractHookable $hookable): bool
     {
-        return is_a($hookable, HookableTemplate::class, true);
+        return $hookable->isTemplateType();
     }
 }
