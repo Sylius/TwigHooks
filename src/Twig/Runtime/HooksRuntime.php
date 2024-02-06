@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Twig\Runtime;
 
+use Sylius\TwigHooks\Hook\NameGenerator\NameGeneratorInterface;
 use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -15,37 +16,13 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
     public function __construct (
         private readonly HookRendererInterface $hookRenderer,
+        private readonly NameGeneratorInterface $nameGenerator,
     ) {
     }
 
     public function createHookName(string $base, string ...$parts): string
     {
-        if ([] === $parts) {
-            return $this->formatBaseString($base);
-        }
-
-        return sprintf(
-            '%s.%s',
-            $this->formatBaseString($base),
-            implode('.', $parts),
-        );
-    }
-
-    private function formatBaseString(string $base): string
-    {
-        $parts = explode('/', $base);
-        $resultParts = [];
-
-        foreach ($parts as $part) {
-            $resultPart = trim($part, '_');
-            $resultPart = str_replace(['@', '.html.twig'], '', $resultPart);
-            /** @var string $resultPart */
-            $resultPart = preg_replace('/(?<!^)[A-Z]/', '_$0', $resultPart);
-            $resultPart = strtolower($resultPart);
-            $resultParts[] = $resultPart;
-        }
-
-        return implode('.', $resultParts);
+        return $this->nameGenerator->generate($base, ...$parts);
     }
 
     /**

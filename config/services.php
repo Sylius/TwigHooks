@@ -2,6 +2,7 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Sylius\TwigHooks\Hook\NameGenerator\TemplateNameGenerator;
 use Sylius\TwigHooks\Provider\DefaultConfigurationProvider;
 use Sylius\TwigHooks\Provider\DefaultDataProvider;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
@@ -23,6 +24,8 @@ return static function (ContainerConfigurator $configurator): void {
         ])
     ;
 
+    $services->set('twig_hooks.hook.name_generator.template', TemplateNameGenerator::class);
+
     $services->set(HooksExtension::class)
         ->args([
             service('twig_hooks.renderer.hook'),
@@ -37,6 +40,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(HooksRuntime::class)
         ->args([
             service('twig_hooks.renderer.hook'),
+            service('twig_hooks.hook.name_generator.template'),
         ])
         ->tag('twig.runtime')
     ;
