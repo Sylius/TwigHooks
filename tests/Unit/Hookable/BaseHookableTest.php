@@ -71,17 +71,37 @@ final class BaseHookableTest extends TestCase
 
     public function testItOverwritesHookableWithGivenHookable(): void
     {
-        $testSubject = $this->getTestSubject();
+        $hookableToBeOverwritten = new BaseHookable(
+            'some_hook',
+            'some_name',
+            'template',
+            'some_target',
+            ['some_data' => 'yes', 'another_data' => 'no'],
+            ['title' => 'King', 'name' => 'Arthur'],
+            50,
+            true,
+        );
+        $hookableToOverwrite = new BaseHookable(
+            'some_hook',
+            'some_name',
+            'component',
+            'some_other_target',
+            ['another_data' => 'yes', 'another_other_data' => 'no'],
+            ['title' => 'Queen'],
+            100,
+            false,
+        );
 
-        $overwrittenTestSubject = $testSubject->overwriteWith(BaseHookableMotherObject::withTarget('some_other_target'));
+        $overwrittenHookable = $hookableToBeOverwritten->overwriteWith($hookableToOverwrite);
 
-        $this->assertSame('some_hook', $overwrittenTestSubject->getHookName());
-        $this->assertSame('some_name', $overwrittenTestSubject->getName());
-        $this->assertSame('some_other_target', $overwrittenTestSubject->getTarget());
-        $this->assertSame([], $overwrittenTestSubject->getData());
-        $this->assertSame([], $overwrittenTestSubject->getConfiguration());
-        $this->assertSame(0, $overwrittenTestSubject->getPriority());
-        $this->assertTrue($overwrittenTestSubject->isEnabled());
+        $this->assertSame('some_hook', $overwrittenHookable->getHookName());
+        $this->assertSame('some_name', $overwrittenHookable->getName());
+        $this->assertSame('component', $overwrittenHookable->getType());
+        $this->assertSame('some_other_target', $overwrittenHookable->getTarget());
+        $this->assertSame(['some_data' => 'yes', 'another_data' => 'yes', 'another_other_data' => 'no'], $overwrittenHookable->getData());
+        $this->assertSame(['title' => 'Queen', 'name' => 'Arthur'], $overwrittenHookable->getConfiguration());
+        $this->assertSame(100, $overwrittenHookable->getPriority());
+        $this->assertFalse($overwrittenHookable->isEnabled());
     }
 
     public function testItAllowsToOverwriteHookableWithAnotherType(): void

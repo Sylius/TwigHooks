@@ -88,7 +88,7 @@ final class Configuration implements ConfigurationInterface
                                     ->useAttributeAsKey('name')
                                     ->prototype('variable')->end()
                                 ->end()
-                                ->integerNode('priority')->defaultValue(0)->end()
+                                ->integerNode('priority')->defaultNull()->end()
                             ->end()
                         ->end()
                     ->end()

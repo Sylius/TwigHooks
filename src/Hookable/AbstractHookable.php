@@ -21,8 +21,8 @@ abstract class AbstractHookable
         protected string $name,
         protected string $type,
         protected string $target,
-        protected ?array $data = null,
-        protected ?array $configuration = null,
+        protected array $data = [],
+        protected array $configuration = [],
         protected ?int $priority = null,
         protected ?bool $enabled = null,
     ) {
@@ -101,8 +101,8 @@ abstract class AbstractHookable
             $hookable->getName(),
             $hookable->getType(),
             $hookable->getTarget(),
-            $hookable->data ?? $this->getData(),
-            $hookable->configuration ?? $this->getConfiguration(),
+            array_merge($this->getData(), $hookable->data),
+            array_merge($this->getConfiguration(), $hookable->configuration),
             $hookable->priority ?? $this->getPriority(),
             $hookable->enabled ?? $this->isEnabled(),
         );
