@@ -25,11 +25,6 @@ final class HooksRuntimeTest extends KernelTestCase
         $this->markTestSkipped('Not implemented yet.');
     }
 
-    public function testItRendersHookable(): void
-    {
-        $this->markTestSkipped('Not implemented yet.');
-    }
-
     /**
      * @return array
      */
