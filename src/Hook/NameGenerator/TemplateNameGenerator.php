@@ -16,7 +16,7 @@ final class TemplateNameGenerator implements NameGeneratorInterface
 
     private function normalizeTemplatePath(string $templatePath): string
     {
-        $parts = explode('/', $templatePath);
+        $parts = explode('/', str_replace('\\', '/', $templatePath));
         $resultParts = [];
 
         foreach ($parts as $part) {

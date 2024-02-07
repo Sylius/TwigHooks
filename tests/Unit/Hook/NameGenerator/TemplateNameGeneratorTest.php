@@ -29,6 +29,7 @@ final class TemplateNameGeneratorTest extends TestCase
             ['@SyliusShop/_template.html.twig', ['header'], 'sylius_shop.template.header'],
             ['@SyliusShop/_template.html.twig', ['header', 'hamburger_menu'], 'sylius_shop.template.header.hamburger_menu'],
             ['@SyliusShop/_template.html.twig', ['header', 'hamburgerMenu'], 'sylius_shop.template.header.hamburger_menu'],
+            ['@SyliusAdmin\Shared\Crud/update.html.twig', [], 'sylius_admin.shared.crud.update']
         ];
     }
 
