@@ -35,8 +35,8 @@ final class HookableComponentRenderer implements SupportableHookableRendererInte
         $configuration = $this->configurationProvider->provide($hookable);
 
         return $this->componentRenderer->createAndRender($hookable->getTarget(), [
-            self::HOOKABLE_DATA_PARAMETER => $data,
             self::HOOKABLE_CONFIGURATION_PARAMETER => $configuration,
+            ...$data,
         ]);
     }
 

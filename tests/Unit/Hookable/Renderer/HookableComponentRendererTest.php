@@ -58,8 +58,8 @@ final class HookableComponentRendererTest extends TestCase
         $this->componentRenderer->expects($this->once())->method('createAndRender')->with(
             'some-component',
             [
-                HookableComponentRenderer::HOOKABLE_DATA_PARAMETER => ['some' => 'data'],
                 HookableComponentRenderer::HOOKABLE_CONFIGURATION_PARAMETER => ['some' => 'configuration'],
+                'some' => 'data',
             ]
         )->willReturn('some-rendered-component');
 

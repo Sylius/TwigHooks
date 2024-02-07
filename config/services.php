@@ -3,11 +3,13 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Sylius\TwigHooks\Hook\NameGenerator\TemplateNameGenerator;
+use Sylius\TwigHooks\Provider\ComponentDataProvider;
 use Sylius\TwigHooks\Provider\DefaultConfigurationProvider;
 use Sylius\TwigHooks\Provider\DefaultDataProvider;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
 use Sylius\TwigHooks\Twig\HooksExtension;
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 return static function (ContainerConfigurator $configurator): void {
     $configurator->import(__DIR__ . '/services/*.php');
@@ -15,6 +17,12 @@ return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
     $services->set('twig_hooks.provider.default_data', DefaultDataProvider::class);
+
+    $services->set('twig_hooks.provider.component_data', ComponentDataProvider::class)
+        ->args([
+            inline_service(ExpressionLanguage::class),
+        ])
+    ;
 
     $services->set('twig_hooks.provider.default_configuration', DefaultConfigurationProvider::class);
 
