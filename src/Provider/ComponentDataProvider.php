@@ -18,7 +18,7 @@ final class ComponentDataProvider implements DataProviderInterface
     {
         return $this->mapArrayRecursively(function (mixed $value) use ($hookData): mixed {
             if (is_string($value) && str_starts_with($value, '@=')) {
-                return $this->expressionLanguage->evaluate(substr($value, 2), ['data' => $hookData]);
+                return $this->expressionLanguage->evaluate(substr($value, 2), $hookData);
             }
 
             return $value;

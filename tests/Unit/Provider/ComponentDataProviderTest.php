@@ -34,11 +34,11 @@ final class ComponentDataProviderTest extends TestCase
 
     public function testItPassesTemplateLevelDataToExpressionLanguage(): void
     {
-        $hookable = BaseHookableMotherObject::withData(['some_key' => '@=data["some"]']);
+        $hookable = BaseHookableMotherObject::withData(['some_key' => '@=some']);
 
         $dataProvider = $this->createTestSubject();
 
-        $this->assertSame(['some_key' => 'data'], $dataProvider->provide($hookable, ['some' => 'data']));
+        $this->assertSame(['some_key' => 'data'], $dataProvider->provide($hookable, ['some' => 'data', 'another' => 'data']));
     }
 
     private function createTestSubject(): DataProviderInterface
