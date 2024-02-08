@@ -2,7 +2,6 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Sylius\TwigHooks\DependencyInjection\CompilerPass\UnregisterDebugServicesPass;
 use Sylius\TwigHooks\Hook\Renderer\Debug\HookDebugCommentRenderer;
 use Sylius\TwigHooks\Hook\Renderer\Debug\HookProfilerRenderer;
 use Sylius\TwigHooks\Hookable\Renderer\Debug\HookableDebugCommentRenderer;
@@ -13,7 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 return static function (ContainerBuilder $container, ContainerConfigurator $configurator): void {
     $services = $configurator->services();
-    $services->defaults()->tag(UnregisterDebugServicesPass::DEBUG_TAG);
 
     $services->set('twig_hooks.renderer.hook.debug_comment', HookDebugCommentRenderer::class)
         ->decorate('twig_hooks.renderer.hook', priority: 256)
