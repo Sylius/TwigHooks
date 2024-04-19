@@ -14,6 +14,7 @@ final class HookNode extends Node
     public function __construct (
         Node $hookNames,
         ?Node $parameters,
+
         int $lineno,
         string $tag = null
     ) {

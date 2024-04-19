@@ -24,6 +24,11 @@ final class HookTokenParser extends AbstractTokenParser
             $variables = $this->parser->getExpressionParser()->parseMultitargetExpression();
         }
 
+        $disablePassthrough = false;
+        if ($stream->nextIf(Token::NAME_TYPE, 'disablePassthrough')) {
+            $disablePassthrough = true;
+        }
+
         $stream->expect(Token::BLOCK_END_TYPE);
 
         return new HookNode($hookNames, $variables, $lineno, $this->getTag());
