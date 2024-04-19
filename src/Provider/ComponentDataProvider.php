@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Provider;
 
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Provider\Exception\InvalidExpressionException;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ComponentDataProvider implements DataProviderInterface
@@ -16,9 +17,22 @@ final class ComponentDataProvider implements DataProviderInterface
 
     public function provide(AbstractHookable $hookable, array $hookData): array
     {
-        return $this->mapArrayRecursively(function (mixed $value) use ($hookData): mixed {
+        return $this->mapArrayRecursively(function (mixed $value) use ($hookData, $hookable): mixed {
             if (is_string($value) && str_starts_with($value, '@=')) {
-                return $this->expressionLanguage->evaluate(substr($value, 2), $hookData);
+                try {
+                    return $this->expressionLanguage->evaluate(substr($value, 2), $hookData);
+                } catch (\Throwable $e) {
+                    throw new InvalidExpressionException(
+                        sprintf(
+                            'Failed to evaluate the "%s" expression while rendering the "%s" hookable in the "%s" hook. Error: %s".',
+                            $value,
+                            $hookable->getName(),
+                            $hookable->getHookName(),
+                            $e->getMessage(),
+                        ),
+                        previous: $e,
+                    );
+                }
             }
 
             return $value;
