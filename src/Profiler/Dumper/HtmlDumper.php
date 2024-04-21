@@ -51,7 +51,7 @@ final class HtmlDumper
         $str = sprintf(
             '%s└ <span><span class="status-success">(%s)</span> [↑ %d, ⏲ %d ms] %s (%s)</span>',
             $prefix,
-            ucfirst($hookableProfile->getHookable()->getTypeName()),
+            ucfirst($hookableProfile->getHookable()->getType()),
             $hookableProfile->getHookable()->getPriority(),
             $hookableProfile->getDuration(),
             $hookableProfile->getName(),

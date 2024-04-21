@@ -8,7 +8,7 @@ use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Provider\Exception\InvalidExpressionException;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-final class ComponentDataProvider implements DataProviderInterface
+final class ComponentContextProvider implements ContextProviderInterface
 {
     public function __construct (
         private ExpressionLanguage $expressionLanguage,

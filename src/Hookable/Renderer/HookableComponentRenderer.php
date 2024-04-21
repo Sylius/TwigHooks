@@ -5,25 +5,19 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Hookable\Renderer;
 
 use Sylius\TwigHooks\Hookable\AbstractHookable;
-use Sylius\TwigHooks\Hookable\HookableComponent;
-use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
-use Sylius\TwigHooks\Provider\DataProviderInterface;
+use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Symfony\UX\TwigComponent\ComponentRendererInterface;
 
 final class HookableComponentRenderer implements SupportableHookableRendererInterface
 {
     public const HOOKABLE_CONFIGURATION_PARAMETER = 'hookableConfiguration';
 
-    public const HOOKABLE_DATA_PARAMETER = 'hookableData';
-
     public function __construct(
-        private ComponentRendererInterface $componentRenderer,
-        private DataProviderInterface $dataProvider,
-        private ConfigurationProviderInterface $configurationProvider,
+        private readonly ComponentRendererInterface $componentRenderer,
     ) {
     }
 
-    public function render(AbstractHookable $hookable, array $hookData = []): string
+    public function render(AbstractHookable $hookable, HookableMetadata $metadata): string
     {
         if (!$this->supports($hookable)) {
             throw new \InvalidArgumentException(
@@ -31,12 +25,12 @@ final class HookableComponentRenderer implements SupportableHookableRendererInte
             );
         }
 
-        $data = $this->dataProvider->provide($hookable, $hookData);
-        $configuration = $this->configurationProvider->provide($hookable);
+        $context = $metadata->context->all();
+        $configuration = $metadata->configuration->all();
 
         return $this->componentRenderer->createAndRender($hookable->getTarget(), [
             self::HOOKABLE_CONFIGURATION_PARAMETER => $configuration,
-            ...$data,
+            ...$context,
         ]);
     }
 

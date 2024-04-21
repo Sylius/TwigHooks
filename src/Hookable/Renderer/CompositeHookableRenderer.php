@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Hookable\Renderer;
 
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\Exception\NoSupportedRendererException;
 
 final class CompositeHookableRenderer implements HookableRendererInterface
@@ -28,11 +29,11 @@ final class CompositeHookableRenderer implements HookableRendererInterface
         }
     }
 
-    public function render(AbstractHookable $hookable, array $hookData = []): string
+    public function render(AbstractHookable $hookable, HookableMetadata $metadata): string
     {
         foreach ($this->renderers as $renderer) {
             if ($renderer->supports($hookable)) {
-                return $renderer->render($hookable, $hookData);
+                return $renderer->render($hookable, $metadata);
             }
         }
 

@@ -17,21 +17,16 @@ final class HookTokenParser extends AbstractTokenParser
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
-        $hookNames = $this->parser->getExpressionParser()->parseExpression();
+        $hooksNames = $this->parser->getExpressionParser()->parseExpression();
 
-        $variables = null;
+        $hookContext = null;
         if ($stream->nextIf(Token::NAME_TYPE, 'with')) {
-            $variables = $this->parser->getExpressionParser()->parseMultitargetExpression();
-        }
-
-        $disablePassthrough = false;
-        if ($stream->nextIf(Token::NAME_TYPE, 'disablePassthrough')) {
-            $disablePassthrough = true;
+            $hookContext = $this->parser->getExpressionParser()->parseMultitargetExpression();
         }
 
         $stream->expect(Token::BLOCK_END_TYPE);
 
-        return new HookNode($hookNames, $variables, $lineno, $this->getTag());
+        return new HookNode($hooksNames, $hookContext, $lineno, $this->getTag());
     }
 
     public function getTag(): string

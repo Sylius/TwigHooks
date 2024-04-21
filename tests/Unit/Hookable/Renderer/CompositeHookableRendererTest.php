@@ -6,6 +6,7 @@ namespace Tests\Sylius\TwigHooks\Unit\Hookable\Renderer;
 
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\CompositeHookableRenderer;
 use Sylius\TwigHooks\Hookable\Renderer\SupportableHookableRendererInterface;
 
@@ -25,9 +26,10 @@ final class CompositeHookableRendererTest extends TestCase
         $supportingRenderer = $this->createSupportableHookableRenderer(true, 'supporting-renderer');
 
         $hookable = $this->createMock(AbstractHookable::class);
+        $metadata = $this->createMock(HookableMetadata::class);
 
         $hookableRenderer = $this->getTestSubject([$nonSupportingRenderer, $supportingRenderer]);
-        $result = $hookableRenderer->render($hookable);
+        $result = $hookableRenderer->render($hookable, $metadata);
 
         $this->assertSame('supporting-renderer', $result);
     }

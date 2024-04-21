@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Sylius\TwigHooks\Unit\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Sylius\TwigHooks\Provider\DefaultDataProvider;
+use Sylius\TwigHooks\Provider\DefaultContextProvider;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
 
 final class DefaultDataProviderTest extends TestCase
@@ -21,8 +21,8 @@ final class DefaultDataProviderTest extends TestCase
         $this->assertSame(['some' => 'datum', 'another' => 'data', 'yet_another' => 'data'], $data);
     }
 
-    private function getTestSubject(): DefaultDataProvider
+    private function getTestSubject(): DefaultContextProvider
     {
-        return new DefaultDataProvider();
+        return new DefaultContextProvider();
     }
 }
