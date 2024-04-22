@@ -69,12 +69,11 @@ final class HooksRuntime implements RuntimeExtensionInterface
     {
         $hookNames = is_string($hookNames) ? [$hookNames] : $hookNames;
 
+        $context = $this->getContext($hookContext, $hookableMetadata);
         $prefixes = $this->getPrefixes($hookContext, $hookableMetadata);
 
         if (false === $this->enableAutoprefixing || [] === $prefixes) {
-            $hookContext['_prefixes'] = $hookNames;
-
-            return $this->hookRenderer->render($hookNames, $hookContext);
+            return $this->hookRenderer->render($hookNames, $context);
         }
 
         $prefixedHookNames = [];
@@ -85,9 +84,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
             }
         }
 
-        $hookContext['_prefixes'] = $prefixedHookNames;
-
-        return $this->hookRenderer->render($prefixedHookNames, $hookContext);
+        return $this->hookRenderer->render($prefixedHookNames, $context);
     }
 
     /**
@@ -108,5 +105,20 @@ final class HooksRuntime implements RuntimeExtensionInterface
         }
 
         return $prefixes;
+    }
+
+    /**
+     * @param array<string, mixed> $hookContext
+     * @return array<string, mixed>
+     */
+    private function getContext(array $hookContext, ?HookableMetadata $hookableMetadata): array
+    {
+        $context = [];
+
+        if ($hookableMetadata !== null) {
+            $context = $hookableMetadata->context->all();
+        }
+
+        return array_merge($context, $hookContext);
     }
 }
