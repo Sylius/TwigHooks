@@ -38,9 +38,9 @@ final class HooksDataCollector extends DataCollector implements LateDataCollecto
         return $this->profile ??= unserialize($this->data['profile']);
     }
 
-    public function getTotalDuration(): int|float
+    public function getTotalDuration(): string
     {
-        return $this->getProfile()->getTotalDuration();
+        return sprintf('%.1f', $this->getProfile()->getTotalDuration());
     }
 
     public function getNumberOfHooks(): int
