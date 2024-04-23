@@ -33,4 +33,17 @@ class HookableTemplate extends AbstractHookable
             $hookable->isEnabled(),
         );
     }
+
+    public function toArray(): array
+    {
+        return [
+            'hookName' => $this->hookName,
+            'name' => $this->name,
+            'target' => $this->target,
+            'context' => $this->context,
+            'configuration' => $this->configuration,
+            'priority' => $this->getPriority(),
+            'enabled' => $this->isEnabled(),
+        ];
+    }
 }

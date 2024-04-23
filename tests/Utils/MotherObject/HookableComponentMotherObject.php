@@ -13,6 +13,23 @@ final class HookableComponentMotherObject
         return new HookableComponent('some_hook', 'some_name', 'some_target');
     }
 
+    public static function with(array $parameters):HookableComponent
+    {
+        if (!array_key_exists('hookName', $parameters)) {
+            $parameters['hookName'] = 'some_hook';
+        }
+
+        if (!array_key_exists('name', $parameters)) {
+            $parameters['name'] = 'some_name';
+        }
+
+        if (!array_key_exists('target', $parameters)) {
+            $parameters['target'] = 'some_target';
+        }
+
+        return new HookableComponent(...$parameters);
+    }
+
     public static function withHookName(string $hookName): HookableComponent
     {
         return new HookableComponent($hookName, 'some_name', 'some_target');

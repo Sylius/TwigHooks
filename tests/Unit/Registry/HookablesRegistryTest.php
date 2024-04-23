@@ -7,11 +7,22 @@ namespace Tests\Sylius\TwigHooks\Unit\Registry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\Merger\HookableMergerInterface;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 
 final class HookablesRegistryTest extends TestCase
 {
+    /** @var HookableMergerInterface&MockObject */
+    private HookableMergerInterface $hookableMerger;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->hookableMerger = $this->createMock(HookableMergerInterface::class);
+    }
+
     public function testItThrowsAnExceptionWhenAtLeastOneElementIsNotAnAbstractHookable(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -42,6 +53,14 @@ final class HookablesRegistryTest extends TestCase
         $hookableTwo = $this->createHookable('another_hook', 'hookable_one');
         $hookableThree = $this->createHookable('yet_another_hook', 'hookable_one', false);
 
+        $this->hookableMerger
+            ->expects($this->exactly(2))
+            ->method('merge')
+            ->willReturnCallback(static function (AbstractHookable $first, AbstractHookable $second): AbstractHookable {
+                return $second;
+            })
+        ;
+
         $hookable = $this->getTestSubject([$hookableOne, $hookableTwo, $hookableThree])
             ->getEnabledFor(['some_hook', 'another_hook', 'yet_another_hook'])
         ;
@@ -61,7 +80,7 @@ final class HookablesRegistryTest extends TestCase
      */
     private function getTestSubject(iterable $hookables): HookablesRegistry
     {
-        return new HookablesRegistry($hookables);
+        return new HookablesRegistry($hookables, $this->hookableMerger);
     }
 
     /**

@@ -41,4 +41,9 @@ abstract class AbstractHookable
     abstract public function overwriteWith(self $hookable): self;
 
     abstract public function getType(): string;
+
+    /**
+     * @return array<string, mixed>
+     */
+    abstract public function toArray(): array;
 }
