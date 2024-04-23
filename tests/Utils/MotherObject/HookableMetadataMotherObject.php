@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Sylius\TwigHooks\Utils\MotherObject;
 
+use Sylius\TwigHooks\Bag\DataBag;
+use Sylius\TwigHooks\Bag\DataBagInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class HookableMetadataMotherObject
 {
@@ -14,40 +14,40 @@ final class HookableMetadataMotherObject
     {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
-            new ParameterBag([]),
-            new ParameterBag([]),
+            new DataBag([]),
+            new DataBag([]),
             []
         );
     }
 
-    public static function withContext(ParameterBagInterface|array $context): HookableMetadata
+    public static function withContext(DataBagInterface|array $context): HookableMetadata
     {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
-            is_array($context) ? new ParameterBag($context) : $context,
-            new ParameterBag([]),
+            is_array($context) ? new DataBag($context) : $context,
+            new DataBag([]),
             []
         );
     }
 
-    public static function withConfiguration(ParameterBagInterface|array $configuration): HookableMetadata
+    public static function withConfiguration(DataBagInterface|array $configuration): HookableMetadata
     {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
-            new ParameterBag([]),
-            is_array($configuration) ? new ParameterBag($configuration) : $configuration,
+            new DataBag([]),
+            is_array($configuration) ? new DataBag($configuration) : $configuration,
             []
         );
     }
 
     public static function withContextAndConfiguration(
-        ParameterBagInterface|array $context,
-        ParameterBagInterface|array $configuration,
+        DataBagInterface|array $context,
+        DataBagInterface|array $configuration,
     ): HookableMetadata {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
-            is_array($context) ? new ParameterBag($context) : $context,
-            is_array($configuration) ? new ParameterBag($configuration) : $configuration,
+            is_array($context) ? new DataBag($context) : $context,
+            is_array($configuration) ? new DataBag($configuration) : $configuration,
             []
         );
     }
