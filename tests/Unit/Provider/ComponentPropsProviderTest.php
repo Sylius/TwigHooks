@@ -36,7 +36,7 @@ final class ComponentPropsProviderTest extends TestCase
     public function testItEvaluatesExpressions(): void
     {
         $hookable = HookableComponentMotherObject::withProps([
-            'name' => '@=_configuration.get("anonymize") ? "Anon" : _context.get("username")'
+            'name' => '@=_configuration.anonymize ? "Anon" : _context.username'
         ]);
         $anonymizeMetadata = HookableMetadataMotherObject::withContextAndConfiguration(
             context: [

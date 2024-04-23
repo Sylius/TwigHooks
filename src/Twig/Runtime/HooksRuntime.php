@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Twig\Runtime;
 
+use Sylius\TwigHooks\Bag\DataBagInterface;
 use Sylius\TwigHooks\Hook\NameGenerator\NameGeneratorInterface;
 use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Error\RuntimeError;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -46,7 +46,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
      * @param array<string, mixed> $context
      * @throws RuntimeError
      */
-    public function getHookableContext(array $context): ParameterBagInterface
+    public function getHookableContext(array $context): DataBagInterface
     {
         return $this->getHookableMetadata($context)->context;
     }
@@ -55,7 +55,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
      * @param array<string, mixed> $context
      * @throws RuntimeError
      */
-    public function getHookableConfiguration(array $context): ParameterBagInterface
+    public function getHookableConfiguration(array $context): DataBagInterface
     {
         return $this->getHookableMetadata($context)->configuration;
     }
