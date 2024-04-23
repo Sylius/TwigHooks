@@ -14,6 +14,7 @@ final class HookNode extends Node
     public function __construct (
         Node $name,
         ?Node $context,
+        bool $only,
         int $lineno,
         string $tag = null
     ) {
@@ -22,7 +23,9 @@ final class HookNode extends Node
                 'name' => $name,
                 'hook_level_context' => $context ?? new ArrayExpression([], $lineno),
             ],
-            [],
+            [
+                'only' => $only,
+            ],
             $lineno,
             $tag,
         );
@@ -43,6 +46,8 @@ final class HookNode extends Node
         $compiler->subcompile($this->getNode('hook_level_context'));
         $compiler->raw(', ');
         $compiler->raw('$context["hookable_metadata"] ?? null');
+        $compiler->raw(', ');
+        $compiler->raw($this->getAttribute('only') ? 'true' : 'false');
         $compiler->raw(");\n");
     }
 }
