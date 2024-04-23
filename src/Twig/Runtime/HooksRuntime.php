@@ -22,6 +22,11 @@ final class HooksRuntime implements RuntimeExtensionInterface
     ) {
     }
 
+    public function createHookName(string $base, string ...$parts): string
+    {
+        return $this->nameGenerator->generate($base, ...$parts);
+    }
+
     /**
      * @param array<string, mixed> $context
      * @throws RuntimeError
