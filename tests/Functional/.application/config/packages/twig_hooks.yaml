@@ -3,3 +3,21 @@ twig_hooks:
         'hook_with_hookable':
             hookable:
                 template: 'parsing_hook_tag_test/hook_with_hookables/hookable_with_hook.html.twig'
+
+        'restricting_context_scope.index':
+            with_only:
+                template: 'restricting_context_scope/index/with_only.html.twig'
+                context:
+                    'other': 'data'
+            without_only:
+                template: 'restricting_context_scope/index/without_only.html.twig'
+                context:
+                    'other': 'data'
+
+        'restricting_context_scope.index.with_only':
+            some:
+                template: 'restricting_context_scope/index/block/some.html.twig'
+
+        'restricting_context_scope.index.without_only':
+            some:
+                template: 'restricting_context_scope/index/block/some.html.twig'

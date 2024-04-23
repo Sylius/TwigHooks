@@ -59,11 +59,16 @@ final class HooksRuntime implements RuntimeExtensionInterface
      * @param string|array<string> $hookNames
      * @param array<string, mixed> $hookContext
      */
-    public function renderHook(string|array $hookNames, array $hookContext = [], ?HookableMetadata $hookableMetadata = null): string
+    public function renderHook(
+        string|array $hookNames,
+        array $hookContext = [],
+        ?HookableMetadata $hookableMetadata = null,
+        bool $only = false,
+    ): string
     {
         $hookNames = is_string($hookNames) ? [$hookNames] : $hookNames;
 
-        $context = $this->getContext($hookContext, $hookableMetadata);
+        $context = $this->getContext($hookContext, $hookableMetadata, $only);
         $prefixes = $this->getPrefixes($hookContext, $hookableMetadata);
 
         if (false === $this->enableAutoprefixing || [] === $prefixes) {
@@ -105,13 +110,13 @@ final class HooksRuntime implements RuntimeExtensionInterface
      * @param array<string, mixed> $hookContext
      * @return array<string, mixed>
      */
-    private function getContext(array $hookContext, ?HookableMetadata $hookableMetadata): array
+    private function getContext(array $hookContext, ?HookableMetadata $hookableMetadata, bool $only = false): array
     {
-        $context = [];
-
-        if ($hookableMetadata !== null) {
-            $context = $hookableMetadata->context->all();
+        if ($only) {
+            return $hookContext;
         }
+
+        $context = $hookableMetadata?->context->all() ?? [];
 
         return array_merge($context, $hookContext);
     }
