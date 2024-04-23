@@ -24,9 +24,14 @@ final class HookTokenParser extends AbstractTokenParser
             $hookContext = $this->parser->getExpressionParser()->parseMultitargetExpression();
         }
 
+        $only = false;
+        if ($stream->nextIf(Token::NAME_TYPE, 'only')) {
+            $only = true;
+        }
+
         $stream->expect(Token::BLOCK_END_TYPE);
 
-        return new HookNode($hooksNames, $hookContext, $lineno, $this->getTag());
+        return new HookNode($hooksNames, $hookContext, $only, $lineno, $this->getTag());
     }
 
     public function getTag(): string

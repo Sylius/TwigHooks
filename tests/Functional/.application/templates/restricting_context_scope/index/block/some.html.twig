@@ -1,0 +1,6 @@
+{% set hookable_context = get_hookable_context() %}
+
+{{ hookable_context.get('title') }}
+
+is "some" defined: {{ hookable_context.has('some') ? 'Yes' : 'No' }}
+is "other" defined: {{ hookable_context.has('other') ? 'Yes' : 'No' }}
