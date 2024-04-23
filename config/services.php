@@ -49,6 +49,7 @@ return static function (ContainerConfigurator $configurator): void {
         ->args([
             service('twig_hooks.renderer.hook'),
             service('twig_hooks.hook.name_generator.template'),
+            param('twig_hooks.enable_autoprefixing'),
         ])
         ->tag('twig.runtime')
     ;

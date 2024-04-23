@@ -11,6 +11,17 @@ use Sylius\TwigHooks\Hookable\HookableTemplate;
 
 final class TwigHooksExtensionTest extends AbstractExtensionTestCase
 {
+    public function testItSetsEnableAutoprefixingParameter(): void
+    {
+        $this->load([
+            'enable_autoprefixing' => true,
+            'hooks' => [],
+            'supported_hookable_types' => [],
+        ]);
+
+        $this->assertContainerBuilderHasParameter('twig_hooks.enable_autoprefixing', true);
+    }
+
     public function testItRegistersHookablesAsServices(): void
     {
         $this->load([

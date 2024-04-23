@@ -18,6 +18,12 @@ final class Configuration implements ConfigurationInterface
 
         $rootNode = $treeBuilder->getRootNode();
 
+        $rootNode
+            ->children()
+                ->booleanNode('enable_autoprefixing')->defaultFalse()->end()
+            ->end()
+        ->end();
+
         $this->addSupportedHookableTypesConfiguration($rootNode);
         $this->addHooksConfiguration($rootNode);
 

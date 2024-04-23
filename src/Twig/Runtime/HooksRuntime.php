@@ -18,7 +18,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
     public function __construct (
         private readonly HookRendererInterface $hookRenderer,
         private readonly NameGeneratorInterface $nameGenerator,
-        private readonly bool $enableAutoprefixing = true,
+        private readonly bool $enableAutoprefixing,
     ) {
     }
 

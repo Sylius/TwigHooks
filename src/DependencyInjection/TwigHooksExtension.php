@@ -26,6 +26,7 @@ final class TwigHooksExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $this->registerHooks($container, $config['hooks'], $config['supported_hookable_types']);
+        $container->setParameter('twig_hooks.enable_autoprefixing', $config['enable_autoprefixing']);
     }
 
     /**
