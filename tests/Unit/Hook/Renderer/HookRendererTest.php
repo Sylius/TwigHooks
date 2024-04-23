@@ -12,6 +12,7 @@ use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
 use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
 use Sylius\TwigHooks\Provider\ContextProviderInterface;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 
 final class HookRendererTest extends TestCase
 {
@@ -35,10 +36,10 @@ final class HookRendererTest extends TestCase
         $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
     }
 
-    public function testItRendersHookablesForGivenHookName(): void
+    public function testItReturnsRenderedHookables(): void
     {
-        $hookableOne = $this->createMock(AbstractHookable::class);
-        $hookableTwo = $this->createMock(AbstractHookable::class);
+        $hookableOne = HookableTemplateMotherObject::withName('first_hook');
+        $hookableTwo = HookableTemplateMotherObject::withName('second_hook');
 
         $this->hookablesRegistry->method('getEnabledFor')->willReturn([$hookableOne, $hookableTwo]);
         $this->contextProvider->method('provide')->willReturn([]);
@@ -58,6 +59,17 @@ final class HookRendererTest extends TestCase
         RENDER;
 
         $this->assertSame($expected, $result);
+    }
+
+    public function testItReturnsEmptyStringWhenNoHookablesAreFound(): void
+    {
+        $this->hookablesRegistry->method('getEnabledFor')->willReturn([]);
+        $this->contextProvider->method('provide')->willReturn([]);
+        $this->configurationProvider->method('provide')->willReturn([]);
+
+        $result = $this->getTestSubject()->render(['hook_name']);
+
+        $this->assertSame('', $result);
     }
 
     private function getTestSubject(): HookRenderer

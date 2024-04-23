@@ -7,6 +7,8 @@ namespace Tests\Sylius\TwigHooks\Integration\DependencyInjection;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\DependencyInjection\Configuration;
+use Sylius\TwigHooks\Hookable\HookableComponent;
+use Sylius\TwigHooks\Hookable\HookableTemplate;
 
 final class ConfigurationTest extends TestCase
 {
@@ -43,12 +45,13 @@ final class ConfigurationTest extends TestCase
                         'some_hookable' => [
                             'type' => 'template',
                             'target' => 'some_target.html.twig',
-                            'data' => [],
+                            'context' => [],
                             'configuration' => [],
                             'priority' => null,
                             'enabled' => true,
                             'component' => null,
                             'template' => null,
+                            'props' => [],
                         ],
                     ],
                 ],
@@ -98,12 +101,13 @@ final class ConfigurationTest extends TestCase
                         'some_hookable' => [
                             'type' => 'component',
                             'target' => 'MyAwesomeComponent',
-                            'data' => [],
+                            'context' => [],
                             'configuration' => [],
                             'priority' => null,
                             'enabled' => true,
                             'component' => 'MyAwesomeComponent',
                             'template' => null,
+                            'props' => [],
                         ],
                     ],
                 ],
@@ -132,12 +136,13 @@ final class ConfigurationTest extends TestCase
                         'some_hookable' => [
                             'type' => 'template',
                             'target' => 'some_target.html.twig',
-                            'data' => [],
+                            'context' => [],
                             'configuration' => [],
                             'priority' => null,
                             'enabled' => true,
                             'component' => null,
                             'template' => 'some_target.html.twig',
+                            'props' => [],
                         ],
                     ],
                 ],
@@ -162,6 +167,25 @@ final class ConfigurationTest extends TestCase
                 ],
             ],
             'You cannot define both "component" and "template" at the same time.'
+        );
+    }
+
+    public function testItThrowsExceptionWhenPropsAreDefinedForNonComponentHookable(): void
+    {
+        $this->assertConfigurationIsInvalid(
+            [
+                [
+                    'hooks' => [
+                        'some_hook' => [
+                            'some_hookable' => [
+                                'template' => 'some_target.html.twig',
+                                'props' => ['key' => 'value'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            '"Props" cannot be defined for non-component hookables.'
         );
     }
 

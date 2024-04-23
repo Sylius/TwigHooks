@@ -55,7 +55,7 @@ class Profile
             throw new \RuntimeException('Cannot register hookable render without hook profile');
         }
 
-        $hookableProfile = new HookableProfile($this->currentHookProfile, $hookable->getName(), $hookable, []);
+        $hookableProfile = new HookableProfile($this->currentHookProfile, $hookable->name, $hookable, []);
 
         $this->currentHookableProfile = $hookableProfile;
         $this->currentHookProfile->addHookableProfile($this->currentHookableProfile);

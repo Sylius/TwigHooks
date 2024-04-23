@@ -18,9 +18,11 @@
         "laminas/laminas-stdlib": "^3.18",
         "symfony/config": "^5.4 || ^6.0",
         "symfony/dependency-injection": "^5.4 || ^6.0",
+        "symfony/expression-language": "^5.4 || ^6.0",
         "symfony/http-kernel": "^5.4 || ^6.0",
         "symfony/stopwatch": "^5.4 || ^6.0",
         "symfony/ux-twig-component": "^2.12",
+        "symfony/twig-bundle": "^5.4 || ^6.0",
         "twig/twig": "^2.15 || ^3.0"
     },
     "require-dev": {

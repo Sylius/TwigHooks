@@ -9,8 +9,8 @@ use Sylius\TwigHooks\Hookable\AbstractHookable;
 interface ContextProviderInterface
 {
     /**
-     * @param array<string, mixed> $hookData
+     * @param array<string, mixed> $hookContext
      * @return array<string, mixed>
      */
-    public function provide(AbstractHookable $hookable, array $hookData): array;
+    public function provide(AbstractHookable $hookable, array $hookContext): array;
 }

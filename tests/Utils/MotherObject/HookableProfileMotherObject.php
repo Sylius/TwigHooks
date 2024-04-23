@@ -13,7 +13,7 @@ final class HookableProfileMotherObject
         return new HookableProfile(
             HookProfileMotherObject::some(),
             'some_name',
-            BaseHookableMotherObject::some(),
+            HookableTemplateMotherObject::some(),
             [],
         );
     }

@@ -20,6 +20,7 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set('twig_hooks.renderer.hookable.component', HookableComponentRenderer::class)
         ->args([
+            service('twig_hooks.provider.component_props'),
             service('ux.twig_component.component_renderer'),
         ])
         ->tag('twig_hooks.hookable_renderer')

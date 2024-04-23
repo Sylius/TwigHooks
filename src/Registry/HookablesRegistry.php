@@ -26,7 +26,7 @@ class HookablesRegistry
                 );
             }
 
-            $this->hookables[$hookable->getHookName()][$hookable->getName()] = $hookable;
+            $this->hookables[$hookable->hookName][$hookable->name] = $hookable;
         }
     }
 

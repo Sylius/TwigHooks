@@ -15,7 +15,7 @@ final class HooksExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('get_hookable_metadata', [HooksRuntime::class, 'getHookableContext'], ['needs_context' => true]),
+            new TwigFunction('get_hookable_metadata', [HooksRuntime::class, 'getHookableMetadata'], ['needs_context' => true]),
             new TwigFunction('get_hookable_context', [HooksRuntime::class, 'getHookableContext'], ['needs_context' => true]),
             new TwigFunction('get_hookable_configuration', [HooksRuntime::class, 'getHookableContext'], ['needs_context' => true]),
         ];
