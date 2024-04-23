@@ -20,8 +20,12 @@ final class ConfigurationTest extends TestCase
             [],
             [
                 'hooks' => [],
+                'enable_autoprefixing' => false,
+                'supported_hookable_types' => [
+                    'template' => HookableTemplate::class,
+                    'component' => HookableComponent::class,
+                ],
             ],
-            'hooks.*'
         );
     }
 

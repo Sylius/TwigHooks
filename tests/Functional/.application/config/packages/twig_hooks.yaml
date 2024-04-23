@@ -1,4 +1,5 @@
 twig_hooks:
+    enable_autoprefixing: true
     hooks:
         'hook_with_hookable':
             hookable:
