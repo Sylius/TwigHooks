@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Twig\Node;
 
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
-use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Node;
 
-#[YieldReady]
 final class HookNode extends Node
 {
     public function __construct (
@@ -42,7 +40,7 @@ final class HookNode extends Node
             HooksRuntime::class,
         ))->raw("\n");
 
-        $compiler->raw('yield $hooksRuntime->renderHook(');
+        $compiler->raw('echo $hooksRuntime->renderHook(');
         $compiler->subcompile($this->getNode('name'));
         $compiler->raw(', ');
         $compiler->subcompile($this->getNode('hook_level_context'));
