@@ -12,16 +12,15 @@ use Twig\Node\Node;
 final class HookNode extends Node
 {
     public function __construct (
-        Node $hookNames,
-        ?Node $parameters,
-
+        Node $name,
+        ?Node $context,
         int $lineno,
         string $tag = null
     ) {
         parent::__construct(
             [
-                'hook_names' => $hookNames,
-                'parameters' => $parameters ?? new ArrayExpression([], $lineno),
+                'name' => $name,
+                'hook_level_context' => $context ?? new ArrayExpression([], $lineno),
             ],
             [],
             $lineno,
@@ -39,9 +38,11 @@ final class HookNode extends Node
         ))->raw("\n");
 
         $compiler->raw('echo $hooksRuntime->renderHook(');
-        $compiler->subcompile($this->getNode('hook_names'));
+        $compiler->subcompile($this->getNode('name'));
         $compiler->raw(', ');
-        $compiler->subcompile($this->getNode('parameters'));
+        $compiler->subcompile($this->getNode('hook_level_context'));
+        $compiler->raw(', ');
+        $compiler->raw('$context["hookable_metadata"] ?? null');
         $compiler->raw(");\n");
     }
 }

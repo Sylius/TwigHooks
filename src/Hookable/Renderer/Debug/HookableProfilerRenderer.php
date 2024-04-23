@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Hookable\Renderer\Debug;
 
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
 use Sylius\TwigHooks\Profiler\Profile;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -18,12 +19,12 @@ final class HookableProfilerRenderer implements HookableRendererInterface
     ) {
     }
 
-    public function render(AbstractHookable $hookable, array $hookData = []): string
+    public function render(AbstractHookable $hookable, HookableMetadata $metadata): string
     {
         $this->profile?->registerHookableRenderStart($hookable);
         $this->stopwatch?->start($hookable->getId());
 
-        $rendered = $this->innerRenderer->render($hookable, $hookData);
+        $rendered = $this->innerRenderer->render($hookable, $metadata);
 
         $this->profile?->registerHookableRenderEnd(
             $this->stopwatch?->stop($hookable->getId())->getDuration(),

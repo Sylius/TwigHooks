@@ -6,7 +6,7 @@ namespace Sylius\TwigHooks\Provider;
 
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 
-interface DataProviderInterface
+interface ContextProviderInterface
 {
     /**
      * @param array<string, mixed> $hookData

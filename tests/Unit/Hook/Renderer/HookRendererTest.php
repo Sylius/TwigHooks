@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hook\Renderer\HookRenderer;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
+use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
+use Sylius\TwigHooks\Provider\ContextProviderInterface;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
 
 final class HookRendererTest extends TestCase
@@ -19,10 +21,18 @@ final class HookRendererTest extends TestCase
     /** @var HookableRendererInterface&MockObject */
     private HookableRendererInterface $hookableRenderer;
 
+    /** @var ContextProviderInterface&MockObject */
+    private ContextProviderInterface $contextProvider;
+
+    /** @var ConfigurationProviderInterface&MockObject */
+    private ConfigurationProviderInterface $configurationProvider;
+
     protected function setUp(): void
     {
         $this->hookablesRegistry = $this->createMock(HookablesRegistry::class);
         $this->hookableRenderer = $this->createMock(HookableRendererInterface::class);
+        $this->contextProvider = $this->createMock(ContextProviderInterface::class);
+        $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
     }
 
     public function testItRendersHookablesForGivenHookName(): void
@@ -31,6 +41,8 @@ final class HookRendererTest extends TestCase
         $hookableTwo = $this->createMock(AbstractHookable::class);
 
         $this->hookablesRegistry->method('getEnabledFor')->willReturn([$hookableOne, $hookableTwo]);
+        $this->contextProvider->method('provide')->willReturn([]);
+        $this->configurationProvider->method('provide')->willReturn([]);
 
         $this->hookableRenderer->expects($this->exactly(2))->method('render')->willReturnCallback(
             static fn (AbstractHookable $hookable): string => match ($hookable) {
@@ -39,7 +51,7 @@ final class HookRendererTest extends TestCase
             }
         );
 
-        $result = $this->getTestSubject()->render('hook_name');
+        $result = $this->getTestSubject()->render(['hook_name']);
         $expected = <<<RENDER
         hookable_one_rendered
         hookable_two_rendered
@@ -50,6 +62,11 @@ final class HookRendererTest extends TestCase
 
     private function getTestSubject(): HookRenderer
     {
-        return new HookRenderer($this->hookablesRegistry, $this->hookableRenderer);
+        return new HookRenderer(
+            $this->hookablesRegistry,
+            $this->hookableRenderer,
+            $this->contextProvider,
+            $this->configurationProvider,
+        );
     }
 }

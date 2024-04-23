@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\Renderer\Debug\HookableDebugCommentRenderer;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableMetadataMotherObject;
 
 final class HookableDebugCommentRendererTest extends TestCase
 {
@@ -24,11 +24,12 @@ final class HookableDebugCommentRendererTest extends TestCase
     public function testItAddsDebugCommentsToRenderedHookable(): void
     {
         $hookable = BaseHookableMotherObject::some();
+        $metadata = HookableMetadataMotherObject::some();
 
         $this->innerRenderer
             ->expects($this->once())
             ->method('render')
-            ->with($hookable, [])
+            ->with($hookable, $metadata)
             ->willReturn('some-rendered-hookable')
         ;
 
@@ -38,7 +39,7 @@ final class HookableDebugCommentRendererTest extends TestCase
         <!--  END HOOKABLE  | hook: "some_hook", type: "template", name: "some_name", target: "some_target", priority: 0 -->
         HOOKABLE;
 
-        $this->assertSame($expectedRenderedHookable, $this->getTestSubject()->render($hookable));
+        $this->assertSame($expectedRenderedHookable, $this->getTestSubject()->render($hookable, $metadata));
     }
 
     private function getTestSubject(): HookableDebugCommentRenderer

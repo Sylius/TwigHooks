@@ -4,24 +4,42 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Hook\Renderer;
 
+use Sylius\TwigHooks\Hook\Metadata\HookMetadata;
+use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
+use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
+use Sylius\TwigHooks\Provider\ContextProviderInterface;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 final class HookRenderer implements HookRendererInterface
 {
     public function __construct(
-        private HookablesRegistry $hookablesRegistry,
-        private HookableRendererInterface $compositeHookableRenderer,
+        private readonly HookablesRegistry $hookablesRegistry,
+        private readonly HookableRendererInterface $compositeHookableRenderer,
+        private readonly ContextProviderInterface $contextProvider,
+        private readonly ConfigurationProviderInterface $configurationProvider,
     ) {
     }
 
-    public function render(array|string $hooksNames, array $data = []): string
+    /**
+     * @param array<string> $hookNames
+     * @param array<string, mixed> $hookContext
+     */
+    public function render(array $hookNames, array $hookContext = []): string
     {
-        $hookables = $this->hookablesRegistry->getEnabledFor($hooksNames);
+        $hookables = $this->hookablesRegistry->getEnabledFor($hookNames);
         $renderedHookables = [];
 
         foreach ($hookables as $hookable) {
-            $renderedHookables[] = $this->compositeHookableRenderer->render($hookable, $data);
+            $hookMetadata = new HookMetadata($hookable->getHookName(), new ParameterBag($hookContext));
+
+            $context = $this->contextProvider->provide($hookable, $hookContext);
+            $configuration = $this->configurationProvider->provide($hookable);
+
+            $hookableMetadata = new HookableMetadata($hookMetadata, new ParameterBag($context), new ParameterBag($configuration), $hookNames);
+
+            $renderedHookables[] = $this->compositeHookableRenderer->render($hookable, $hookableMetadata);
         }
 
         return implode(PHP_EOL, $renderedHookables);

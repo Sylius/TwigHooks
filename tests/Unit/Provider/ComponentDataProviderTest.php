@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Sylius\TwigHooks\Unit\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Sylius\TwigHooks\Provider\ComponentDataProvider;
-use Sylius\TwigHooks\Provider\DataProviderInterface;
+use Sylius\TwigHooks\Provider\ComponentContextProvider;
+use Sylius\TwigHooks\Provider\ContextProviderInterface;
 use Sylius\TwigHooks\Provider\Exception\InvalidExpressionException;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
@@ -56,9 +56,9 @@ final class ComponentDataProviderTest extends TestCase
         $dataProvider->provide($hookable, ['some' => 'data', 'another' => 'data']);
     }
 
-    private function createTestSubject(): DataProviderInterface
+    private function createTestSubject(): ContextProviderInterface
     {
-        return new ComponentDataProvider(
+        return new ComponentContextProvider(
             new ExpressionLanguage(),
         );
     }

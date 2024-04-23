@@ -6,7 +6,7 @@ namespace Sylius\TwigHooks\Provider;
 
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 
-final class DefaultDataProvider implements DataProviderInterface
+final class DefaultContextProvider implements ContextProviderInterface
 {
     public function provide(AbstractHookable $hookable, array $hookData): array
     {

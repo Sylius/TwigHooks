@@ -21,8 +21,6 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set('twig_hooks.renderer.hookable.component', HookableComponentRenderer::class)
         ->args([
             service('ux.twig_component.component_renderer'),
-            service('twig_hooks.provider.component_data'),
-            service('twig_hooks.provider.default_configuration'),
         ])
         ->tag('twig_hooks.hookable_renderer')
     ;
@@ -30,8 +28,6 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set('twig_hooks.renderer.hookable.template', HookableTemplateRenderer::class)
         ->args([
             service('twig'),
-            service('twig_hooks.provider.default_data'),
-            service('twig_hooks.provider.default_configuration'),
         ])
         ->tag('twig_hooks.hookable_renderer')
     ;

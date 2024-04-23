@@ -12,12 +12,12 @@ final class HookDebugCommentRenderer implements HookRendererInterface
     {
     }
 
-    public function render(array $hooksNames, array $data = []): string
+    public function render(array $hookNames, array $hookContext = []): string
     {
         $renderedParts = [];
-        $renderedParts[] = $this->getOpeningDebugComment($hooksNames);
-        $renderedParts[] = trim($this->innerRenderer->render($hooksNames, $data));
-        $renderedParts[] = $this->getClosingDebugComment($hooksNames);
+        $renderedParts[] = $this->getOpeningDebugComment($hookNames);
+        $renderedParts[] = trim($this->innerRenderer->render($hookNames, $hookContext));
+        $renderedParts[] = $this->getClosingDebugComment($hookNames);
 
         return implode(PHP_EOL, $renderedParts);
     }

@@ -8,10 +8,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
+use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\HookableTemplateRenderer;
-use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
-use Sylius\TwigHooks\Provider\DataProviderInterface;
-use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 use Twig\Environment as Twig;
@@ -21,17 +19,9 @@ final class HookableTemplateRendererTest extends TestCase
     /** @var Twig&MockObject */
     private Twig $twig;
 
-    /** @var DataProviderInterface&MockObject */
-    private DataProviderInterface $dataProvider;
-
-    /** @var ConfigurationProviderInterface&MockObject */
-    private ConfigurationProviderInterface $configurationProvider;
-
     protected function setUp(): void
     {
         $this->twig = $this->createMock(Twig::class);
-        $this->dataProvider = $this->createMock(DataProviderInterface::class);
-        $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
     }
 
     public function testItSupportsOnlyHookableTemplates(): void
@@ -46,35 +36,30 @@ final class HookableTemplateRendererTest extends TestCase
     public function testItThrowsAnExceptionWhenTryingToRenderUnsupportedHookable(): void
     {
         $hookableComponent = BaseHookableMotherObject::withType(AbstractHookable::TYPE_COMPONENT);
+        $metadata = $this->createMock(HookableMetadata::class);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Hookable must be the "template" type, but "component" given.');
 
-        $this->getTestSubject()->render($hookableComponent);
+        $this->getTestSubject()->render($hookableComponent, $metadata);
     }
 
     public function testItRendersHookableTemplate(): void
     {
-        $this->dataProvider->expects($this->once())->method('provide')->willReturn(['some' => 'data']);
-        $this->configurationProvider->expects($this->once())->method('provide')->willReturn(['some' => 'configuration']);
+        $metadata = $this->createMock(HookableMetadata::class);
 
         $this->twig->expects($this->once())->method('render')->with('some-template', [
-            HooksRuntime::HOOKABLE_DATA_PARAMETER => ['some' => 'data'],
-            HooksRuntime::HOOKABLE_CONFIGURATION_PARAMETER => ['some' => 'configuration'],
+            'hookable_metadata' => $metadata,
         ])->willReturn('some-rendered-template');
 
         $hookable = BaseHookableMotherObject::withTarget('some-template');
-        $renderedTemplate = $this->getTestSubject()->render($hookable);
+        $renderedTemplate = $this->getTestSubject()->render($hookable, $metadata);
 
         $this->assertSame('some-rendered-template', $renderedTemplate);
     }
 
     private function getTestSubject(): HookableTemplateRenderer
     {
-        return new HookableTemplateRenderer(
-            $this->twig,
-            $this->dataProvider,
-            $this->configurationProvider
-        );
+        return new HookableTemplateRenderer($this->twig);
     }
 }

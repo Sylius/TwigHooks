@@ -16,15 +16,11 @@ final class TwigHooksExtension extends Extension
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__, 2) . '/config'));
         $loader->load('services.php');
 
-        if ($container->getParameter('kernel.debug')) {
+        if ($container->hasParameter('kernel.debug') && $container->getParameter('kernel.debug')) {
             $loader->load('services/debug/twig_events.php');
         }
 
         $configuration = $this->getConfiguration([], $container);
-        if ($configuration === null) {
-            return;
-        }
-
         $config = $this->processConfiguration($configuration, $configs);
 
         $this->registerHooks($container, $config['hooks'], $config['supported_hookable_types']);

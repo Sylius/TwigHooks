@@ -17,15 +17,15 @@ final class HookProfilerRenderer implements HookRendererInterface
     ) {
     }
 
-    public function render(array $hooksNames, array $data = []): string
+    public function render(array $hookNames, array $hookContext = []): string
     {
-        $this->profile?->registerHookStart($hooksNames);
-        $this->stopwatch?->start(md5(serialize($hooksNames)));
+        $this->profile?->registerHookStart($hookNames);
+        $this->stopwatch?->start(md5(serialize($hookNames)));
 
-        $rendered = $this->innerRenderer->render($hooksNames, $data);
+        $rendered = $this->innerRenderer->render($hookNames, $hookContext);
 
         $this->profile?->registerHookEnd(
-            $this->stopwatch?->stop(md5(serialize($hooksNames)))->getDuration(),
+            $this->stopwatch?->stop(md5(serialize($hookNames)))->getDuration(),
         );
 
         return $rendered;

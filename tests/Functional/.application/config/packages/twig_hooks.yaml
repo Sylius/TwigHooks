@@ -1,0 +1,5 @@
+twig_hooks:
+    hooks:
+        'hook_with_hookable':
+            hookable:
+                template: 'parsing_hook_tag_test/hook_with_hookables/hookable_with_hook.html.twig'
