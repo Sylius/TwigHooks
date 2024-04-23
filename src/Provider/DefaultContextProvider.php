@@ -8,8 +8,8 @@ use Sylius\TwigHooks\Hookable\AbstractHookable;
 
 final class DefaultContextProvider implements ContextProviderInterface
 {
-    public function provide(AbstractHookable $hookable, array $hookData): array
+    public function provide(AbstractHookable $hookable, array $hookContext): array
     {
-        return array_replace($hookable->getData(), $hookData);
+        return array_merge($hookContext, $hookable->context);
     }
 }

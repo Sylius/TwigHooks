@@ -28,10 +28,10 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface
     {
         return sprintf(
             '<!-- BEGIN HOOKABLE | hook: "%s", type: "%s", name: "%s", target: "%s", priority: %d -->',
-            $hookable->getHookName(),
+            $hookable->hookName,
             $hookable->getType(),
-            $hookable->getName(),
-            $hookable->getTarget(),
+            $hookable->name,
+            $hookable->target,
             $hookable->getPriority(),
         );
     }
@@ -40,10 +40,10 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface
     {
         return sprintf(
             '<!--  END HOOKABLE  | hook: "%s", type: "%s", name: "%s", target: "%s", priority: %d -->',
-            $hookable->getHookName(),
+            $hookable->hookName,
             $hookable->getType(),
-            $hookable->getName(),
-            $hookable->getTarget(),
+            $hookable->name,
+            $hookable->target,
             $hookable->getPriority(),
         );
     }

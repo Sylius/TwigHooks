@@ -20,32 +20,34 @@ final class HookableMetadataMotherObject
         );
     }
 
-    public static function withContext(ParameterBagInterface $context): HookableMetadata
+    public static function withContext(ParameterBagInterface|array $context): HookableMetadata
     {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
-            $context,
+            is_array($context) ? new ParameterBag($context) : $context,
             new ParameterBag([]),
             []
         );
     }
 
-    public static function withConfiguration(ParameterBagInterface $configuration): HookableMetadata
+    public static function withConfiguration(ParameterBagInterface|array $configuration): HookableMetadata
     {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
             new ParameterBag([]),
-            $configuration,
+            is_array($configuration) ? new ParameterBag($configuration) : $configuration,
             []
         );
     }
 
-    public static function withContextAndConfiguration(ParameterBagInterface $context, ParameterBagInterface $configuration): HookableMetadata
-    {
+    public static function withContextAndConfiguration(
+        ParameterBagInterface|array $context,
+        ParameterBagInterface|array $configuration,
+    ): HookableMetadata {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
-            $context,
-            $configuration,
+            is_array($context) ? new ParameterBag($context) : $context,
+            is_array($configuration) ? new ParameterBag($configuration) : $configuration,
             []
         );
     }

@@ -55,7 +55,7 @@ final class HtmlDumper
             $hookableProfile->getHookable()->getPriority(),
             $hookableProfile->getDuration(),
             $hookableProfile->getName(),
-            $hookableProfile->getHookable()->getTarget(),
+            $hookableProfile->getHookable()->target,
         );
         $str .= PHP_EOL;
         $prefix .= $sibling ? '│   ' : '    ';

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\DependencyInjection;
 
-use Sylius\TwigHooks\Hookable\BaseHookable;
+use Sylius\TwigHooks\Hookable\HookableComponent;
+use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -30,8 +31,8 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('supported_hookable_types')
                     ->useAttributeAsKey('type')
                     ->defaultValue([
-                        'template' => BaseHookable::class,
-                        'component' => BaseHookable::class,
+                        'template' => HookableTemplate::class,
+                        'component' => HookableComponent::class,
                     ])
                     ->scalarPrototype()->end()
                 ->end()
@@ -44,9 +45,9 @@ final class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('hooks')
-                    ->useAttributeAsKey('name')
+                    ->useAttributeAsKey('_name')
                     ->arrayPrototype()
-                        ->useAttributeAsKey('name')
+                        ->useAttributeAsKey('_name')
                         ->arrayPrototype()
                             ->beforeNormalization()
                                 ->always(function ($v) {
@@ -64,13 +65,20 @@ final class Configuration implements ConfigurationInterface
                                 })
                             ->end()
                             ->validate()
-                                ->ifTrue(function ($v) {
+                                ->always(static function ($v) {
                                     $component = $v['component'] ?? null;
                                     $template = $v['template'] ?? null;
 
-                                    return null !== $component && null !== $template;
+                                    if (null !== $component && null !== $template) {
+                                        throw new \InvalidArgumentException('You cannot define both "component" and "template" at the same time.');
+                                    }
+
+                                    if (null === $component && [] !== $v['props']) {
+                                        throw new \InvalidArgumentException('"Props" cannot be defined for non-component hookables.');
+                                    }
+
+                                    return $v;
                                 })
-                                ->thenInvalid('You cannot define both "component" and "template" at the same time.')
                             ->end()
                             ->canBeDisabled()
                             ->children()
@@ -78,7 +86,12 @@ final class Configuration implements ConfigurationInterface
                                 ->scalarNode('target')->isRequired()->cannotBeEmpty()->end()
                                 ->scalarNode('component')->defaultNull()->end()
                                 ->scalarNode('template')->defaultNull()->end()
-                                ->arrayNode('data')
+                                ->arrayNode('context')
+                                    ->defaultValue([])
+                                    ->useAttributeAsKey('name')
+                                    ->prototype('variable')->end()
+                                ->end()
+                                ->arrayNode('props')
                                     ->defaultValue([])
                                     ->useAttributeAsKey('name')
                                     ->prototype('variable')->end()

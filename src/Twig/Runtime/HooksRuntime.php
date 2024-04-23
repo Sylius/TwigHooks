@@ -15,12 +15,6 @@ final class HooksRuntime implements RuntimeExtensionInterface
 {
     public const HOOKABLE_METADATA = 'hookable_metadata';
 
-    /** @deprecated  */
-    public const HOOKABLE_CONFIGURATION_PARAMETER = 'hookable_configuration';
-
-    /** @deprecated  */
-    public const HOOKABLE_DATA_PARAMETER = 'hookable_data';
-
     public function __construct (
         private readonly HookRendererInterface $hookRenderer,
         private readonly NameGeneratorInterface $nameGenerator,
