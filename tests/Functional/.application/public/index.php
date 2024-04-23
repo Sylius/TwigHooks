@@ -1,6 +1,6 @@
 <?php
 
-use App\Kernel;
+use app\Kernel;
 
 if (file_exists(dirname(__DIR__).'/vendor/autoload_runtime.php')) {
     require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';

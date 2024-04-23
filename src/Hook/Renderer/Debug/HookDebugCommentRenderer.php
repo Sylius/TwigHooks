@@ -8,7 +8,7 @@ use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 
 final class HookDebugCommentRenderer implements HookRendererInterface
 {
-    public function __construct(private HookRendererInterface $innerRenderer)
+    public function __construct(private readonly HookRendererInterface $innerRenderer)
     {
     }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\DependencyInjection;
 
+use Sylius\TwigHooks\Hookable\HookableComponent;
+use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -30,7 +32,7 @@ final class TwigHooksExtension extends Extension
      * @param array<string, array<string, array{
      *      type: string,
      *      target: string,
-     *      data: array<string, mixed>,
+     *      context: array<string, mixed>,
      *      configuration: array<string, mixed>,
      *      priority: int,
      *      enabled: bool,
@@ -60,7 +62,8 @@ final class TwigHooksExtension extends Extension
      * @param array{
      *     type: string,
      *     target: string,
-     *     data: array<string, mixed>,
+     *     props?: array<string, mixed>,
+     *     context: array<string, mixed>,
      *     configuration: array<string, mixed>,
      *     priority: int,
      *     enabled: bool,
@@ -73,14 +76,69 @@ final class TwigHooksExtension extends Extension
         string $hookableName,
         array $hookable,
     ): void {
+        match ($class) {
+            HookableTemplate::class => $this->registerTemplateHookable($container, $hookName, $hookableName, $hookable),
+            HookableComponent::class => $this->registerComponentHookable($container, $hookName, $hookableName, $hookable),
+            default => throw new \InvalidArgumentException(sprintf('Unsupported hookable class "%s".', $class)),
+        };
+    }
+
+    /**
+     * @param array{
+     *     type: string,
+     *     target: string,
+     *     context: array<string, mixed>,
+     *     configuration: array<string, mixed>,
+     *     priority: int,
+     *     enabled: bool,
+     * } $hookable
+     */
+    private function registerTemplateHookable(
+        ContainerBuilder $container,
+        string $hookName,
+        string $hookableName,
+        array $hookable,
+    ): void {
         $container
-            ->register(sprintf('twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), $class)
+            ->register(sprintf('twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), HookableTemplate::class)
             ->setArguments([
                 $hookName,
                 $hookableName,
-                $hookable['type'],
                 $hookable['target'],
-                $hookable['data'],
+                $hookable['context'],
+                $hookable['configuration'],
+                $hookable['priority'],
+                $hookable['enabled'],
+            ])
+            ->addTag('twig_hooks.hookable', ['priority' => $hookable['priority']])
+        ;
+    }
+
+    /**
+     * @param array{
+     *     type: string,
+     *     target: string,
+     *     props?: array<string, mixed>,
+     *     context: array<string, mixed>,
+     *     configuration: array<string, mixed>,
+     *     priority: int,
+     *     enabled: bool,
+     * } $hookable
+     */
+    private function registerComponentHookable(
+        ContainerBuilder $container,
+        string $hookName,
+        string $hookableName,
+        array $hookable,
+    ): void {
+        $container
+            ->register(sprintf('twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), HookableComponent::class)
+            ->setArguments([
+                $hookName,
+                $hookableName,
+                $hookable['target'],
+                $hookable['props'] ?? [],
+                $hookable['context'],
                 $hookable['configuration'],
                 $hookable['priority'],
                 $hookable['enabled'],

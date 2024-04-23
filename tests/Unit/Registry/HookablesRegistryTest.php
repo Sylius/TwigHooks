@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 
 final class HookablesRegistryTest extends TestCase
 {
@@ -39,17 +40,20 @@ final class HookablesRegistryTest extends TestCase
     {
         $hookableOne = $this->createHookable('some_hook', 'hookable_one');
         $hookableTwo = $this->createHookable('another_hook', 'hookable_one');
-
         $hookableThree = $this->createHookable('yet_another_hook', 'hookable_one', false);
-        $hookableThree->expects($this->exactly(2))->method('overwriteWith')->willReturnCallback(
-            fn (AbstractHookable $hookable) => match ($hookable) {
-                $hookableTwo, $hookableOne => $hookableThree,
-            }
-        );
 
-        $this->getTestSubject([$hookableOne, $hookableTwo, $hookableThree])
+        $hookable = $this->getTestSubject([$hookableOne, $hookableTwo, $hookableThree])
             ->getEnabledFor(['some_hook', 'another_hook', 'yet_another_hook'])
         ;
+
+        $this->assertCount(1, $hookable);
+        $this->assertSame('some_hook', $hookable[0]->hookName);
+        $this->assertSame('hookable_one', $hookable[0]->name);
+        $this->assertSame('some_target', $hookable[0]->target);
+        $this->assertSame([], $hookable[0]->context);
+        $this->assertSame([], $hookable[0]->configuration);
+        $this->assertSame(0, $hookable[0]->getPriority());
+        $this->assertTrue($hookable[0]->isEnabled());
     }
 
     /**
@@ -65,11 +69,10 @@ final class HookablesRegistryTest extends TestCase
      */
     private function createHookable(string $hookName, string $name, bool $enabled = true): AbstractHookable
     {
-        $hookable = $this->createMock(AbstractHookable::class);
-        $hookable->method('getHookName')->willReturn($hookName);
-        $hookable->method('getName')->willReturn($name);
-        $hookable->method('isEnabled')->willReturn($enabled);
-
-        return $hookable;
+        return HookableTemplateMotherObject::with([
+            'hookName' => $hookName,
+            'name' => $name,
+            'enabled' => $enabled,
+        ]);
     }
 }

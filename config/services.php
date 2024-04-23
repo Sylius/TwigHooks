@@ -3,7 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Sylius\TwigHooks\Hook\NameGenerator\TemplateNameGenerator;
-use Sylius\TwigHooks\Provider\ComponentContextProvider;
+use Sylius\TwigHooks\Provider\ComponentPropsProvider;
 use Sylius\TwigHooks\Provider\DefaultConfigurationProvider;
 use Sylius\TwigHooks\Provider\DefaultContextProvider;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
@@ -18,7 +18,7 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set('twig_hooks.provider.default_context', DefaultContextProvider::class);
 
-    $services->set('twig_hooks.provider.component_data', ComponentContextProvider::class)
+    $services->set('twig_hooks.provider.component_props', ComponentPropsProvider::class)
         ->args([
             inline_service(ExpressionLanguage::class),
         ])

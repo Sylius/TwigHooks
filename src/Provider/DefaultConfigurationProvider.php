@@ -10,6 +10,6 @@ final class DefaultConfigurationProvider implements ConfigurationProviderInterfa
 {
     public function provide(AbstractHookable $hookable): array
     {
-        return $hookable->getConfiguration();
+        return $hookable->configuration;
     }
 }

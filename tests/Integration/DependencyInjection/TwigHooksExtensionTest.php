@@ -6,6 +6,8 @@ namespace Tests\Sylius\TwigHooks\Integration\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Sylius\TwigHooks\DependencyInjection\TwigHooksExtension;
+use Sylius\TwigHooks\Hookable\HookableComponent;
+use Sylius\TwigHooks\Hookable\HookableTemplate;
 
 final class TwigHooksExtensionTest extends AbstractExtensionTestCase
 {
@@ -21,7 +23,7 @@ final class TwigHooksExtensionTest extends AbstractExtensionTestCase
                     'some_hookable' => [
                         'type' => 'template',
                         'target' => '@SomeBundle/some_template.html.twig',
-                        'data' => ['some' => 'data'],
+                        'context' => ['some' => 'context'],
                         'configuration' => [],
                         'priority' => 16,
                         'enabled' => false,
@@ -29,7 +31,7 @@ final class TwigHooksExtensionTest extends AbstractExtensionTestCase
                     'another_hookable' => [
                         'type' => 'component',
                         'target' => 'MyComponent',
-                        'data' => ['some' => 'data'],
+                        'context' => ['some' => 'context'],
                         'configuration' => [],
                         'priority' => 16,
                         'enabled' => false,
@@ -39,7 +41,7 @@ final class TwigHooksExtensionTest extends AbstractExtensionTestCase
                     'yet_another_hookable' => [
                         'type' => 'template',
                         'target' => '@SomeBundle/another_template.html.twig',
-                        'data' => ['some' => 'data'],
+                        'context' => ['some' => 'context'],
                         'enabled' => false,
                     ],
                 ]

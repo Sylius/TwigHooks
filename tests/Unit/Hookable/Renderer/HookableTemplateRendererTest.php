@@ -6,11 +6,9 @@ namespace Tests\Sylius\TwigHooks\Unit\Hookable\Renderer;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Sylius\TwigHooks\Hookable\AbstractHookable;
-use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\HookableTemplateRenderer;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableComponentMotherObject;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 use Twig\Environment as Twig;
 
@@ -26,8 +24,8 @@ final class HookableTemplateRendererTest extends TestCase
 
     public function testItSupportsOnlyHookableTemplates(): void
     {
-        $hookableTemplate = BaseHookableMotherObject::withType(AbstractHookable::TYPE_TEMPLATE);
-        $hookableComponent = BaseHookableMotherObject::withType(AbstractHookable::TYPE_COMPONENT);
+        $hookableTemplate = HookableTemplateMotherObject::some();
+        $hookableComponent = HookableComponentMotherObject::some();
 
         $this->assertTrue($this->getTestSubject()->supports($hookableTemplate));
         $this->assertFalse($this->getTestSubject()->supports($hookableComponent));
@@ -35,7 +33,7 @@ final class HookableTemplateRendererTest extends TestCase
 
     public function testItThrowsAnExceptionWhenTryingToRenderUnsupportedHookable(): void
     {
-        $hookableComponent = BaseHookableMotherObject::withType(AbstractHookable::TYPE_COMPONENT);
+        $hookableComponent = HookableComponentMotherObject::some();
         $metadata = $this->createMock(HookableMetadata::class);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -52,7 +50,7 @@ final class HookableTemplateRendererTest extends TestCase
             'hookable_metadata' => $metadata,
         ])->willReturn('some-rendered-template');
 
-        $hookable = BaseHookableMotherObject::withTarget('some-template');
+        $hookable = HookableTemplateMotherObject::withTarget('some-template');
         $renderedTemplate = $this->getTestSubject()->render($hookable, $metadata);
 
         $this->assertSame('some-rendered-template', $renderedTemplate);

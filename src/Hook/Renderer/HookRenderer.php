@@ -32,7 +32,7 @@ final class HookRenderer implements HookRendererInterface
         $renderedHookables = [];
 
         foreach ($hookables as $hookable) {
-            $hookMetadata = new HookMetadata($hookable->getHookName(), new ParameterBag($hookContext));
+            $hookMetadata = new HookMetadata($hookable->hookName, new ParameterBag($hookContext));
 
             $context = $this->contextProvider->provide($hookable, $hookContext);
             $configuration = $this->configurationProvider->provide($hookable);

@@ -8,8 +8,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\Renderer\Debug\HookableDebugCommentRenderer;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
-use Tests\Sylius\TwigHooks\Utils\MotherObject\BaseHookableMotherObject;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableMetadataMotherObject;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 
 final class HookableDebugCommentRendererTest extends TestCase
 {
@@ -23,7 +23,7 @@ final class HookableDebugCommentRendererTest extends TestCase
 
     public function testItAddsDebugCommentsToRenderedHookable(): void
     {
-        $hookable = BaseHookableMotherObject::some();
+        $hookable = HookableTemplateMotherObject::some();
         $metadata = HookableMetadataMotherObject::some();
 
         $this->innerRenderer

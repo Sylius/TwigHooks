@@ -37,6 +37,6 @@ final class CompositeHookableRenderer implements HookableRendererInterface
             }
         }
 
-        throw new NoSupportedRendererException($hookable->getHookName(), $hookable->getName());
+        throw new NoSupportedRendererException($hookable->hookName, $hookable->name);
     }
 }
