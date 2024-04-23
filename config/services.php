@@ -29,6 +29,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set('twig_hooks.registry.hookables', HookablesRegistry::class)
         ->args([
             tagged_iterator('twig_hooks.hookable'),
+            service('twig_hooks.merger.hookable'),
         ])
     ;
 

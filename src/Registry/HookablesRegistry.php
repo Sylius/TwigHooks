@@ -6,6 +6,7 @@ namespace Sylius\TwigHooks\Registry;
 
 use Laminas\Stdlib\SplPriorityQueue;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\Merger\HookableMergerInterface;
 
 /** @internal */
 class HookablesRegistry
@@ -16,8 +17,10 @@ class HookablesRegistry
     /**
      * @param iterable<AbstractHookable> $hookables
      */
-    public function __construct(iterable $hookables)
-    {
+    public function __construct(
+        iterable $hookables,
+        private readonly HookableMergerInterface $hookableMerger,
+    ) {
         /** @var AbstractHookable $hookable */
         foreach ($hookables as $hookable) {
             if (!$hookable instanceof AbstractHookable) {
@@ -68,7 +71,7 @@ class HookablesRegistry
 
             foreach ($hookables as $hookableName => $hookable) {
                 if (array_key_exists($hookableName, $mergedHookables)) {
-                    $hookable = $mergedHookables[$hookableName]->overwriteWith($hookable);
+                    $hookable = $this->hookableMerger->merge($mergedHookables[$hookableName], $hookable);
                 }
 
                 $mergedHookables[$hookableName] = $hookable;
