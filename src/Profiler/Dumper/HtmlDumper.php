@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Profiler\Dumper;
 
+use Sylius\TwigHooks\Hookable\HookableComponent;
+use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Sylius\TwigHooks\Profiler\HookableProfile;
 use Sylius\TwigHooks\Profiler\HookProfile;
 use Sylius\TwigHooks\Profiler\Profile;
@@ -48,14 +50,19 @@ final class HtmlDumper
 
     private function dumpHookableProfile(HookableProfile $hookableProfile, string $prefix = '', bool $sibling = false): string
     {
+        list($targetName, $targetValue) = match (get_class($hookableProfile->getHookable())) {
+            HookableTemplate::class => 'Template',
+            HookableComponent::class => 'Component',
+        };
+
         $str = sprintf(
             '%s└ <span><span class="status-success">(%s)</span> [↑ %d, ⏲ %d ms] %s (%s)</span>',
             $prefix,
-            ucfirst($hookableProfile->getHookable()->getType()),
-            $hookableProfile->getHookable()->getPriority(),
+            $targetName,
+            $hookableProfile->getHookable()->priority(),
             $hookableProfile->getDuration(),
             $hookableProfile->getName(),
-            $hookableProfile->getHookable()->target,
+            $targetValue,
         );
         $str .= PHP_EOL;
         $prefix .= $sibling ? '│   ' : '    ';
