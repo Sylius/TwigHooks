@@ -6,6 +6,7 @@ namespace Sylius\TwigHooks\Registry;
 
 use Laminas\Stdlib\SplPriorityQueue;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\DisabledHookable;
 use Sylius\TwigHooks\Hookable\Merger\HookableMergerInterface;
 
 /** @internal */
@@ -44,13 +45,13 @@ class HookablesRegistry
         $hookables = array_values(
             array_filter(
                 $this->mergeHookables($hooksNames),
-                static fn (AbstractHookable $hookable): bool => $hookable->isEnabled(),
+                static fn (AbstractHookable $hookable): bool => !$hookable instanceof DisabledHookable,
             ),
         );
 
         $priorityQueue = new SplPriorityQueue();
         foreach ($hookables as $hookable) {
-            $priorityQueue->insert($hookable, $hookable->getPriority());
+            $priorityQueue->insert($hookable, $hookable->priority());
         }
 
         return $priorityQueue->toArray();

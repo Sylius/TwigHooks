@@ -7,6 +7,7 @@ namespace Tests\Sylius\TwigHooks\Integration\DependencyInjection;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\DependencyInjection\Configuration;
+use Sylius\TwigHooks\Hookable\DisabledHookable;
 use Sylius\TwigHooks\Hookable\HookableComponent;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
 
@@ -24,6 +25,7 @@ final class ConfigurationTest extends TestCase
                 'supported_hookable_types' => [
                     'template' => HookableTemplate::class,
                     'component' => HookableComponent::class,
+                    'disabled' => DisabledHookable::class,
                 ],
             ],
         );
@@ -37,7 +39,7 @@ final class ConfigurationTest extends TestCase
                     'hooks' => [
                         'some_hook' => [
                             'some_hookable' => [
-                                'target' => 'some_target.html.twig',
+                                'template' => 'some_template.html.twig',
                             ],
                         ],
                     ],
@@ -48,13 +50,12 @@ final class ConfigurationTest extends TestCase
                     'some_hook' => [
                         'some_hookable' => [
                             'type' => 'template',
-                            'target' => 'some_target.html.twig',
+                            'template' => 'some_template.html.twig',
                             'context' => [],
                             'configuration' => [],
                             'priority' => null,
                             'enabled' => true,
                             'component' => null,
-                            'template' => null,
                             'props' => [],
                         ],
                     ],
@@ -104,7 +105,6 @@ final class ConfigurationTest extends TestCase
                     'some_hook' => [
                         'some_hookable' => [
                             'type' => 'component',
-                            'target' => 'MyAwesomeComponent',
                             'context' => [],
                             'configuration' => [],
                             'priority' => null,
@@ -139,7 +139,6 @@ final class ConfigurationTest extends TestCase
                     'some_hook' => [
                         'some_hookable' => [
                             'type' => 'template',
-                            'target' => 'some_target.html.twig',
                             'context' => [],
                             'configuration' => [],
                             'priority' => null,

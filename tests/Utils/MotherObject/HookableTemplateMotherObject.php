@@ -23,16 +23,11 @@ final class HookableTemplateMotherObject
             $parameters['name'] = 'some_name';
         }
 
-        if (!array_key_exists('target', $parameters)) {
-            $parameters['target'] = 'some_target';
+        if (!array_key_exists('template', $parameters)) {
+            $parameters['template'] = 'some_target';
         }
 
         return new HookableTemplate(...$parameters);
-    }
-
-    public static function withHookName(string $hookName): HookableTemplate
-    {
-        return new HookableTemplate($hookName, 'some_name', 'some_target');
     }
 
     public static function withName(string $name): HookableTemplate
@@ -64,15 +59,5 @@ final class HookableTemplateMotherObject
     public static function withPriority(?int $priority): HookableTemplate
     {
         return new HookableTemplate('some_hook', 'some_name', 'some_target', priority: $priority);
-    }
-
-    public static function enabled(): HookableTemplate
-    {
-        return new HookableTemplate('some_hook', 'some_name', 'some_target', enabled: true);
-    }
-
-    public static function disabled(): HookableTemplate
-    {
-        return new HookableTemplate('some_hook', 'some_name', 'some_target', enabled: false);
     }
 }

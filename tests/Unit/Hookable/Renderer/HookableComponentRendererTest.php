@@ -44,7 +44,7 @@ final class HookableComponentRendererTest extends TestCase
         $metadata = $this->createMock(HookableMetadata::class);
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Hookable must be the "component" type, but "template" given.');
+        $this->expectExceptionMessage('Hookable must be the "Sylius\TwigHooks\Hookable\HookableComponent", but "Sylius\TwigHooks\Hookable\HookableTemplate" given.');
 
         $this->getTestSubject()->render($hookableTemplate, $metadata);
     }

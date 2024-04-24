@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\DependencyInjection;
 
+use Sylius\TwigHooks\Hookable\DisabledHookable;
 use Sylius\TwigHooks\Hookable\HookableComponent;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Symfony\Component\Config\FileLocator;
@@ -30,14 +31,7 @@ final class TwigHooksExtension extends Extension
     }
 
     /**
-     * @param array<string, array<string, array{
-     *      type: string,
-     *      target: string,
-     *      context: array<string, mixed>,
-     *      configuration: array<string, mixed>,
-     *      priority: int,
-     *      enabled: bool,
-     *  }>> $hooks
+     * @param array<string, mixed> $hooks
      * @param array<string, string> $supportedHookableTypes
      */
     private function registerHooks(ContainerBuilder $container, array $hooks, array $supportedHookableTypes): void
@@ -60,15 +54,7 @@ final class TwigHooksExtension extends Extension
     }
 
     /**
-     * @param array{
-     *     type: string,
-     *     target: string,
-     *     props?: array<string, mixed>,
-     *     context: array<string, mixed>,
-     *     configuration: array<string, mixed>,
-     *     priority: int,
-     *     enabled: bool,
-     * } $hookable
+     * @param array<string, mixed> $hookable
      */
     private function registerHookable(
         ContainerBuilder $container,
@@ -80,19 +66,13 @@ final class TwigHooksExtension extends Extension
         match ($class) {
             HookableTemplate::class => $this->registerTemplateHookable($container, $hookName, $hookableName, $hookable),
             HookableComponent::class => $this->registerComponentHookable($container, $hookName, $hookableName, $hookable),
+            DisabledHookable::class => $this->registerDisabledHookable($container, $hookName, $hookableName),
             default => throw new \InvalidArgumentException(sprintf('Unsupported hookable class "%s".', $class)),
         };
     }
 
     /**
-     * @param array{
-     *     type: string,
-     *     target: string,
-     *     context: array<string, mixed>,
-     *     configuration: array<string, mixed>,
-     *     priority: int,
-     *     enabled: bool,
-     * } $hookable
+     * @param array<string, mixed> $hookable
      */
     private function registerTemplateHookable(
         ContainerBuilder $container,
@@ -105,7 +85,7 @@ final class TwigHooksExtension extends Extension
             ->setArguments([
                 $hookName,
                 $hookableName,
-                $hookable['target'],
+                $hookable['template'],
                 $hookable['context'],
                 $hookable['configuration'],
                 $hookable['priority'],
@@ -116,15 +96,7 @@ final class TwigHooksExtension extends Extension
     }
 
     /**
-     * @param array{
-     *     type: string,
-     *     target: string,
-     *     props?: array<string, mixed>,
-     *     context: array<string, mixed>,
-     *     configuration: array<string, mixed>,
-     *     priority: int,
-     *     enabled: bool,
-     * } $hookable
+     * @param array<string, mixed> $hookable
      */
     private function registerComponentHookable(
         ContainerBuilder $container,
@@ -137,7 +109,7 @@ final class TwigHooksExtension extends Extension
             ->setArguments([
                 $hookName,
                 $hookableName,
-                $hookable['target'],
+                $hookable['component'],
                 $hookable['props'] ?? [],
                 $hookable['context'],
                 $hookable['configuration'],
@@ -145,6 +117,24 @@ final class TwigHooksExtension extends Extension
                 $hookable['enabled'],
             ])
             ->addTag('twig_hooks.hookable', ['priority' => $hookable['priority']])
+        ;
+    }
+
+    private function registerDisabledHookable(
+        ContainerBuilder $container,
+        string $hookName,
+        string $hookableName,
+    ): void {
+        $container
+            ->register(sprintf('twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), DisabledHookable::class)
+            ->setArguments([
+                $hookName,
+                $hookableName,
+                [],
+                [],
+                null,
+            ])
+            ->addTag('twig_hooks.hookable', ['priority' => 0])
         ;
     }
 }

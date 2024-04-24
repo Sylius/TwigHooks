@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\DependencyInjection;
 
+use Sylius\TwigHooks\Hookable\DisabledHookable;
 use Sylius\TwigHooks\Hookable\HookableComponent;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -39,6 +40,7 @@ final class Configuration implements ConfigurationInterface
                     ->defaultValue([
                         'template' => HookableTemplate::class,
                         'component' => HookableComponent::class,
+                        'disabled' => DisabledHookable::class,
                     ])
                     ->scalarPrototype()->end()
                 ->end()
@@ -57,15 +59,19 @@ final class Configuration implements ConfigurationInterface
                         ->arrayPrototype()
                             ->beforeNormalization()
                                 ->always(function ($v) {
-                                    $component = $v['component'] ?? null;
-                                    $template = $v['template'] ?? null;
+                                    $isComponentDefined = isset($v['component']);
+                                    $isTemplateDefined = isset($v['template']);
+                                    $isDisabled = isset($v['enabled']) && $v['enabled'] === false;
 
-                                    if (null === $component && null === $template) {
+                                    if (!$isComponentDefined && !$isTemplateDefined && !$isDisabled) {
                                         return $v;
                                     }
 
-                                    $v['type'] = null !== $component ? 'component' : 'template';
-                                    $v['target'] = $component ?? $template;
+                                    $v['type'] = match (true) {
+                                        $isDisabled => 'disabled',
+                                        $isComponentDefined => 'component',
+                                        $isTemplateDefined => 'template',
+                                    };
 
                                     return $v;
                                 })
@@ -74,9 +80,14 @@ final class Configuration implements ConfigurationInterface
                                 ->always(static function ($v) {
                                     $component = $v['component'] ?? null;
                                     $template = $v['template'] ?? null;
+                                    $enabled = $v['enabled'] ?? true;
 
                                     if (null !== $component && null !== $template) {
                                         throw new \InvalidArgumentException('You cannot define both "component" and "template" at the same time.');
+                                    }
+
+                                    if ($enabled && null === $component && null === $template) {
+                                        throw new \InvalidArgumentException('You must define either "component" or "template" for enabled hookables.');
                                     }
 
                                     if (null === $component && [] !== $v['props']) {
@@ -88,8 +99,7 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                             ->canBeDisabled()
                             ->children()
-                                ->scalarNode('type')->defaultValue('template')->end()
-                                ->scalarNode('target')->isRequired()->cannotBeEmpty()->end()
+                                ->scalarNode('type')->defaultNull()->end()
                                 ->scalarNode('component')->defaultNull()->end()
                                 ->scalarNode('template')->defaultNull()->end()
                                 ->arrayNode('context')

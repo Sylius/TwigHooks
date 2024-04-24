@@ -65,11 +65,11 @@ final class ParsingHookTagTest extends KernelTestCase
         $this->assertSame(
             <<<EXPECTED
             <!-- BEGIN HOOK | name: "hook_with_hookable" -->
-            <!-- BEGIN HOOKABLE | hook: "hook_with_hookable", type: "template", name: "hookable", target: "parsing_hook_tag_test/hook_with_hookables/hookable_with_hook.html.twig", priority: 0 -->
+            <!-- BEGIN HOOKABLE | hook: "hook_with_hookable", name: "hookable", template: "parsing_hook_tag_test/hook_with_hookables/hookable_with_hook.html.twig", priority: 0 -->
             <!-- BEGIN HOOK | name: "hook_with_hookable.hookable_with_hook" -->
             
             <!--  END HOOK  | name: "hook_with_hookable.hookable_with_hook" -->
-            <!--  END HOOKABLE  | hook: "hook_with_hookable", type: "template", name: "hookable", target: "parsing_hook_tag_test/hook_with_hookables/hookable_with_hook.html.twig", priority: 0 -->
+            <!--  END HOOKABLE  | hook: "hook_with_hookable", name: "hookable", template: "parsing_hook_tag_test/hook_with_hookables/hookable_with_hook.html.twig", priority: 0 -->
             <!--  END HOOK  | name: "hook_with_hookable" -->
             EXPECTED,
             $this->render('parsing_hook_tag_test/hook_with_hookables.html.twig'),

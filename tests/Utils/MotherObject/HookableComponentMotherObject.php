@@ -23,8 +23,8 @@ final class HookableComponentMotherObject
             $parameters['name'] = 'some_name';
         }
 
-        if (!array_key_exists('target', $parameters)) {
-            $parameters['target'] = 'some_target';
+        if (!array_key_exists('component', $parameters)) {
+            $parameters['component'] = 'some_target';
         }
 
         return new HookableComponent(...$parameters);
@@ -56,14 +56,6 @@ final class HookableComponentMotherObject
     }
 
     /**
-     * @param array<string, mixed> $configuration
-     */
-    public static function withConfiguration(array $configuration): HookableComponent
-    {
-        return new HookableComponent('some_hook', 'some_name', 'some_target', configuration: $configuration);
-    }
-
-    /**
      * @param array<string, mixed> $context
      */
     public static function withContext(array $context): HookableComponent
@@ -74,15 +66,5 @@ final class HookableComponentMotherObject
     public static function withPriority(?int $priority): HookableComponent
     {
         return new HookableComponent('some_hook', 'some_name', 'some_target', priority: $priority);
-    }
-
-    public static function enabled(): HookableComponent
-    {
-        return new HookableComponent('some_hook', 'some_name', 'some_target', enabled: true);
-    }
-
-    public static function disabled(): HookableComponent
-    {
-        return new HookableComponent('some_hook', 'some_name', 'some_target', enabled: false);
     }
 }

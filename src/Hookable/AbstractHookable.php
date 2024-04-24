@@ -6,6 +6,18 @@ namespace Sylius\TwigHooks\Hookable;
 
 abstract class AbstractHookable
 {
+    public readonly string $id;
+
+    public readonly string $hookName;
+
+    public readonly string $name;
+
+    public readonly array $context;
+
+    public readonly array $configuration;
+
+    private readonly ?int $priority;
+
     public const DEFAULT_PRIORITY = 0;
 
     /**
@@ -13,34 +25,24 @@ abstract class AbstractHookable
      * @param array<string, mixed> $configuration
      */
     public function __construct (
-        public readonly string $hookName,
-        public readonly string $name,
-        public readonly string $target,
-        public readonly array $context = [],
-        public readonly array $configuration = [],
-        protected readonly ?int $priority = null,
-        protected readonly ?bool $enabled = null,
+        string $hookName,
+        string $name,
+        array $context = [],
+        array $configuration = [],
+        ?int $priority = null,
     ) {
+        $this->id = sprintf('%s#%s', $hookName, $name);
+        $this->hookName = $hookName;
+        $this->name = $name;
+        $this->context = $context;
+        $this->configuration = $configuration;
+        $this->priority = $priority;
     }
 
-    public function getId(): string
-    {
-        return sprintf('%s#%s', $this->hookName, $this->name);
-    }
-
-    public function getPriority(): int
+    public function priority(): int
     {
         return $this->priority ?? self::DEFAULT_PRIORITY;
     }
-
-    public function isEnabled(): bool
-    {
-        return $this->enabled ?? true;
-    }
-
-    abstract public function overwriteWith(self $hookable): self;
-
-    abstract public function getType(): string;
 
     /**
      * @return array<string, mixed>

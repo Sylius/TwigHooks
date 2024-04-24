@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Hookable\Renderer\Debug;
 
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\HookableComponent;
+use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
 
@@ -26,25 +28,37 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface
 
     private function getOpeningDebugComment(AbstractHookable $hookable): string
     {
+        list($targetName, $targetValue) = match (get_class($hookable)) {
+            HookableTemplate::class => ['template', $hookable->template],
+            HookableComponent::class => ['component', $hookable->component],
+            default => throw new \InvalidArgumentException('Unsupported hookable type.'),
+        };
+
         return sprintf(
-            '<!-- BEGIN HOOKABLE | hook: "%s", type: "%s", name: "%s", target: "%s", priority: %d -->',
+            '<!-- BEGIN HOOKABLE | hook: "%s", name: "%s", %s: "%s", priority: %d -->',
             $hookable->hookName,
-            $hookable->getType(),
             $hookable->name,
-            $hookable->target,
-            $hookable->getPriority(),
+            $targetName,
+            $targetValue,
+            $hookable->priority(),
         );
     }
 
     private function getClosingDebugComment(AbstractHookable $hookable): string
     {
+        list($targetName, $targetValue) = match (get_class($hookable)) {
+            HookableTemplate::class => ['template', $hookable->template],
+            HookableComponent::class => ['component', $hookable->component],
+            default => throw new \InvalidArgumentException('Unsupported hookable type.'),
+        };
+
         return sprintf(
-            '<!--  END HOOKABLE  | hook: "%s", type: "%s", name: "%s", target: "%s", priority: %d -->',
+            '<!--  END HOOKABLE  | hook: "%s", name: "%s", %s: "%s", priority: %d -->',
             $hookable->hookName,
-            $hookable->getType(),
             $hookable->name,
-            $hookable->target,
-            $hookable->getPriority(),
+            $targetName,
+            $targetValue,
+            $hookable->priority(),
         );
     }
 }
