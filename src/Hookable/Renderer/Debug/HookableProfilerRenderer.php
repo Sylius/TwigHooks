@@ -22,12 +22,12 @@ final class HookableProfilerRenderer implements HookableRendererInterface
     public function render(AbstractHookable $hookable, HookableMetadata $metadata): string
     {
         $this->profile?->registerHookableRenderStart($hookable);
-        $this->stopwatch?->start($hookable->getId());
+        $this->stopwatch?->start($hookable->id);
 
         $rendered = $this->innerRenderer->render($hookable, $metadata);
 
         $this->profile?->registerHookableRenderEnd(
-            $this->stopwatch?->stop($hookable->getId())->getDuration(),
+            $this->stopwatch?->stop($hookable->id)->getDuration(),
         );
 
         return $rendered;

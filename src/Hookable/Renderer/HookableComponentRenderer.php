@@ -29,13 +29,13 @@ final class HookableComponentRenderer implements SupportableHookableRendererInte
     {
         if (!$this->supports($hookable)) {
             throw new \InvalidArgumentException(
-                sprintf('Hookable must be the "%s" type, but "%s" given.', HookableComponent::TYPE_NAME, $hookable->getType()),
+                sprintf('Hookable must be the "%s", but "%s" given.', HookableComponent::class, get_class($hookable))
             );
         }
 
         $props = $this->propsProvider->provide($hookable, $metadata);
 
-        return $this->componentRenderer->createAndRender($hookable->target, [
+        return $this->componentRenderer->createAndRender($hookable->component, [
             self::HOOKABLE_METADATA_PARAMETER => $metadata,
             ...$props,
         ]);

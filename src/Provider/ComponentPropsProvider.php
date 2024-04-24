@@ -42,7 +42,7 @@ final class ComponentPropsProvider implements PropsProviderInterface
             }
 
             return $value;
-        }, $hookable->getProps());
+        }, $hookable->props);
     }
 
     /**

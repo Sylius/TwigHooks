@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Hookable\Merger\HookableMergerInterface;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\DisabledHookableMotherObject;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 
 final class HookablesRegistryTest extends TestCase
@@ -68,11 +69,10 @@ final class HookablesRegistryTest extends TestCase
         $this->assertCount(1, $hookable);
         $this->assertSame('some_hook', $hookable[0]->hookName);
         $this->assertSame('hookable_one', $hookable[0]->name);
-        $this->assertSame('some_target', $hookable[0]->target);
+        $this->assertSame('some_target', $hookable[0]->template);
         $this->assertSame([], $hookable[0]->context);
         $this->assertSame([], $hookable[0]->configuration);
-        $this->assertSame(0, $hookable[0]->getPriority());
-        $this->assertTrue($hookable[0]->isEnabled());
+        $this->assertSame(0, $hookable[0]->priority());
     }
 
     /**
@@ -88,10 +88,11 @@ final class HookablesRegistryTest extends TestCase
      */
     private function createHookable(string $hookName, string $name, bool $enabled = true): AbstractHookable
     {
-        return HookableTemplateMotherObject::with([
-            'hookName' => $hookName,
-            'name' => $name,
-            'enabled' => $enabled,
-        ]);
+        $arguments = ['hookName' => $hookName, 'name' => $name];
+
+        return match ($enabled) {
+            false => DisabledHookableMotherObject::with($arguments),
+            true => HookableTemplateMotherObject::with($arguments),
+        };
     }
 }

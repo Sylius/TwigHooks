@@ -34,9 +34,9 @@ final class HookableDebugCommentRendererTest extends TestCase
         ;
 
         $expectedRenderedHookable = <<<HOOKABLE
-        <!-- BEGIN HOOKABLE | hook: "some_hook", type: "template", name: "some_name", target: "some_target", priority: 0 -->
+        <!-- BEGIN HOOKABLE | hook: "some_hook", name: "some_name", template: "some_target", priority: 0 -->
         some-rendered-hookable
-        <!--  END HOOKABLE  | hook: "some_hook", type: "template", name: "some_name", target: "some_target", priority: 0 -->
+        <!--  END HOOKABLE  | hook: "some_hook", name: "some_name", template: "some_target", priority: 0 -->
         HOOKABLE;
 
         $this->assertSame($expectedRenderedHookable, $this->getTestSubject()->render($hookable, $metadata));

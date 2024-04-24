@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Hookable;
 
-class HookableTemplate extends AbstractHookable
+class DisabledHookable extends AbstractHookable
 {
     public function __construct(
         string $hookName,
         string $name,
-        public readonly string $template,
         array $context = [],
         array $configuration = [],
         ?int $priority = null,
@@ -22,7 +21,6 @@ class HookableTemplate extends AbstractHookable
         return [
             'hookName' => $this->hookName,
             'name' => $this->name,
-            'template' => $this->template,
             'context' => $this->context,
             'configuration' => $this->configuration,
             'priority' => $this->priority(),

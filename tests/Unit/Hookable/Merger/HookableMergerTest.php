@@ -19,7 +19,7 @@ final class HookableMergerTest extends TestCase
         $hookable = HookableTemplateMotherObject::with([
             'hookName' => 'some_hook',
             'name' => 'some_template_hookable',
-            'target' => 'index.html.twig',
+            'template' => 'index.html.twig',
         ]);
 
         $result = $this->getTestSubject()->merge($hookable);
@@ -27,7 +27,7 @@ final class HookableMergerTest extends TestCase
         $this->assertInstanceOf(HookableTemplate::class, $result);
         $this->assertSame('some_hook', $result->hookName);
         $this->assertSame('some_template_hookable', $result->name);
-        $this->assertSame('index.html.twig', $result->target);
+        $this->assertSame('index.html.twig', $result->template);
     }
 
     public function testItOverridesEarlierHookableWithLaterHookableWithSameTypes(): void
@@ -35,12 +35,12 @@ final class HookableMergerTest extends TestCase
         $earlierHookable = HookableTemplateMotherObject::with([
             'hookName' => 'common.some_hook',
             'name' => 'some_template',
-            'target' => 'index.html.twig',
+            'template' => 'index.html.twig',
         ]);
         $laterHookable = HookableTemplateMotherObject::with([
             'hookName' => 'app.some_hook',
             'name' => 'some_template',
-            'target' => 'base.html.twig',
+            'template' => 'base.html.twig',
         ]);
 
         $result = $this->getTestSubject()->merge($earlierHookable, $laterHookable);
@@ -48,7 +48,7 @@ final class HookableMergerTest extends TestCase
         $this->assertInstanceOf(HookableTemplate::class, $result);
         $this->assertSame('app.some_hook', $result->hookName);
         $this->assertSame('some_template', $result->name);
-        $this->assertSame('base.html.twig', $result->target);
+        $this->assertSame('base.html.twig', $result->template);
     }
 
     public function testItOverridesEarlierHookableWithLaterHookableWithDifferentTypesAndTheComponentIsTheLastOne(): void
@@ -56,12 +56,12 @@ final class HookableMergerTest extends TestCase
         $earlierHookable = HookableTemplateMotherObject::with([
             'hookName' => 'common.some_hook',
             'name' => 'some_template',
-            'target' => 'index.html.twig',
+            'template' => 'index.html.twig',
         ]);
         $laterHookable = HookableComponentMotherObject::with([
             'hookName' => 'app.some_hook',
             'name' => 'some_template',
-            'target' => 'app:form',
+            'component' => 'app:form',
         ]);
 
         $result = $this->getTestSubject()->merge($earlierHookable, $laterHookable);
@@ -69,7 +69,7 @@ final class HookableMergerTest extends TestCase
         $this->assertInstanceOf(HookableComponent::class, $result);
         $this->assertSame('app.some_hook', $result->hookName);
         $this->assertSame('some_template', $result->name);
-        $this->assertSame('app:form', $result->target);
+        $this->assertSame('app:form', $result->component);
     }
 
     public function testItOverridesEarlierHookableWithLaterHookableWithDifferentTypesAndTheTemplateIsTheLastOne(): void
@@ -77,12 +77,12 @@ final class HookableMergerTest extends TestCase
         $earlierHookable = HookableComponentMotherObject::with([
             'hookName' => 'common.some_hook',
             'name' => 'some_template',
-            'target' => 'app:form',
+            'component' => 'app:form',
         ]);
         $laterHookable = HookableTemplateMotherObject::with([
             'hookName' => 'app.some_hook',
             'name' => 'some_template',
-            'target' => 'index.html.twig',
+            'template' => 'index.html.twig',
         ]);
 
         $result = $this->getTestSubject()->merge($earlierHookable, $laterHookable);
@@ -90,7 +90,7 @@ final class HookableMergerTest extends TestCase
         $this->assertInstanceOf(HookableTemplate::class, $result);
         $this->assertSame('app.some_hook', $result->hookName);
         $this->assertSame('some_template', $result->name);
-        $this->assertSame('index.html.twig', $result->target);
+        $this->assertSame('index.html.twig', $result->template);
     }
 
     private function getTestSubject(): HookableMergerInterface
