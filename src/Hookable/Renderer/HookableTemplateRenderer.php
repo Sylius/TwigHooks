@@ -36,11 +36,11 @@ final class HookableTemplateRenderer implements SupportableHookableRendererInter
         } catch (\Throwable $exception) {
             throw new HookRenderException(
                 sprintf(
-                    'An error occurred during rendering the "%s" hook in the "%s" hookable. Original error: %s',
+                    'An error occurred during rendering the "%s" hook in the "%s" hookable',
                     $hookable->name,
                     $hookable->hookName,
-                    $exception->getMessage(),
                 ),
+                previous: $exception,
             );
         }
     }
