@@ -7,11 +7,9 @@ namespace Sylius\TwigHooks\Hookable\Renderer;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
+use Sylius\TwigHooks\Hookable\Renderer\Exception\HookRenderException;
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
 use Twig\Environment as Twig;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 final class HookableTemplateRenderer implements SupportableHookableRendererInterface
 {
@@ -22,9 +20,6 @@ final class HookableTemplateRenderer implements SupportableHookableRendererInter
 
     /**
      * @param HookableTemplate $hookable
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      */
     public function render(AbstractHookable $hookable, HookableMetadata $metadata): string
     {
@@ -34,9 +29,20 @@ final class HookableTemplateRenderer implements SupportableHookableRendererInter
             );
         }
 
-        return $this->twig->render($hookable->template, [
-            HooksRuntime::HOOKABLE_METADATA => $metadata,
-        ]);
+        try {
+            return $this->twig->render($hookable->template, [
+                HooksRuntime::HOOKABLE_METADATA => $metadata,
+            ]);
+        } catch (\Throwable $exception) {
+            throw new HookRenderException(
+                sprintf(
+                    'An error occurred during rendering the "%s" hook in the "%s" hookable. Original error: %s',
+                    $hookable->name,
+                    $hookable->hookName,
+                    $exception->getMessage(),
+                ),
+            );
+        }
     }
 
     public function supports(AbstractHookable $hookable): bool
