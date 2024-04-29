@@ -12,8 +12,10 @@ abstract class AbstractHookable
 
     public readonly string $name;
 
+    /** @var array<string, mixed> */
     public readonly array $context;
 
+    /** @var array<string, mixed> */
     public readonly array $configuration;
 
     private readonly ?int $priority;

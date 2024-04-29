@@ -72,6 +72,7 @@ final class Configuration implements ConfigurationInterface
                                         $isDisabled => 'disabled',
                                         $isComponentDefined => 'component',
                                         $isTemplateDefined => 'template',
+                                        default => 'undefined',
                                     };
 
                                     return $v;

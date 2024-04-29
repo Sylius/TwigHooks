@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Profiler\Dumper;
 
+use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Hookable\HookableComponent;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Sylius\TwigHooks\Profiler\HookableProfile;
@@ -50,9 +51,10 @@ final class HtmlDumper
 
     private function dumpHookableProfile(HookableProfile $hookableProfile, string $prefix = '', bool $sibling = false): string
     {
-        list($targetName, $targetValue) = match (get_class($hookableProfile->getHookable())) {
+        $targetName = match (get_class($hookableProfile->getHookable())) {
             HookableTemplate::class => 'Template',
             HookableComponent::class => 'Component',
+            default => throw new \InvalidArgumentException(sprintf('Unsupported hookable type %s', get_class($hookableProfile->getHookable()))),
         };
 
         $str = sprintf(
@@ -62,7 +64,7 @@ final class HtmlDumper
             $hookableProfile->getHookable()->priority(),
             $hookableProfile->getDuration(),
             $hookableProfile->getName(),
-            $targetValue,
+            $this->getTargetValue($hookableProfile->getHookable()),
         );
         $str .= PHP_EOL;
         $prefix .= $sibling ? '│   ' : '    ';
@@ -73,5 +75,14 @@ final class HtmlDumper
         }
 
         return $str;
+    }
+
+    private function getTargetValue(AbstractHookable $hookable): string
+    {
+        return match (get_class($hookable)) {
+            HookableTemplate::class => $hookable->template,
+            HookableComponent::class => $hookable->component,
+            default => throw new \InvalidArgumentException(sprintf('Unsupported hookable type %s', get_class($hookable))),
+        };
     }
 }
