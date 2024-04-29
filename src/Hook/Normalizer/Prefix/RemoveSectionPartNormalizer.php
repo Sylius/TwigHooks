@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\TwigHooks\Hook\Normalizer;
+namespace Sylius\TwigHooks\Hook\Normalizer\Prefix;
 
-final class RemoveSectionPartNormalizer implements NameNormalizerInterface
+final class RemoveSectionPartNormalizer implements PrefixNormalizerInterface
 {
     /**
      * @param non-empty-string|false $separator
@@ -13,13 +13,13 @@ final class RemoveSectionPartNormalizer implements NameNormalizerInterface
     {
     }
 
-    public function normalize(string $name): string
+    public function normalize(string $prefix): string
     {
         if (false === $this->separator) {
-            return $name;
+            return $prefix;
         }
 
-        $parts = explode('.', $name);
+        $parts = explode('.', $prefix);
         $result = [];
 
         foreach ($parts as $part) {

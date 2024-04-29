@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Twig\Runtime;
 
 use Sylius\TwigHooks\Bag\DataBagInterface;
-use Sylius\TwigHooks\Hook\Normalizer\NameNormalizerInterface;
+use Sylius\TwigHooks\Hook\Normalizer\Name\NameNormalizerInterface;
+use Sylius\TwigHooks\Hook\Normalizer\Prefix\PrefixNormalizerInterface;
 use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Twig\Error\RuntimeError;
@@ -18,6 +19,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
     public function __construct (
         private readonly HookRendererInterface $hookRenderer,
         private readonly NameNormalizerInterface $nameNormalizer,
+        private readonly PrefixNormalizerInterface $prefixNormalizer,
         private readonly bool $enableAutoprefixing,
     ) {
     }
@@ -80,8 +82,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
         foreach ($hookNames as $hookName) {
             foreach ($prefixes as $prefix) {
-                $normalizedPrefix = $this->nameNormalizer->normalize($prefix);
-                $prefixedHookNames[] = implode('.', [$normalizedPrefix, $hookName]);
+                $prefixedHookNames[] = sprintf('%s.%s', $prefix, $hookName);
             }
         }
 
@@ -104,6 +105,8 @@ final class HooksRuntime implements RuntimeExtensionInterface
         if (array_key_exists('_prefixes', $hookContext)) {
             $prefixes = $hookContext['_prefixes'];
         }
+
+        $prefixes = array_map([$this->prefixNormalizer, 'normalize'], $prefixes);
 
         return $prefixes;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\TwigHooks\Hook\Normalizer;
+namespace Sylius\TwigHooks\Hook\Normalizer\Name;
 
 final class CompositeNameNormalizer implements NameNormalizerInterface
 {

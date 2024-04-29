@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hook\Renderer\HookRenderer;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\Metadata\HookableMetadataFactoryInterface;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
 use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
 use Sylius\TwigHooks\Provider\ContextProviderInterface;
@@ -28,12 +29,16 @@ final class HookRendererTest extends TestCase
     /** @var ConfigurationProviderInterface&MockObject */
     private ConfigurationProviderInterface $configurationProvider;
 
+    /** @var HookableMetadataFactoryInterface&MockObject */
+    private HookableMetadataFactoryInterface $hookableMetadataFactory;
+
     protected function setUp(): void
     {
         $this->hookablesRegistry = $this->createMock(HookablesRegistry::class);
         $this->hookableRenderer = $this->createMock(HookableRendererInterface::class);
         $this->contextProvider = $this->createMock(ContextProviderInterface::class);
         $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $this->hookableMetadataFactory = $this->createMock(HookableMetadataFactoryInterface::class);
     }
 
     public function testItReturnsRenderedHookables(): void
@@ -79,6 +84,7 @@ final class HookRendererTest extends TestCase
             $this->hookableRenderer,
             $this->contextProvider,
             $this->configurationProvider,
+            $this->hookableMetadataFactory,
         );
     }
 }
