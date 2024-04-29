@@ -11,6 +11,11 @@ class DataBag implements DataBagInterface
      */
     public function __construct(private array $container = [])
     {
+        foreach ($container as $key => $value) {
+            if (!is_string($key)) {
+                throw new \InvalidArgumentException('The key must be a string.');
+            }
+        }
     }
 
     public function offsetExists(mixed $offset): bool

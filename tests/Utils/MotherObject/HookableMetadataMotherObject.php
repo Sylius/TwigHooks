@@ -6,6 +6,8 @@ namespace Tests\Sylius\TwigHooks\Utils\MotherObject;
 
 use Sylius\TwigHooks\Bag\DataBag;
 use Sylius\TwigHooks\Bag\DataBagInterface;
+use Sylius\TwigHooks\Bag\ScalarDataBag;
+use Sylius\TwigHooks\Bag\ScalarDataBagInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 
 final class HookableMetadataMotherObject
@@ -15,7 +17,7 @@ final class HookableMetadataMotherObject
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
             new DataBag([]),
-            new DataBag([]),
+            new ScalarDataBag([]),
             []
         );
     }
@@ -25,29 +27,29 @@ final class HookableMetadataMotherObject
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
             is_array($context) ? new DataBag($context) : $context,
-            new DataBag([]),
+            new ScalarDataBag([]),
             []
         );
     }
 
-    public static function withConfiguration(DataBagInterface|array $configuration): HookableMetadata
+    public static function withConfiguration(ScalarDataBagInterface|array $configuration): HookableMetadata
     {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
             new DataBag([]),
-            is_array($configuration) ? new DataBag($configuration) : $configuration,
+            is_array($configuration) ? new ScalarDataBag($configuration) : $configuration,
             []
         );
     }
 
     public static function withContextAndConfiguration(
         DataBagInterface|array $context,
-        DataBagInterface|array $configuration,
+        ScalarDataBagInterface|array $configuration,
     ): HookableMetadata {
         return new HookableMetadata(
             HookMetadataMotherObject::some(),
             is_array($context) ? new DataBag($context) : $context,
-            is_array($configuration) ? new DataBag($configuration) : $configuration,
+            is_array($configuration) ? new ScalarDataBag($configuration) : $configuration,
             []
         );
     }

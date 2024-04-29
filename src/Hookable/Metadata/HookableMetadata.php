@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Hookable\Metadata;
 
 use Sylius\TwigHooks\Bag\DataBagInterface;
+use Sylius\TwigHooks\Bag\ScalarDataBagInterface;
 use Sylius\TwigHooks\Hook\Metadata\HookMetadata;
 
 class HookableMetadata
@@ -15,7 +16,7 @@ class HookableMetadata
     public function __construct(
         public readonly HookMetadata $renderedBy,
         public readonly DataBagInterface $context,
-        public readonly DataBagInterface $configuration,
+        public readonly ScalarDataBagInterface $configuration,
         public readonly array $prefixes = [],
     ) {
         foreach ($prefixes as $prefix) {
