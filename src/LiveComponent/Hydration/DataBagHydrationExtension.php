@@ -21,6 +21,10 @@ final class DataBagHydrationExtension implements HydrationExtensionInterface
 
     public function dehydrate(object $object): mixed
     {
+        if (!$object instanceof DataBagInterface) {
+            throw new \InvalidArgumentException(sprintf('Object must implement %s', DataBagInterface::class));
+        }
+
         return $object->all();
     }
 }
