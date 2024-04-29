@@ -14,6 +14,7 @@ return static function (ContainerConfigurator $configurator): void {
             service('twig_hooks.renderer.hookable'),
             service('twig_hooks.provider.default_context'),
             service('twig_hooks.provider.default_configuration'),
+            service('twig_hooks.factory.hookable_metadata'),
         ])
         ->alias(HookRendererInterface::class, 'twig_hooks.renderer.hook')
     ;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Sylius\TwigHooks\Unit\Hook\Normalizer;
 
 use PHPUnit\Framework\TestCase;
-use Sylius\TwigHooks\Hook\Normalizer\RemoveSectionPartNormalizer;
+use Sylius\TwigHooks\Hook\Normalizer\Prefix\RemoveSectionPartNormalizer;
 
 final class RemoveSectionPartNormalizerTest extends TestCase
 {

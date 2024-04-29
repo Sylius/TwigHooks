@@ -7,7 +7,7 @@ namespace Sylius\TwigHooks\Hook\Renderer;
 use Sylius\TwigHooks\Bag\DataBag;
 use Sylius\TwigHooks\Bag\ScalarDataBag;
 use Sylius\TwigHooks\Hook\Metadata\HookMetadata;
-use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
+use Sylius\TwigHooks\Hookable\Metadata\HookableMetadataFactoryInterface;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
 use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
 use Sylius\TwigHooks\Provider\ContextProviderInterface;
@@ -20,6 +20,7 @@ final class HookRenderer implements HookRendererInterface
         private readonly HookableRendererInterface $compositeHookableRenderer,
         private readonly ContextProviderInterface $contextProvider,
         private readonly ConfigurationProviderInterface $configurationProvider,
+        private readonly HookableMetadataFactoryInterface $hookableMetadataFactory,
     ) {
     }
 
@@ -38,7 +39,12 @@ final class HookRenderer implements HookRendererInterface
             $context = $this->contextProvider->provide($hookable, $hookContext);
             $configuration = $this->configurationProvider->provide($hookable);
 
-            $hookableMetadata = new HookableMetadata($hookMetadata, new DataBag($context), new ScalarDataBag($configuration), $hookNames);
+            $hookableMetadata = $this->hookableMetadataFactory->create(
+                $hookMetadata,
+                new DataBag($context),
+                new ScalarDataBag($configuration),
+                $hookNames,
+            );
 
             $renderedHookables[] = $this->compositeHookableRenderer->render($hookable, $hookableMetadata);
         }
