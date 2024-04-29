@@ -1,5 +1,6 @@
 twig_hooks:
     enable_autoprefixing: true
+    hook_name_section_separator: '#'
     hooks:
         'hook_with_hookable':
             hookable:
@@ -22,3 +23,7 @@ twig_hooks:
         'restricting_context_scope.index.without_only':
             some:
                 template: 'restricting_context_scope/index/block/some.html.twig'
+
+        'hook_with_sections.index':
+            block:
+                template: 'hook_with_sections/index/block.html.twig'
