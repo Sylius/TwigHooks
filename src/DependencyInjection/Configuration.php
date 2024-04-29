@@ -22,6 +22,7 @@ final class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('enable_autoprefixing')->defaultFalse()->end()
+                ->scalarNode('hook_name_section_separator')->defaultFalse()->end()
             ->end()
         ->end();
 
