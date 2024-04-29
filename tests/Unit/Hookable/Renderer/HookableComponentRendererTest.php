@@ -7,6 +7,7 @@ namespace Tests\Sylius\TwigHooks\Unit\Hookable\Renderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Bag\DataBag;
+use Sylius\TwigHooks\Bag\ScalarDataBag;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\HookableComponentRenderer;
 use Sylius\TwigHooks\Provider\PropsProviderInterface;
@@ -54,7 +55,7 @@ final class HookableComponentRendererTest extends TestCase
         $hookable = HookableComponentMotherObject::withTargetAndProps('some-component', ['some' => 'data']);
         $metadata = HookableMetadataMotherObject::withContextAndConfiguration(
             context: new DataBag(['some' => 'data']),
-            configuration: new DataBag(['some' => 'configuration']),
+            configuration: new ScalarDataBag(['some' => 'configuration']),
         );
 
         $this->propsProvider->expects($this->once())->method('provide')->with($hookable, $metadata)->willReturn(['some' => 'props']);

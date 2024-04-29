@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Sylius\TwigHooks\Integration\Twig\Runtime;
 
 use Sylius\TwigHooks\Bag\DataBag;
+use Sylius\TwigHooks\Bag\ScalarDataBag;
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableMetadataMotherObject;
@@ -47,7 +48,7 @@ final class HooksRuntimeTest extends KernelTestCase
     public function testItReturnsHookableConfiguration(): void
     {
         $runtime = $this->getTestSubject();
-        $configuration = new DataBag();
+        $configuration = new ScalarDataBag();
         $metadata = HookableMetadataMotherObject::withConfiguration($configuration);
 
         $this->assertSame($configuration, $runtime->getHookableConfiguration(['hookable_metadata' => $metadata]));
