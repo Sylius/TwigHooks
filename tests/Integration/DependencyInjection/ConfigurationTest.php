@@ -27,6 +27,7 @@ final class ConfigurationTest extends TestCase
                     'component' => HookableComponent::class,
                     'disabled' => DisabledHookable::class,
                 ],
+                'hook_name_section_separator' => '#',
             ],
         );
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Twig\Runtime;
 
 use Sylius\TwigHooks\Bag\DataBagInterface;
-use Sylius\TwigHooks\Hook\NameGenerator\NameGeneratorInterface;
+use Sylius\TwigHooks\Hook\Normalizer\NameNormalizerInterface;
 use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Twig\Error\RuntimeError;
@@ -17,14 +17,9 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
     public function __construct (
         private readonly HookRendererInterface $hookRenderer,
-        private readonly NameGeneratorInterface $nameGenerator,
+        private readonly NameNormalizerInterface $nameNormalizer,
         private readonly bool $enableAutoprefixing,
     ) {
-    }
-
-    public function createHookName(string $base, string ...$parts): string
-    {
-        return $this->nameGenerator->generate($base, ...$parts);
     }
 
     /**
@@ -72,6 +67,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
     ): string
     {
         $hookNames = is_string($hookNames) ? [$hookNames] : $hookNames;
+        $hookNames = array_map([$this->nameNormalizer, 'normalize'], $hookNames);
 
         $context = $this->getContext($hookContext, $hookableMetadata, $only);
         $prefixes = $this->getPrefixes($hookContext, $hookableMetadata);
@@ -84,7 +80,8 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
         foreach ($hookNames as $hookName) {
             foreach ($prefixes as $prefix) {
-                $prefixedHookNames[] = $this->nameGenerator->generate($prefix, $hookName);
+                $normalizedPrefix = $this->nameNormalizer->normalize($prefix);
+                $prefixedHookNames[] = implode('.', [$normalizedPrefix, $hookName]);
             }
         }
 

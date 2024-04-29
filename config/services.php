@@ -2,7 +2,9 @@
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Sylius\TwigHooks\Hook\NameGenerator\TemplateNameGenerator;
+use Sylius\TwigHooks\Hook\Normalizer\CompositeNameNormalizer;
+use Sylius\TwigHooks\Hook\Normalizer\NameNormalizerInterface;
+use Sylius\TwigHooks\Hook\Normalizer\RemoveSectionPartNormalizer;
 use Sylius\TwigHooks\Provider\ComponentPropsProvider;
 use Sylius\TwigHooks\Provider\DefaultConfigurationProvider;
 use Sylius\TwigHooks\Provider\DefaultContextProvider;
@@ -33,7 +35,22 @@ return static function (ContainerConfigurator $configurator): void {
         ])
     ;
 
-    $services->set('twig_hooks.hook.name_generator.template', TemplateNameGenerator::class);
+    $services
+        ->set('twig_hooks.hook.normalizer.composite', CompositeNameNormalizer::class)
+        ->args([
+            tagged_iterator('twig_hooks.hook_normalizer'),
+        ])
+        ->alias(NameNormalizerInterface::class, 'twig_hooks.hook.normalizer.composite')
+    ;
+
+    $services
+        ->set('twig_hooks.hook.normalizer.remove_section_part', RemoveSectionPartNormalizer::class)
+        ->args([
+            param('twig_hooks.hook_name_section_separator'),
+        ])
+        ->tag('twig_hooks.hook_normalizer')
+        ->alias(sprintf('%s $removeSectionPartNormalizer', NameNormalizerInterface::class), 'twig_hooks.hook.normalizer.remove_section_part')
+    ;
 
     $services->set(HooksExtension::class)
         ->args([
@@ -49,7 +66,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(HooksRuntime::class)
         ->args([
             service('twig_hooks.renderer.hook'),
-            service('twig_hooks.hook.name_generator.template'),
+            service('twig_hooks.hook.normalizer.composite'),
             param('twig_hooks.enable_autoprefixing'),
         ])
         ->tag('twig.runtime')
