@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sylius\TwigHooks\Twig\Runtime;
 
 use Sylius\TwigHooks\Bag\DataBagInterface;
+use Sylius\TwigHooks\Bag\ScalarDataBagInterface;
 use Sylius\TwigHooks\Hook\Normalizer\Name\NameNormalizerInterface;
 use Sylius\TwigHooks\Hook\Normalizer\Prefix\PrefixNormalizerInterface;
 use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
@@ -52,7 +53,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
      * @param array<string, mixed> $context
      * @throws RuntimeError
      */
-    public function getHookableConfiguration(array $context): DataBagInterface
+    public function getHookableConfiguration(array $context): ScalarDataBagInterface
     {
         return $this->getHookableMetadata($context)->configuration;
     }

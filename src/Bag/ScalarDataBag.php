@@ -6,6 +6,9 @@ namespace Sylius\TwigHooks\Bag;
 
 class ScalarDataBag extends DataBag implements ScalarDataBagInterface
 {
+    /**
+     * @param array<string, scalar> $container
+     */
     public function __construct(array $container = [])
     {
         $this->validateValues($container);
@@ -22,6 +25,9 @@ class ScalarDataBag extends DataBag implements ScalarDataBagInterface
         parent::offsetSet($offset, $value);
     }
 
+    /**
+     * @param array<string, mixed> $values
+     */
     private function validateValues(array $values): void
     {
         foreach ($values as $value) {
