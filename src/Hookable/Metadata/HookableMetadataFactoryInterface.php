@@ -10,5 +10,8 @@ use Sylius\TwigHooks\Hook\Metadata\HookMetadata;
 
 interface HookableMetadataFactoryInterface
 {
+    /**
+     * @param array<string> $prefixes
+     */
     public function create(HookMetadata $hookMetadata, DataBagInterface $context, ScalarDataBagInterface $configuration, array $prefixes = [],): HookableMetadata;
 }
