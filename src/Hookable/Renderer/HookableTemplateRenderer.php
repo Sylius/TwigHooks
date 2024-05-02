@@ -40,7 +40,6 @@ final class HookableTemplateRenderer implements SupportableHookableRendererInter
                     $hookable->name,
                     $hookable->hookName,
                 ),
-                previous: $exception,
             );
         }
     }
