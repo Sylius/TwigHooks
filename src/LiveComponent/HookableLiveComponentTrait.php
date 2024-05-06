@@ -15,7 +15,7 @@ trait HookableLiveComponentTrait
 {
     #[LiveProp(hydrateWith: 'hydrateHookableMetadata', dehydrateWith: 'dehydrateHookableMetadata')]
     #[ExposeInTemplate('hookable_metadata')]
-    public HookableMetadata $hookableMetadata;
+    public ?HookableMetadata $hookableMetadata = null;
 
     public function hydrateHookableMetadata($data): HookableMetadata
     {
@@ -27,9 +27,9 @@ trait HookableLiveComponentTrait
         );
     }
 
-    public function dehydrateHookableMetadata(HookableMetadata $metadata): array
+    public function dehydrateHookableMetadata(?HookableMetadata $metadata = null): array
     {
-        return [
+        return $metadata === null ? [] : [
             'renderedBy' => $metadata->renderedBy->name,
             'configuration' => json_encode($metadata->configuration->all()),
             'prefixes' => $metadata->prefixes,
