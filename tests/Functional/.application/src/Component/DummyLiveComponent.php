@@ -8,8 +8,8 @@ use Sylius\TwigHooks\LiveComponent\HookableLiveComponentTrait;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsLiveComponent('app:dummy', template: '_component/dummy.html.twig')]
-final class DummyComponent
+#[AsLiveComponent('app:dummy_live', template: '_component/dummy_live.html.twig')]
+final class DummyLiveComponent
 {
     use DefaultActionTrait;
     use HookableLiveComponentTrait;
