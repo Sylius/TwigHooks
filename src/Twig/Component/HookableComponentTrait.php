@@ -10,5 +10,5 @@ use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 trait HookableComponentTrait
 {
     #[ExposeInTemplate('hookable_metadata')]
-    public HookableMetadata $hookableMetadata;
+    public ?HookableMetadata $hookableMetadata = null;
 }
