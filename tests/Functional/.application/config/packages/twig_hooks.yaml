@@ -31,3 +31,7 @@ twig_hooks:
         'hookable_live_component':
             dummy:
                 component: 'app:dummy_live'
+
+        'hookable_twig_component':
+            dummy:
+                component: 'app:dummy'
