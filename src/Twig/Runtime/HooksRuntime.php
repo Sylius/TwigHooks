@@ -59,6 +59,14 @@ final class HooksRuntime implements RuntimeExtensionInterface
     }
 
     /**
+     * @param array<string, mixed> $context
+     */
+    public function isHookable(array $context): bool
+    {
+        return array_key_exists(self::HOOKABLE_METADATA, $context) && $context[self::HOOKABLE_METADATA] instanceof HookableMetadata;
+    }
+
+    /**
      * @param string|array<string> $hookNames
      * @param array<string, mixed> $hookContext
      */
