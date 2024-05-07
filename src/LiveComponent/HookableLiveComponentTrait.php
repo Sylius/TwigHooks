@@ -15,10 +15,14 @@ trait HookableLiveComponentTrait
 {
     #[LiveProp(hydrateWith: 'hydrateHookableMetadata', dehydrateWith: 'dehydrateHookableMetadata')]
     #[ExposeInTemplate('hookable_metadata')]
-    public HookableMetadata $hookableMetadata;
+    public ?HookableMetadata $hookableMetadata = null;
 
-    public function hydrateHookableMetadata($data): HookableMetadata
+    public function hydrateHookableMetadata($data): ?HookableMetadata
     {
+        if (null === $data) {
+            return null;
+        }
+
         return new HookableMetadata(
             new HookMetadata($data['renderedBy'], new DataBag()),
             new DataBag(),
@@ -27,8 +31,12 @@ trait HookableLiveComponentTrait
         );
     }
 
-    public function dehydrateHookableMetadata(HookableMetadata $metadata): array
+    public function dehydrateHookableMetadata(?HookableMetadata $metadata = null): ?array
     {
+        if (null === $metadata) {
+            return null;
+        }
+
         return [
             'renderedBy' => $metadata->renderedBy->name,
             'configuration' => json_encode($metadata->configuration->all()),
