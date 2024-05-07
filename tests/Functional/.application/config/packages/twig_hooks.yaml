@@ -27,3 +27,7 @@ twig_hooks:
         'hook_with_sections.index':
             block:
                 template: 'hook_with_sections/index/block.html.twig'
+
+        'hookable_live_component':
+            dummy:
+                component: 'app:dummy'
