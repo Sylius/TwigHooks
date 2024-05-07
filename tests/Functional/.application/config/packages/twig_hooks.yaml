@@ -30,4 +30,4 @@ twig_hooks:
 
         'hookable_live_component':
             dummy:
-                component: 'app:dummy'
+                component: 'app:dummy_live'

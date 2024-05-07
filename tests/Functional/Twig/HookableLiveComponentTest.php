@@ -17,9 +17,9 @@ final class HookableLiveComponentTest extends KernelTestCase
         $this->assertSame(
             <<<EXPECTED
             <!-- BEGIN HOOK | name: "hookable_live_component" -->
-            <!-- BEGIN HOOKABLE | hook: "hookable_live_component", name: "dummy", component: "app:dummy", priority: 0 -->
+            <!-- BEGIN HOOKABLE | hook: "hookable_live_component", name: "dummy", component: "app:dummy_live", priority: 0 -->
             I'm a hookable!
-            <!--  END HOOKABLE  | hook: "hookable_live_component", name: "dummy", component: "app:dummy", priority: 0 -->
+            <!--  END HOOKABLE  | hook: "hookable_live_component", name: "dummy", component: "app:dummy_live", priority: 0 -->
             <!--  END HOOK  | name: "hookable_live_component" -->
             EXPECTED,
             $this->render('hookable_live_component/hookable_component_rendered_with_using_twig_hooks.html.twig'),
