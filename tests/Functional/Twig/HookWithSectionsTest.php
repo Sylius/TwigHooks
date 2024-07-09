@@ -32,6 +32,21 @@ final class HookWithSectionsTest extends KernelTestCase
         );
     }
 
+    public function testItRendersPrefixedHookWithSections(): void
+    {
+        $this->assertSame(
+            <<<EXPECTED
+            <!-- BEGIN HOOK | name: "twig_hook.index" -->
+            
+            <!--  END HOOK  | name: "twig_hook.index" -->
+            <!-- BEGIN HOOK | name: "twig_hook#section" -->
+            
+            <!--  END HOOK  | name: "twig_hook#section" -->
+            EXPECTED,
+            $this->render('hook_with_sections/prefixed_hook.html.twig'),
+        );
+    }
+
     private function render(string $path): string
     {
         /** @var Twig $twig */
