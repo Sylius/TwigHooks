@@ -91,7 +91,8 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
         foreach ($hookNames as $hookName) {
             foreach ($prefixes as $prefix) {
-                $prefixedHookNames[] = sprintf('%s.%s', $prefix, $hookName);
+                $format = str_starts_with($hookName, '#') ? '%s%s' : '%s.%s';
+                $prefixedHookNames[] = sprintf($format, $prefix, $hookName);
             }
         }
 
