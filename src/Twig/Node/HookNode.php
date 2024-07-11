@@ -45,7 +45,7 @@ final class HookNode extends Node
         $compiler->raw(', ');
         $compiler->subcompile($this->getNode('hook_level_context'));
         $compiler->raw(', ');
-        $compiler->raw('$context["hookable_metadata"] ?? null');
+        $compiler->raw('$context');
         $compiler->raw(', ');
         $compiler->raw($this->getAttribute('only') ? 'true' : 'false');
         $compiler->raw(");\n");
