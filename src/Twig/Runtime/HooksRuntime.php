@@ -69,18 +69,22 @@ final class HooksRuntime implements RuntimeExtensionInterface
     /**
      * @param string|array<string> $hookNames
      * @param array<string, mixed> $hookContext
+     * @param array<string, mixed> $twigVars
      */
     public function renderHook(
         string|array $hookNames,
         array $hookContext = [],
-        ?HookableMetadata $hookableMetadata = null,
+        array $twigVars = [],
         bool $only = false,
     ): string
     {
         $hookNames = is_string($hookNames) ? [$hookNames] : $hookNames;
         $hookNames = array_map([$this->nameNormalizer, 'normalize'], $hookNames);
 
-        $context = $this->getContext($hookContext, $hookableMetadata, $only);
+        $hookableMetadata = $twigVars[self::HOOKABLE_METADATA] ?? null;
+        unset($twigVars[self::HOOKABLE_METADATA]);
+
+        $context = $this->getContext($hookContext, $twigVars, $hookableMetadata, $only);
         $prefixes = $this->getPrefixes($hookContext, $hookableMetadata);
 
         if (false === $this->enableAutoprefixing || [] === $prefixes) {
@@ -123,9 +127,10 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
     /**
      * @param array<string, mixed> $hookContext
+     * @param array<string, mixed> $twigVars
      * @return array<string, mixed>
      */
-    private function getContext(array $hookContext, ?HookableMetadata $hookableMetadata, bool $only = false): array
+    private function getContext(array $hookContext, array $twigVars, ?HookableMetadata $hookableMetadata, bool $only = false): array
     {
         if ($only) {
             return $hookContext;
@@ -133,6 +138,6 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
         $context = $hookableMetadata?->context->all() ?? [];
 
-        return array_merge($context, $hookContext);
+        return array_merge($context, $hookContext, $twigVars);
     }
 }
