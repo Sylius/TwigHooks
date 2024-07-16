@@ -12,6 +12,7 @@ use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Twig\Error\RuntimeError;
 use Twig\Extension\RuntimeExtensionInterface;
+use Webmozart\Assert\Assert;
 
 final class HooksRuntime implements RuntimeExtensionInterface
 {
@@ -82,6 +83,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
         $hookNames = array_map([$this->nameNormalizer, 'normalize'], $hookNames);
 
         $hookableMetadata = $twigVars[self::HOOKABLE_METADATA] ?? null;
+        Assert::nullOrIsInstanceOf($hookableMetadata, HookableMetadata::class);
         unset($twigVars[self::HOOKABLE_METADATA]);
 
         $context = $this->getContext($hookContext, $twigVars, $hookableMetadata, $only);
@@ -138,6 +140,6 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
         $context = $hookableMetadata?->context->all() ?? [];
 
-        return array_merge($context, $hookContext, $twigVars);
+        return array_merge($context, $twigVars, $hookContext);
     }
 }
