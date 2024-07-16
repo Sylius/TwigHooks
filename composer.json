@@ -24,7 +24,8 @@
         "symfony/ux-live-component": "^2.17",
         "symfony/ux-twig-component": "^2.17",
         "symfony/twig-bundle": "^6.4 || ^7.0",
-        "twig/twig": "^2.15 || ^3.0"
+        "twig/twig": "^2.15 || ^3.0",
+        "webmozart/assert": "^1.9"
     },
     "require-dev": {
         "symfony/console": "^6.4 || ^7.0",
