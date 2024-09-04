@@ -24,6 +24,7 @@ final class RestrictingContextScopeTest extends KernelTestCase
             
             is "some" defined: No
             is "other" defined: No
+            is "var in template" defined: No
             <!--  END HOOKABLE  | hook: "restricting_context_scope.index.with_only", name: "some", template: "restricting_context_scope/index/block/some.html.twig", priority: 0 -->
             <!--  END HOOK  | name: "restricting_context_scope.index.with_only" -->
             <!--  END HOOKABLE  | hook: "restricting_context_scope.index", name: "with_only", template: "restricting_context_scope/index/with_only.html.twig", priority: 0 -->
@@ -34,6 +35,7 @@ final class RestrictingContextScopeTest extends KernelTestCase
             
             is "some" defined: Yes
             is "other" defined: Yes
+            is "var in template" defined: Yes
             <!--  END HOOKABLE  | hook: "restricting_context_scope.index.without_only", name: "some", template: "restricting_context_scope/index/block/some.html.twig", priority: 0 -->
             <!--  END HOOK  | name: "restricting_context_scope.index.without_only" -->
             <!--  END HOOKABLE  | hook: "restricting_context_scope.index", name: "without_only", template: "restricting_context_scope/index/without_only.html.twig", priority: 0 -->
