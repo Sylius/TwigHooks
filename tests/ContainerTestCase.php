@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Tests\Sylius\TwigHooks;
@@ -73,7 +82,7 @@ abstract class ContainerTestCase extends TestCase
     {
         $container = new ContainerBuilder();
 
-        $container->addCompilerPass(new class implements CompilerPassInterface {
+        $container->addCompilerPass(new class() implements CompilerPassInterface {
             public function process(ContainerBuilder $container): void
             {
                 foreach ($container->getDefinitions() as $definition) {
