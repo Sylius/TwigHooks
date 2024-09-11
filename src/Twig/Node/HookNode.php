@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Twig\Node;
@@ -11,12 +20,12 @@ use Twig\Node\Node;
 
 final class HookNode extends Node
 {
-    public function __construct (
+    public function __construct(
         Node $name,
         ?Node $context,
         bool $only,
         int $lineno,
-        string $tag = null
+        string $tag = null,
     ) {
         parent::__construct(
             [

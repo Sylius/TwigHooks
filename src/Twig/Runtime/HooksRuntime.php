@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Twig\Runtime;
@@ -18,7 +27,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
 {
     public const HOOKABLE_METADATA = 'hookable_metadata';
 
-    public function __construct (
+    public function __construct(
         private readonly HookRendererInterface $hookRenderer,
         private readonly NameNormalizerInterface $nameNormalizer,
         private readonly PrefixNormalizerInterface $prefixNormalizer,
@@ -28,6 +37,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
     /**
      * @param array<string, mixed> $context
+     *
      * @throws RuntimeError
      */
     public function getHookableMetadata(array $context): HookableMetadata
@@ -43,6 +53,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
     /**
      * @param array<string, mixed> $context
+     *
      * @throws RuntimeError
      */
     public function getHookableContext(array $context): DataBagInterface
@@ -52,6 +63,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
     /**
      * @param array<string, mixed> $context
+     *
      * @throws RuntimeError
      */
     public function getHookableConfiguration(array $context): ScalarDataBagInterface
@@ -77,8 +89,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
         array $hookContext = [],
         array $twigVars = [],
         bool $only = false,
-    ): string
-    {
+    ): string {
         $hookNames = is_string($hookNames) ? [$hookNames] : $hookNames;
         $hookNames = array_map([$this->nameNormalizer, 'normalize'], $hookNames);
 
@@ -130,6 +141,7 @@ final class HooksRuntime implements RuntimeExtensionInterface
     /**
      * @param array<string, mixed> $hookContext
      * @param array<string, mixed> $twigVars
+     *
      * @return array<string, mixed>
      */
     private function getContext(array $hookContext, array $twigVars, ?HookableMetadata $hookableMetadata, bool $only = false): array

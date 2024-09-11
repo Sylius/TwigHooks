@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Hookable\Renderer;
@@ -23,13 +32,14 @@ final class HookableComponentRenderer implements SupportableHookableRendererInte
 
     /**
      * @param HookableComponent $hookable
+     *
      * @throws InvalidExpressionException
      */
     public function render(AbstractHookable $hookable, HookableMetadata $metadata): string
     {
         if (!$this->supports($hookable)) {
             throw new \InvalidArgumentException(
-                sprintf('Hookable must be the "%s", but "%s" given.', HookableComponent::class, get_class($hookable))
+                sprintf('Hookable must be the "%s", but "%s" given.', HookableComponent::class, get_class($hookable)),
             );
         }
 

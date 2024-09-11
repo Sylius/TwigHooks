@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Profiler\Dumper;
@@ -16,7 +25,7 @@ final class HtmlDumper
 {
     public function dump(Profile $profile): string
     {
-        return sprintf('<pre>%s%s</pre>', PHP_EOL, $this->dumpProfile($profile));
+        return sprintf('<pre>%s%s</pre>', \PHP_EOL, $this->dumpProfile($profile));
     }
 
     private function dumpProfile(Profile $profile): string
@@ -38,7 +47,7 @@ final class HtmlDumper
             $prefix,
             $hookProfile->getName(),
         );
-        $str .= PHP_EOL;
+        $str .= \PHP_EOL;
         $prefix .= $sibling ? '│   ' : '    ';
 
         $numberOfHookables = \count($hookProfile->getHookablesProfiles());
@@ -66,7 +75,7 @@ final class HtmlDumper
             $hookableProfile->getName(),
             $this->getTargetValue($hookableProfile->getHookable()),
         );
-        $str .= PHP_EOL;
+        $str .= \PHP_EOL;
         $prefix .= $sibling ? '│   ' : '    ';
 
         $numberOfChildren = \count($hookableProfile->getChildren());

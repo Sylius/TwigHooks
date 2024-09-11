@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Tests\Sylius\TwigHooks\Unit\Provider;
@@ -36,7 +45,7 @@ final class ComponentPropsProviderTest extends TestCase
     public function testItEvaluatesExpressions(): void
     {
         $hookable = HookableComponentMotherObject::withProps([
-            'name' => '@=_configuration.anonymize ? "Anon" : _context.username'
+            'name' => '@=_configuration.anonymize ? "Anon" : _context.username',
         ]);
         $anonymizeMetadata = HookableMetadataMotherObject::withContextAndConfiguration(
             context: [

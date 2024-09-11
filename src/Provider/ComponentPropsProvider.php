@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Provider;
@@ -11,7 +20,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ComponentPropsProvider implements PropsProviderInterface
 {
-    public function __construct (
+    public function __construct(
         private ExpressionLanguage $expressionLanguage,
     ) {
     }
@@ -47,6 +56,7 @@ final class ComponentPropsProvider implements PropsProviderInterface
 
     /**
      * @param array<array-key, mixed> $array
+     *
      * @return array<array-key, mixed>
      */
     private function mapArrayRecursively(callable $callback, array $array): array

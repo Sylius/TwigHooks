@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Hookable\Renderer\Debug;
@@ -23,12 +32,12 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface
         $renderedParts[] = trim($this->innerRenderer->render($hookable, $metadata));
         $renderedParts[] = $this->getClosingDebugComment($hookable);
 
-        return implode(PHP_EOL, $renderedParts);
+        return implode(\PHP_EOL, $renderedParts);
     }
 
     private function getOpeningDebugComment(AbstractHookable $hookable): string
     {
-        list($targetName, $targetValue) = match (get_class($hookable)) {
+        [$targetName, $targetValue] = match (get_class($hookable)) {
             HookableTemplate::class => ['template', $hookable->template],
             HookableComponent::class => ['component', $hookable->component],
             default => throw new \InvalidArgumentException('Unsupported hookable type.'),
@@ -46,7 +55,7 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface
 
     private function getClosingDebugComment(AbstractHookable $hookable): string
     {
-        list($targetName, $targetValue) = match (get_class($hookable)) {
+        [$targetName, $targetValue] = match (get_class($hookable)) {
             HookableTemplate::class => ['template', $hookable->template],
             HookableComponent::class => ['component', $hookable->component],
             default => throw new \InvalidArgumentException('Unsupported hookable type.'),

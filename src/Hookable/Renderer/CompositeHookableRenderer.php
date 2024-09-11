@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Hookable\Renderer;
@@ -16,12 +25,12 @@ final class CompositeHookableRenderer implements HookableRendererInterface
     /**
      * @param iterable<object> $renderers
      */
-    public function __construct (iterable $renderers)
+    public function __construct(iterable $renderers)
     {
         foreach ($renderers as $renderer) {
             if (!$renderer instanceof SupportableHookableRendererInterface) {
                 throw new \InvalidArgumentException(
-                    sprintf('Hookable renderer must be an instance of "%s".', SupportableHookableRendererInterface::class)
+                    sprintf('Hookable renderer must be an instance of "%s".', SupportableHookableRendererInterface::class),
                 );
             }
 

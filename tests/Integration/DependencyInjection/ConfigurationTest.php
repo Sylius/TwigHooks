@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Tests\Sylius\TwigHooks\Integration\DependencyInjection;
@@ -62,7 +71,7 @@ final class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
-            'hooks.*'
+            'hooks.*',
         );
     }
 
@@ -83,7 +92,7 @@ final class ConfigurationTest extends TestCase
                     'component' => HookableComponent::class,
                 ],
             ],
-            'supported_hookable_types'
+            'supported_hookable_types',
         );
     }
 
@@ -117,7 +126,7 @@ final class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
-            'hooks.*'
+            'hooks.*',
         );
     }
 
@@ -151,7 +160,7 @@ final class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
-            'hooks.*'
+            'hooks.*',
         );
     }
 
@@ -170,7 +179,7 @@ final class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
-            'You cannot define both "component" and "template" at the same time.'
+            'You cannot define both "component" and "template" at the same time.',
         );
     }
 
@@ -189,7 +198,7 @@ final class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
-            '"Props" cannot be defined for non-component hookables.'
+            '"Props" cannot be defined for non-component hookables.',
         );
     }
 

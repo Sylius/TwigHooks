@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Hookable\Merger;
@@ -31,12 +40,12 @@ final class HookableMerger implements HookableMergerInterface
         return new $class(...$arguments);
     }
 
-
     /**
      * @param class-string $class
      * @param array<string, mixed> $inputs
      *
      * @return array<string>
+     *
      * @throws \ReflectionException
      */
     private function createConstructorArguments(string $class, array $inputs): array
