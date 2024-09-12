@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Tests\Sylius\TwigHooks\Utils\MotherObject;
@@ -13,7 +22,7 @@ final class HookableComponentMotherObject
         return new HookableComponent('some_hook', 'some_name', 'some_target');
     }
 
-    public static function with(array $parameters):HookableComponent
+    public static function with(array $parameters): HookableComponent
     {
         if (!array_key_exists('hookName', $parameters)) {
             $parameters['hookName'] = 'some_hook';
