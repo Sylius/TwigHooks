@@ -1,4 +1,4 @@
-twig_hooks:
+sylius_twig_hooks:
     enable_autoprefixing: true
     hook_name_section_separator: '#'
     hooks:
