@@ -152,6 +152,6 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
         $context = $hookableMetadata?->context->all() ?? [];
 
-        return array_merge($context, $hookContext, $twigVars);
+        return array_merge($context, $twigVars, $hookContext);
     }
 }
