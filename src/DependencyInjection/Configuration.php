@@ -24,7 +24,7 @@ final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('twig_hooks');
+        $treeBuilder = new TreeBuilder('sylius_twig_hooks');
 
         $rootNode = $treeBuilder->getRootNode();
 
