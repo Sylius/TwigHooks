@@ -15,7 +15,7 @@ namespace Sylius\TwigHooks;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-final class TwigHooksBundle extends Bundle
+final class SyliusTwigHooksBundle extends Bundle
 {
     public function getPath(): string
     {

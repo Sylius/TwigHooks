@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Tests\Sylius\TwigHooks\Integration\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Sylius\TwigHooks\DependencyInjection\TwigHooksExtension;
+use Sylius\TwigHooks\DependencyInjection\SyliusTwigHooksExtension;
 use Sylius\TwigHooks\Hookable\DisabledHookable;
 use Sylius\TwigHooks\Hookable\HookableComponent;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
 
-final class TwigHooksExtensionTest extends AbstractExtensionTestCase
+final class SyliusTwigHooksExtensionTest extends AbstractExtensionTestCase
 {
     public function testItSetsEnableAutoprefixingParameter(): void
     {
@@ -90,7 +90,7 @@ final class TwigHooksExtensionTest extends AbstractExtensionTestCase
     protected function getContainerExtensions(): array
     {
         return [
-            new TwigHooksExtension(),
+            new SyliusTwigHooksExtension(),
         ];
     }
 }
