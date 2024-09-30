@@ -21,7 +21,6 @@ use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Twig\Error\RuntimeError;
 use Twig\Extension\RuntimeExtensionInterface;
-use Webmozart\Assert\Assert;
 
 final class HooksRuntime implements RuntimeExtensionInterface
 {
@@ -82,22 +81,17 @@ final class HooksRuntime implements RuntimeExtensionInterface
     /**
      * @param string|array<string> $hookNames
      * @param array<string, mixed> $hookContext
-     * @param array<string, mixed> $twigVars
      */
     public function renderHook(
         string|array $hookNames,
         array $hookContext = [],
-        array $twigVars = [],
+        ?HookableMetadata $hookableMetadata = null,
         bool $only = false,
     ): string {
         $hookNames = is_string($hookNames) ? [$hookNames] : $hookNames;
         $hookNames = array_map([$this->nameNormalizer, 'normalize'], $hookNames);
 
-        $hookableMetadata = $twigVars[self::HOOKABLE_METADATA] ?? null;
-        Assert::nullOrIsInstanceOf($hookableMetadata, HookableMetadata::class);
-        unset($twigVars[self::HOOKABLE_METADATA]);
-
-        $context = $this->getContext($hookContext, $twigVars, $hookableMetadata, $only);
+        $context = $this->getContext($hookContext, $hookableMetadata, $only);
         $prefixes = $this->getPrefixes($hookContext, $hookableMetadata);
 
         if (false === $this->enableAutoprefixing || [] === $prefixes) {
@@ -140,11 +134,10 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
     /**
      * @param array<string, mixed> $hookContext
-     * @param array<string, mixed> $twigVars
      *
      * @return array<string, mixed>
      */
-    private function getContext(array $hookContext, array $twigVars, ?HookableMetadata $hookableMetadata, bool $only = false): array
+    private function getContext(array $hookContext, ?HookableMetadata $hookableMetadata, bool $only = false): array
     {
         if ($only) {
             return $hookContext;
@@ -152,6 +145,6 @@ final class HooksRuntime implements RuntimeExtensionInterface
 
         $context = $hookableMetadata?->context->all() ?? [];
 
-        return array_merge($twigVars, $context, $hookContext);
+        return array_merge($context, $hookContext);
     }
 }
