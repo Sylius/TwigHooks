@@ -65,6 +65,6 @@ return static function (ContainerBuilder $container, ContainerConfigurator $conf
 
     $services->set(HooksDataCollector::class)
         ->args([service('twig_hooks.profiler.profile')])
-        ->tag('data_collector', ['template' => '@TwigHooks/data_collector/hooks.html.twig', 'id' => 'sylius_twig_hooks'])
+        ->tag('data_collector', ['template' => '@SyliusTwigHooks/data_collector/hooks.html.twig', 'id' => 'sylius_twig_hooks'])
     ;
 };
