@@ -21,26 +21,26 @@ use Sylius\TwigHooks\Hookable\Renderer\HookableTemplateRenderer;
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
-    $services->set('twig_hooks.renderer.hookable', CompositeHookableRenderer::class)
+    $services->set('sylius_twig_hooks.renderer.hookable', CompositeHookableRenderer::class)
         ->args([
-            tagged_iterator('twig_hooks.hookable_renderer'),
+            tagged_iterator('sylius_twig_hooks.hookable_renderer'),
         ])
-        ->alias(HookableRendererInterface::class, 'twig_hooks.renderer.hookable')
-        ->alias(sprintf('%s $compositeHookableRenderer', HookableRendererInterface::class), 'twig_hooks.renderer.hookable')
+        ->alias(HookableRendererInterface::class, 'sylius_twig_hooks.renderer.hookable')
+        ->alias(sprintf('%s $compositeHookableRenderer', HookableRendererInterface::class), 'sylius_twig_hooks.renderer.hookable')
     ;
 
-    $services->set('twig_hooks.renderer.hookable.component', HookableComponentRenderer::class)
+    $services->set('sylius_twig_hooks.renderer.hookable.component', HookableComponentRenderer::class)
         ->args([
-            service('twig_hooks.provider.component_props'),
+            service('sylius_twig_hooks.provider.component_props'),
             service('ux.twig_component.component_renderer'),
         ])
-        ->tag('twig_hooks.hookable_renderer')
+        ->tag('sylius_twig_hooks.hookable_renderer')
     ;
 
-    $services->set('twig_hooks.renderer.hookable.template', HookableTemplateRenderer::class)
+    $services->set('sylius_twig_hooks.renderer.hookable.template', HookableTemplateRenderer::class)
         ->args([
             service('twig'),
         ])
-        ->tag('twig_hooks.hookable_renderer')
+        ->tag('sylius_twig_hooks.hookable_renderer')
     ;
 };

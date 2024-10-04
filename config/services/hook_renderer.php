@@ -19,14 +19,14 @@ use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
-    $services->set('twig_hooks.renderer.hook', HookRenderer::class)
+    $services->set('sylius_twig_hooks.renderer.hook', HookRenderer::class)
         ->args([
-            service('twig_hooks.registry.hookables'),
-            service('twig_hooks.renderer.hookable'),
-            service('twig_hooks.provider.default_context'),
-            service('twig_hooks.provider.default_configuration'),
-            service('twig_hooks.factory.hookable_metadata'),
+            service('sylius_twig_hooks.registry.hookables'),
+            service('sylius_twig_hooks.renderer.hookable'),
+            service('sylius_twig_hooks.provider.default_context'),
+            service('sylius_twig_hooks.provider.default_configuration'),
+            service('sylius_twig_hooks.factory.hookable_metadata'),
         ])
-        ->alias(HookRendererInterface::class, 'twig_hooks.renderer.hook')
+        ->alias(HookRendererInterface::class, 'sylius_twig_hooks.renderer.hook')
     ;
 };
