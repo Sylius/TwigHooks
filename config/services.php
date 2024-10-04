@@ -32,63 +32,63 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services = $configurator->services();
 
-    $services->set('twig_hooks.provider.default_context', DefaultContextProvider::class);
+    $services->set('sylius_twig_hooks.provider.default_context', DefaultContextProvider::class);
 
-    $services->set('twig_hooks.provider.component_props', ComponentPropsProvider::class)
+    $services->set('sylius_twig_hooks.provider.component_props', ComponentPropsProvider::class)
         ->args([
             inline_service(ExpressionLanguage::class),
         ])
     ;
 
-    $services->set('twig_hooks.provider.default_configuration', DefaultConfigurationProvider::class);
+    $services->set('sylius_twig_hooks.provider.default_configuration', DefaultConfigurationProvider::class);
 
-    $services->set('twig_hooks.registry.hookables', HookablesRegistry::class)
+    $services->set('sylius_twig_hooks.registry.hookables', HookablesRegistry::class)
         ->args([
-            tagged_iterator('twig_hooks.hookable'),
-            service('twig_hooks.merger.hookable'),
+            tagged_iterator('sylius_twig_hooks.hookable'),
+            service('sylius_twig_hooks.merger.hookable'),
         ])
     ;
 
     $services
-        ->set('twig_hooks.hook.normalizer.name.composite', CompositeNameNormalizer::class)
+        ->set('sylius_twig_hooks.hook.normalizer.name.composite', CompositeNameNormalizer::class)
         ->args([
-            tagged_iterator('twig_hooks.hook.name_normalizer'),
+            tagged_iterator('sylius_twig_hooks.hook.name_normalizer'),
         ])
-        ->alias(NameNormalizerInterface::class, 'twig_hooks.hook.normalizer.name.composite')
+        ->alias(NameNormalizerInterface::class, 'sylius_twig_hooks.hook.normalizer.name.composite')
     ;
 
     $services
-        ->set('twig_hooks.hook.normalizer.prefix.composite', CompositePrefixNormalizer::class)
+        ->set('sylius_twig_hooks.hook.normalizer.prefix.composite', CompositePrefixNormalizer::class)
         ->args([
-            tagged_iterator('twig_hooks.hook.prefix_normalizer'),
+            tagged_iterator('sylius_twig_hooks.hook.prefix_normalizer'),
         ])
-        ->alias(PrefixNormalizerInterface::class, 'twig_hooks.hook.normalizer.prefix.composite')
+        ->alias(PrefixNormalizerInterface::class, 'sylius_twig_hooks.hook.normalizer.prefix.composite')
     ;
 
     $services
-        ->set('twig_hooks.hook.normalizer.prefix.remove_section_part', RemoveSectionPartNormalizer::class)
+        ->set('sylius_twig_hooks.hook.normalizer.prefix.remove_section_part', RemoveSectionPartNormalizer::class)
         ->args([
-            param('twig_hooks.hook_name_section_separator'),
+            param('sylius_twig_hooks.hook_name_section_separator'),
         ])
-        ->tag('twig_hooks.hook.prefix_normalizer')
+        ->tag('sylius_twig_hooks.hook.prefix_normalizer')
         ->alias(
             sprintf('%s $removeSectionPartNormalizer', PrefixNormalizerInterface::class),
-            'twig_hooks.hook.normalizer.prefix.remove_section_part',
+            'sylius_twig_hooks.hook.normalizer.prefix.remove_section_part',
         )
     ;
 
-    $services->set('twig_hooks.factory.hookable_metadata', HookableMetadataFactory::class)
+    $services->set('sylius_twig_hooks.factory.hookable_metadata', HookableMetadataFactory::class)
         ->args([
-            service('twig_hooks.hook.normalizer.prefix.composite'),
+            service('sylius_twig_hooks.hook.normalizer.prefix.composite'),
         ])
     ;
 
     $services->set(HooksExtension::class)
         ->args([
-            service('twig_hooks.renderer.hook'),
-            service('twig_hooks.registry.hookables'),
-            service('twig_hooks.renderer.hookable'),
-            service('twig_hooks.profiler.profile')->nullOnInvalid(),
+            service('sylius_twig_hooks.renderer.hook'),
+            service('sylius_twig_hooks.registry.hookables'),
+            service('sylius_twig_hooks.renderer.hookable'),
+            service('sylius_twig_hooks.profiler.profile')->nullOnInvalid(),
             service('debug.stopwatch')->nullOnInvalid(),
         ])
         ->tag('twig.extension')
@@ -96,10 +96,10 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(HooksRuntime::class)
         ->args([
-            service('twig_hooks.renderer.hook'),
-            service('twig_hooks.hook.normalizer.name.composite'),
-            service('twig_hooks.hook.normalizer.prefix.composite'),
-            param('twig_hooks.enable_autoprefixing'),
+            service('sylius_twig_hooks.renderer.hook'),
+            service('sylius_twig_hooks.hook.normalizer.name.composite'),
+            service('sylius_twig_hooks.hook.normalizer.prefix.composite'),
+            param('sylius_twig_hooks.enable_autoprefixing'),
         ])
         ->tag('twig.runtime')
     ;

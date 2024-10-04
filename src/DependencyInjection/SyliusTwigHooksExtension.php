@@ -36,8 +36,8 @@ final class SyliusTwigHooksExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $this->registerHooks($container, $config['hooks'], $config['supported_hookable_types']);
-        $container->setParameter('twig_hooks.enable_autoprefixing', $config['enable_autoprefixing']);
-        $container->setParameter('twig_hooks.hook_name_section_separator', $config['hook_name_section_separator']);
+        $container->setParameter('sylius_twig_hooks.enable_autoprefixing', $config['enable_autoprefixing']);
+        $container->setParameter('sylius_twig_hooks.hook_name_section_separator', $config['hook_name_section_separator']);
     }
 
     /**
@@ -91,7 +91,7 @@ final class SyliusTwigHooksExtension extends Extension
         array $hookable,
     ): void {
         $container
-            ->register(sprintf('twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), HookableTemplate::class)
+            ->register(sprintf('sylius_twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), HookableTemplate::class)
             ->setArguments([
                 $hookName,
                 $hookableName,
@@ -101,7 +101,7 @@ final class SyliusTwigHooksExtension extends Extension
                 $hookable['priority'],
                 $hookable['enabled'],
             ])
-            ->addTag('twig_hooks.hookable', ['priority' => $hookable['priority']])
+            ->addTag('sylius_twig_hooks.hookable', ['priority' => $hookable['priority']])
         ;
     }
 
@@ -115,7 +115,7 @@ final class SyliusTwigHooksExtension extends Extension
         array $hookable,
     ): void {
         $container
-            ->register(sprintf('twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), HookableComponent::class)
+            ->register(sprintf('sylius_twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), HookableComponent::class)
             ->setArguments([
                 $hookName,
                 $hookableName,
@@ -126,7 +126,7 @@ final class SyliusTwigHooksExtension extends Extension
                 $hookable['priority'],
                 $hookable['enabled'],
             ])
-            ->addTag('twig_hooks.hookable', ['priority' => $hookable['priority']])
+            ->addTag('sylius_twig_hooks.hookable', ['priority' => $hookable['priority']])
         ;
     }
 
@@ -136,7 +136,7 @@ final class SyliusTwigHooksExtension extends Extension
         string $hookableName,
     ): void {
         $container
-            ->register(sprintf('twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), DisabledHookable::class)
+            ->register(sprintf('sylius_twig_hooks.hook.%s.hookable.%s', $hookName, $hookableName), DisabledHookable::class)
             ->setArguments([
                 $hookName,
                 $hookableName,
@@ -144,7 +144,7 @@ final class SyliusTwigHooksExtension extends Extension
                 [],
                 null,
             ])
-            ->addTag('twig_hooks.hookable', ['priority' => 0])
+            ->addTag('sylius_twig_hooks.hookable', ['priority' => 0])
         ;
     }
 }
