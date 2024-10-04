@@ -29,7 +29,7 @@ final class SyliusTwigHooksExtensionTest extends AbstractExtensionTestCase
             'supported_hookable_types' => [],
         ]);
 
-        $this->assertContainerBuilderHasParameter('twig_hooks.enable_autoprefixing', true);
+        $this->assertContainerBuilderHasParameter('sylius_twig_hooks.enable_autoprefixing', true);
     }
 
     public function testItRegistersHookablesAsServices(): void
@@ -65,24 +65,24 @@ final class SyliusTwigHooksExtensionTest extends AbstractExtensionTestCase
             ],
         ]);
 
-        $this->assertContainerBuilderHasService('twig_hooks.hook.some_hook.hookable.some_hookable', HookableTemplate::class);
+        $this->assertContainerBuilderHasService('sylius_twig_hooks.hook.some_hook.hookable.some_hookable', HookableTemplate::class);
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
-            'twig_hooks.hook.some_hook.hookable.some_hookable',
-            'twig_hooks.hookable',
+            'sylius_twig_hooks.hook.some_hook.hookable.some_hookable',
+            'sylius_twig_hooks.hookable',
             ['priority' => 16],
         );
 
-        $this->assertContainerBuilderHasService('twig_hooks.hook.some_hook.hookable.another_hookable', HookableComponent::class);
+        $this->assertContainerBuilderHasService('sylius_twig_hooks.hook.some_hook.hookable.another_hookable', HookableComponent::class);
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
-            'twig_hooks.hook.some_hook.hookable.another_hookable',
-            'twig_hooks.hookable',
+            'sylius_twig_hooks.hook.some_hook.hookable.another_hookable',
+            'sylius_twig_hooks.hookable',
             ['priority' => 16],
         );
 
-        $this->assertContainerBuilderHasService('twig_hooks.hook.app.more_complex.hook_name.hookable.yet_another_hookable', DisabledHookable::class);
+        $this->assertContainerBuilderHasService('sylius_twig_hooks.hook.app.more_complex.hook_name.hookable.yet_another_hookable', DisabledHookable::class);
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
-            'twig_hooks.hook.app.more_complex.hook_name.hookable.yet_another_hookable',
-            'twig_hooks.hookable',
+            'sylius_twig_hooks.hook.app.more_complex.hook_name.hookable.yet_another_hookable',
+            'sylius_twig_hooks.hookable',
             ['priority' => 0],
         );
     }

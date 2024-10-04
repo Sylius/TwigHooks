@@ -24,47 +24,47 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 return static function (ContainerBuilder $container, ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
-    $services->set('twig_hooks.renderer.hook.debug_comment', HookDebugCommentRenderer::class)
-        ->decorate('twig_hooks.renderer.hook', priority: 256)
+    $services->set('sylius_twig_hooks.renderer.hook.debug_comment', HookDebugCommentRenderer::class)
+        ->decorate('sylius_twig_hooks.renderer.hook', priority: 256)
         ->args([
             service('.inner'),
         ])
     ;
 
-    $services->set('twig_hooks.renderer.hook.profiler', HookProfilerRenderer::class)
-        ->decorate('twig_hooks.renderer.hook', priority: 512)
+    $services->set('sylius_twig_hooks.renderer.hook.profiler', HookProfilerRenderer::class)
+        ->decorate('sylius_twig_hooks.renderer.hook', priority: 512)
         ->args([
             service('.inner'),
-            service('twig_hooks.profiler.profile')->nullOnInvalid(),
+            service('sylius_twig_hooks.profiler.profile')->nullOnInvalid(),
             service('debug.stopwatch')->nullOnInvalid(),
         ])
     ;
 
-    $services->set('twig_hooks.renderer.hookable.debug_comment', HookableDebugCommentRenderer::class)
-        ->decorate('twig_hooks.renderer.hookable', priority: 256)
+    $services->set('sylius_twig_hooks.renderer.hookable.debug_comment', HookableDebugCommentRenderer::class)
+        ->decorate('sylius_twig_hooks.renderer.hookable', priority: 256)
         ->args([
             service('.inner'),
         ])
     ;
 
-    $services->set('twig_hooks.renderer.hookable.profiler', HookableProfilerRenderer::class)
-        ->decorate('twig_hooks.renderer.hookable', priority: 512)
+    $services->set('sylius_twig_hooks.renderer.hookable.profiler', HookableProfilerRenderer::class)
+        ->decorate('sylius_twig_hooks.renderer.hookable', priority: 512)
         ->args([
             service('.inner'),
-            service('twig_hooks.profiler.profile')->nullOnInvalid(),
+            service('sylius_twig_hooks.profiler.profile')->nullOnInvalid(),
             service('debug.stopwatch')->nullOnInvalid(),
         ])
     ;
 
-    $services->set('twig_hooks.profiler.profile', Profile::class);
+    $services->set('sylius_twig_hooks.profiler.profile', Profile::class);
 
     $services->set(HooksDataCollector::class)
-        ->args([service('twig_hooks.profiler.profile')])
+        ->args([service('sylius_twig_hooks.profiler.profile')])
         ->tag('data_collector')
     ;
 
     $services->set(HooksDataCollector::class)
-        ->args([service('twig_hooks.profiler.profile')])
+        ->args([service('sylius_twig_hooks.profiler.profile')])
         ->tag('data_collector', ['template' => '@SyliusTwigHooks/data_collector/hooks.html.twig', 'id' => 'sylius_twig_hooks'])
     ;
 };
