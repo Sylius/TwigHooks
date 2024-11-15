@@ -67,8 +67,9 @@ final class HtmlDumper
         };
 
         $str = sprintf(
-            '%s└ <span><span class="status-success">(%s)</span> [↑ %d, ⏲ %d ms] %s (%s)</span>',
+            '%s└ <span><span class="%s">(%s)</span> [↑ %d, ⏲ %d ms] %s (%s)</span>',
             $prefix,
+            $targetName === 'Template' ? 'status-success' : 'status-warning',
             $targetName,
             $hookableProfile->getHookable()->priority(),
             $hookableProfile->getDuration(),
