@@ -28,7 +28,7 @@ final class HooksDataCollector extends DataCollector implements LateDataCollecto
     ) {
     }
 
-    public function collect(Request $request, Response $response, \Throwable $exception = null): void
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
     {
     }
 

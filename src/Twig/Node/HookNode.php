@@ -25,7 +25,7 @@ final class HookNode extends Node
         ?Node $context,
         bool $only,
         int $lineno,
-        string $tag = null,
+        ?string $tag = null,
     ) {
         parent::__construct(
             [
