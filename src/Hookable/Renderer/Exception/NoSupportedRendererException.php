@@ -20,7 +20,7 @@ class NoSupportedRendererException extends \RuntimeException
         string $hookableName,
         string $message = 'No supported renderer found for the hook "%s" and "%s" hookable.',
         int $code = 0,
-        \Throwable $previous = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct(
             sprintf(
