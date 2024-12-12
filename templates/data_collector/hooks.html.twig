@@ -38,15 +38,15 @@
 
         <div class="sf-toolbar-info">
             <div class="sf-toolbar-info-piece">
-                <b>{{ 'sylius_twig_hooks.profiler.metrics.render_time'|trans }}</b>
+                <b>Render time</b>
                 <span>{{ collector.totalDuration }} ms</span>
             </div>
             <div class="sf-toolbar-info-piece">
-                <b>{{ 'sylius_twig_hooks.profiler.metrics.rendered_hooks'|trans }}</b>
+                <b>Hooks</b>
                 <span class="sf-toolbar-status">{{ collector.numberOfHooks }}</span>
             </div>
             <div class="sf-toolbar-info-piece">
-                <b>{{ 'sylius_twig_hooks.profiler.metrics.rendered_hookables'|trans }}</b>
+                <b>Hookables</b>
                 <span class="sf-toolbar-status">{{ collector.numberOfHookables }}</span>
             </div>
         </div>
@@ -58,31 +58,31 @@
         <span class="icon">
             {{ include('@SyliusTwigHooks/data_collector/icon.svg') }}
         </span>
-        <strong>{{ 'sylius_twig_hooks.profiler.menu.title'|trans }}</strong>
+        <strong>Twig Hooks</strong>
     </span>
 {% endblock %}
 
 {% block panel %}
-    <h2>{{ 'sylius_twig_hooks.profiler.metrics.title'|trans }}</h2>
+    <h2>Twig Hooks Metrics</h2>
 
     <div class="metrics">
         <div class="metric">
             <span class="value">{{ collector.totalDuration }} <span class="unit">ms</span></span>
-            <span class="label">{{ 'sylius_twig_hooks.profiler.metrics.total_execution_time'|trans }}</span>
+            <span class="label">Total execution time</span>
         </div>
 
         <div class="metric">
             <span class="value">{{ collector.numberOfHooks }}</span>
-            <span class="label">{{ 'sylius_twig_hooks.profiler.metrics.rendered_hooks'|trans }}</span>
+            <span class="label">Hooks</span>
         </div>
 
         <div class="metric">
             <span class="value">{{ collector.numberOfHookables }}</span>
-            <span class="label">{{ 'sylius_twig_hooks.profiler.metrics.rendered_hookables'|trans }}</span>
+            <span class="label">Hookables</span>
         </div>
     </div>
 
-    <h2>{{ 'sylius_twig_hooks.profiler.call_graph.title'|trans }}</h2>
+    <h2>Call Graph</h2>
 
     <div id="twig-dump">
         {{ collector.callGraph }}
