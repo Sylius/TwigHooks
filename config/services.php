@@ -22,6 +22,9 @@ use Sylius\TwigHooks\Hookable\Metadata\HookableMetadataFactory;
 use Sylius\TwigHooks\Provider\ComponentPropsProvider;
 use Sylius\TwigHooks\Provider\DefaultConfigurationProvider;
 use Sylius\TwigHooks\Provider\DefaultContextProvider;
+use Sylius\TwigHooks\Provider\PropsProviderInterface;
+use Sylius\TwigHooks\Provider\TemplateConfigurationProvider;
+use Sylius\TwigHooks\Provider\TemplateConfigurationProviderInterface;
 use Sylius\TwigHooks\Registry\HookablesRegistry;
 use Sylius\TwigHooks\Twig\HooksExtension;
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
@@ -39,8 +42,16 @@ return static function (ContainerConfigurator $configurator): void {
             inline_service(ExpressionLanguage::class),
         ])
     ;
+    $services->alias(PropsProviderInterface::class, 'sylius_twig_hooks.provider.component_props');
 
     $services->set('sylius_twig_hooks.provider.default_configuration', DefaultConfigurationProvider::class);
+
+    $services->set('sylius_twig_hooks.provider.template_configuration', TemplateConfigurationProvider::class)
+        ->args([
+            inline_service(ExpressionLanguage::class),
+        ])
+    ;
+    $services->alias(TemplateConfigurationProviderInterface::class, 'sylius_twig_hooks.provider.template_configuration');
 
     $services->set('sylius_twig_hooks.registry.hookables', HookablesRegistry::class)
         ->args([
