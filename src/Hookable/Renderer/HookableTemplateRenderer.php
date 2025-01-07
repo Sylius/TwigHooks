@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Sylius\TwigHooks\Hookable\Renderer;
 
+use Sylius\TwigHooks\Bag\ScalarDataBag;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\Exception\HookRenderException;
+use Sylius\TwigHooks\Provider\TemplateConfigurationProviderInterface;
 use Sylius\TwigHooks\Twig\Runtime\HooksRuntime;
 use Twig\Environment as Twig;
 
@@ -24,6 +26,7 @@ final class HookableTemplateRenderer implements SupportableHookableRendererInter
 {
     public function __construct(
         private readonly Twig $twig,
+        private readonly TemplateConfigurationProviderInterface $configurationProvider,
     ) {
     }
 
@@ -39,6 +42,9 @@ final class HookableTemplateRenderer implements SupportableHookableRendererInter
         }
 
         try {
+            $configuration = $this->configurationProvider->provide($hookable, $metadata);
+            $metadata = $metadata->withConfiguration(new ScalarDataBag($configuration));
+
             return $this->twig->render($hookable->template, [
                 HooksRuntime::HOOKABLE_METADATA => $metadata,
             ]);

@@ -40,6 +40,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set('sylius_twig_hooks.renderer.hookable.template', HookableTemplateRenderer::class)
         ->args([
             service('twig'),
+            service('sylius_twig_hooks.provider.template_configuration'),
         ])
         ->tag('sylius_twig_hooks.hookable_renderer')
     ;

@@ -18,7 +18,10 @@ use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadata;
 use Sylius\TwigHooks\Hookable\Renderer\Exception\HookRenderException;
 use Sylius\TwigHooks\Hookable\Renderer\HookableTemplateRenderer;
+use Sylius\TwigHooks\Provider\TemplateConfigurationProvider;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableComponentMotherObject;
+use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableMetadataMotherObject;
 use Tests\Sylius\TwigHooks\Utils\MotherObject\HookableTemplateMotherObject;
 use Twig\Environment as Twig;
 use Twig\Error\Error;
@@ -55,7 +58,7 @@ final class HookableTemplateRendererTest extends TestCase
 
     public function testItRendersHookableTemplate(): void
     {
-        $metadata = $this->createMock(HookableMetadata::class);
+        $metadata = HookableMetadataMotherObject::some();
 
         $this->twig->expects($this->once())->method('render')->with('some-template', [
             'hookable_metadata' => $metadata,
@@ -69,7 +72,7 @@ final class HookableTemplateRendererTest extends TestCase
 
     public function testItThrowsAnExceptionWhenTwigThrowsAnError(): void
     {
-        $metadata = $this->createMock(HookableMetadata::class);
+        $metadata = HookableMetadataMotherObject::some();
 
         $this->twig->expects($this->once())->method('render')->with('some-template', [
             'hookable_metadata' => $metadata,
@@ -78,13 +81,13 @@ final class HookableTemplateRendererTest extends TestCase
         $hookable = HookableTemplateMotherObject::withTarget('some-template');
 
         $this->expectException(HookRenderException::class);
-        $this->expectExceptionMessage('An error occurred during rendering the "some_name" hook in the "some_hook" hookable. Unable to find the template at line 76.');
+        $this->expectExceptionMessage('An error occurred during rendering the "some_name" hook in the "some_hook" hookable. Unable to find the template at line 79.');
 
         $this->getTestSubject()->render($hookable, $metadata);
     }
 
     private function getTestSubject(): HookableTemplateRenderer
     {
-        return new HookableTemplateRenderer($this->twig);
+        return new HookableTemplateRenderer($this->twig, new TemplateConfigurationProvider(new ExpressionLanguage()));
     }
 }
