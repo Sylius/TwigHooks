@@ -39,4 +39,9 @@ class HookableMetadata
     {
         return count($this->prefixes) > 0;
     }
+
+    public function withConfiguration(ScalarDataBagInterface $configuration): self
+    {
+        return new self($this->renderedBy, $this->context, $configuration, $this->prefixes);
+    }
 }
