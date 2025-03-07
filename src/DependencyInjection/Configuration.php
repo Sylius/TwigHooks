@@ -78,9 +78,9 @@ final class Configuration implements ConfigurationInterface
                                     }
 
                                     $v['type'] = match (true) {
+                                        $isDisabled => 'disabled',
                                         $isComponentDefined => 'component',
                                         $isTemplateDefined => 'template',
-                                        $isDisabled => 'disabled',
                                         default => 'undefined',
                                     };
 
