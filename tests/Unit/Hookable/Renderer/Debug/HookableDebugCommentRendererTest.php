@@ -66,11 +66,11 @@ final class HookableDebugCommentRendererTest extends TestCase
      */
     public function testItAddsDebugCommentsToRenderedHookableWithCustomPrefixAndSuffix(string $prefix, string $suffix): void
     {
-        $hookable = HookableTemplateMotherObject::withContext([
+        $hookable = HookableTemplateMotherObject::some();
+        $metadata = HookableMetadataMotherObject::withContext([
             DebugAwareRendererInterface::CONTEXT_DEBUG_PREFIX => $prefix,
             DebugAwareRendererInterface::CONTEXT_DEBUG_SUFFIX => $suffix,
         ]);
-        $metadata = HookableMetadataMotherObject::some();
 
         $this->innerRenderer
             ->expects($this->once())

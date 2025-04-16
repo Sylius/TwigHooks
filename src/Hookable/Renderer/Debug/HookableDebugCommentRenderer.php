@@ -31,18 +31,20 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface, D
         $renderedParts = [];
         $renderedParts[] = $this->getDebugComment(
             $hookable,
+            $metadata,
             '%s BEGIN HOOKABLE | hook: "%s", name: "%s", %s: "%s", priority: %d %s',
         );
         $renderedParts[] = trim($this->innerRenderer->render($hookable, $metadata));
         $renderedParts[] = $this->getDebugComment(
             $hookable,
+            $metadata,
             '%s  END HOOKABLE  | hook: "%s", name: "%s", %s: "%s", priority: %d %s',
         );
 
         return implode(\PHP_EOL, $renderedParts);
     }
 
-    private function getDebugComment(AbstractHookable $hookable, string $format): string
+    private function getDebugComment(AbstractHookable $hookable, HookableMetadata $metadata, string $format): string
     {
         [$targetName, $targetValue] = match (get_class($hookable)) {
             HookableTemplate::class => ['template', $hookable->template],
@@ -50,8 +52,8 @@ final class HookableDebugCommentRenderer implements HookableRendererInterface, D
             default => throw new \InvalidArgumentException('Unsupported hookable type.'),
         };
 
-        $commentPrefix = $hookable->context[self::CONTEXT_DEBUG_PREFIX] ?? self::DEFAULT_DEBUG_PREFIX;
-        $commentSuffix = $hookable->context[self::CONTEXT_DEBUG_SUFFIX] ?? self::DEFAULT_DEBUG_SUFFIX;
+        $commentPrefix = $metadata->context[self::CONTEXT_DEBUG_PREFIX] ?? self::DEFAULT_DEBUG_PREFIX;
+        $commentSuffix = $metadata->context[self::CONTEXT_DEBUG_SUFFIX] ?? self::DEFAULT_DEBUG_SUFFIX;
 
         return sprintf(
             $format,
