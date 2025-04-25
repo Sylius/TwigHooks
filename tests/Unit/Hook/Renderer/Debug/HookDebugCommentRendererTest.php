@@ -15,6 +15,7 @@ namespace Tests\Sylius\TwigHooks\Unit\Hook\Renderer\Debug;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Sylius\TwigHooks\Debug\DebugAwareRendererInterface;
 use Sylius\TwigHooks\Hook\Renderer\Debug\HookDebugCommentRenderer;
 use Sylius\TwigHooks\Hook\Renderer\HookRendererInterface;
 
@@ -22,6 +23,15 @@ final class HookDebugCommentRendererTest extends TestCase
 {
     /** @var HookRendererInterface&MockObject */
     private HookRendererInterface $innerRenderer;
+
+    public static function getDebugPrefixAndSuffix(): iterable
+    {
+        yield 'JavaScript one line' => ['//', ''];
+        yield 'JavaScript block' => ['/*', '*/'];
+        yield 'Yaml' => ['#', ''];
+        yield 'Ini' => [';', ''];
+        yield 'Custom HTML' => ['<!-- CUSTOM', 'END CUSTOM -->'];
+    }
 
     protected function setUp(): void
     {
@@ -62,6 +72,33 @@ final class HookDebugCommentRendererTest extends TestCase
         HOOK;
 
         $this->assertSame($expectedRenderedHookable, $this->getTestSubject()->render(['some-hook', 'another-hook'], []));
+    }
+
+    /**
+     * @dataProvider getDebugPrefixAndSuffix
+     */
+    public function testItAddsDebugCommentForSingleHookNameWithCustomPrefixAndSuffix(string $prefix, string $suffix): void
+    {
+        $this->innerRenderer
+            ->expects($this->once())
+            ->method('render')
+            ->with(['some-hook'], [
+                DebugAwareRendererInterface::CONTEXT_DEBUG_PREFIX => $prefix,
+                DebugAwareRendererInterface::CONTEXT_DEBUG_SUFFIX => $suffix,
+            ])
+            ->willReturn('some-rendered-hook')
+        ;
+
+        $expectedRenderedHookable = <<<HOOK
+        $prefix BEGIN HOOK | name: "some-hook" $suffix
+        some-rendered-hook
+        $prefix  END HOOK  | name: "some-hook" $suffix
+        HOOK;
+
+        $this->assertSame($expectedRenderedHookable, $this->getTestSubject()->render(['some-hook'], [
+            DebugAwareRendererInterface::CONTEXT_DEBUG_PREFIX => $prefix,
+            DebugAwareRendererInterface::CONTEXT_DEBUG_SUFFIX => $suffix,
+        ]));
     }
 
     private function getTestSubject(): HookDebugCommentRenderer
