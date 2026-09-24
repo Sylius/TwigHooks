@@ -16,6 +16,7 @@ namespace Sylius\TwigHooks\Hook\Renderer;
 use Sylius\TwigHooks\Bag\DataBag;
 use Sylius\TwigHooks\Bag\ScalarDataBag;
 use Sylius\TwigHooks\Hook\Metadata\HookMetadata;
+use Sylius\TwigHooks\Hookable\Checker\HookableConditionCheckerInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadataFactoryInterface;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
 use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
@@ -30,6 +31,7 @@ final class HookRenderer implements HookRendererInterface
         private readonly ContextProviderInterface $contextProvider,
         private readonly ConfigurationProviderInterface $configurationProvider,
         private readonly HookableMetadataFactoryInterface $hookableMetadataFactory,
+        private readonly HookableConditionCheckerInterface $hookableConditionChecker,
     ) {
     }
 
@@ -46,6 +48,11 @@ final class HookRenderer implements HookRendererInterface
             $hookMetadata = new HookMetadata($hookable->hookName, new DataBag($hookContext));
 
             $context = $this->contextProvider->provide($hookable, $hookContext);
+
+            if (!$this->hookableConditionChecker->isEnabled($hookable, $context)) {
+                continue;
+            }
+
             $configuration = $this->configurationProvider->provide($hookable);
 
             $hookableMetadata = $this->hookableMetadataFactory->create(

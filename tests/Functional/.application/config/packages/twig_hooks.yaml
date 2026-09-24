@@ -35,3 +35,11 @@ sylius_twig_hooks:
         'hookable_twig_component':
             dummy:
                 component: 'app:dummy'
+
+        'enabled_by_condition.index':
+            with_condition_true:
+                template: 'enabled_by_condition/index/block.html.twig'
+                condition: '@=show === true'
+            with_condition_false:
+                template: 'enabled_by_condition/index/block.html.twig'
+                condition: '@=show === false'

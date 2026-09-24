@@ -27,6 +27,8 @@ abstract class AbstractHookable
     /** @var array<string, mixed> */
     public readonly array $configuration;
 
+    public readonly ?string $condition;
+
     private readonly ?int $priority;
 
     public const DEFAULT_PRIORITY = 0;
@@ -41,6 +43,7 @@ abstract class AbstractHookable
         array $context = [],
         array $configuration = [],
         ?int $priority = null,
+        ?string $condition = null,
     ) {
         $this->id = sprintf('%s#%s', $hookName, $name);
         $this->hookName = $hookName;
@@ -48,6 +51,7 @@ abstract class AbstractHookable
         $this->context = $context;
         $this->configuration = $configuration;
         $this->priority = $priority;
+        $this->condition = $condition;
     }
 
     public function priority(): int

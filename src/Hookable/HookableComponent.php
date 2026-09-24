@@ -28,8 +28,9 @@ class HookableComponent extends AbstractHookable
         array $context = [],
         array $configuration = [],
         ?int $priority = null,
+        ?string $condition = null,
     ) {
-        parent::__construct($hookName, $name, $context, $configuration, $priority);
+        parent::__construct($hookName, $name, $context, $configuration, $priority, $condition);
     }
 
     public function toArray(): array
@@ -41,6 +42,7 @@ class HookableComponent extends AbstractHookable
             'props' => $this->props,
             'context' => $this->context,
             'configuration' => $this->configuration,
+            'condition' => $this->condition,
             'priority' => $this->priority(),
         ];
     }

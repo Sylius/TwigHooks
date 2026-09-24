@@ -16,10 +16,13 @@ namespace Sylius\TwigHooks\DependencyInjection;
 use Sylius\TwigHooks\Hookable\DisabledHookable;
 use Sylius\TwigHooks\Hookable\HookableComponent;
 use Sylius\TwigHooks\Hookable\HookableTemplate;
+use Sylius\TwigHooks\Provider\Exception\InvalidExpressionException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\ExpressionLanguage\Parser;
 
 final class SyliusTwigHooksExtension extends Extension
 {
@@ -46,11 +49,15 @@ final class SyliusTwigHooksExtension extends Extension
      */
     private function registerHooks(ContainerBuilder $container, array $hooks, array $supportedHookableTypes): void
     {
+        $expressionLanguage = new ExpressionLanguage();
+
         foreach ($hooks as $hookName => $hookables) {
             foreach ($hookables as $hookableName => $hookable) {
                 if (!array_key_exists($hookable['type'], $supportedHookableTypes)) {
                     throw new \InvalidArgumentException(sprintf('Hookable type "%s" is not supported.', $hookable['type']));
                 }
+
+                $this->lintCondition($expressionLanguage, $hookName, $hookableName, $hookable);
 
                 $this->registerHookable(
                     $container,
@@ -60,6 +67,33 @@ final class SyliusTwigHooksExtension extends Extension
                     $hookable,
                 );
             }
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $hookable
+     */
+    private function lintCondition(ExpressionLanguage $expressionLanguage, string $hookName, string $hookableName, array $hookable): void
+    {
+        $condition = $hookable['condition'] ?? null;
+
+        if (null === $condition || !defined(Parser::class . '::IGNORE_UNKNOWN_VARIABLES')) {
+            return;
+        }
+
+        try {
+            $expressionLanguage->lint(substr($condition, 2), [], Parser::IGNORE_UNKNOWN_VARIABLES);
+        } catch (\Throwable $e) {
+            throw new InvalidExpressionException(
+                sprintf(
+                    'Failed to lint the "%s" condition of the "%s" hookable in the "%s" hook. Error: %s".',
+                    $condition,
+                    $hookableName,
+                    $hookName,
+                    $e->getMessage(),
+                ),
+                previous: $e,
+            );
         }
     }
 
@@ -99,7 +133,7 @@ final class SyliusTwigHooksExtension extends Extension
                 $hookable['context'],
                 $hookable['configuration'],
                 $hookable['priority'],
-                $hookable['enabled'],
+                $hookable['condition'],
             ])
             ->addTag('sylius_twig_hooks.hookable', ['priority' => $hookable['priority']])
         ;
@@ -124,7 +158,7 @@ final class SyliusTwigHooksExtension extends Extension
                 $hookable['context'],
                 $hookable['configuration'],
                 $hookable['priority'],
-                $hookable['enabled'],
+                $hookable['condition'],
             ])
             ->addTag('sylius_twig_hooks.hookable', ['priority' => $hookable['priority']])
         ;

@@ -67,6 +67,7 @@ final class ConfigurationTest extends TestCase
                             'enabled' => true,
                             'component' => null,
                             'props' => [],
+                            'condition' => null,
                         ],
                     ],
                 ],
@@ -122,6 +123,7 @@ final class ConfigurationTest extends TestCase
                             'component' => 'MyAwesomeComponent',
                             'template' => null,
                             'props' => [],
+                            'condition' => null,
                         ],
                     ],
                 ],
@@ -156,6 +158,7 @@ final class ConfigurationTest extends TestCase
                             'component' => null,
                             'template' => 'some_target.html.twig',
                             'props' => [],
+                            'condition' => null,
                         ],
                     ],
                 ],
@@ -199,6 +202,61 @@ final class ConfigurationTest extends TestCase
                 ],
             ],
             '"Props" cannot be defined for non-component hookables.',
+        );
+    }
+
+    public function testItAllowsToDefineCondition(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                [
+                    'hooks' => [
+                        'some_hook' => [
+                            'some_hookable' => [
+                                'template' => 'some_target.html.twig',
+                                'condition' => '@=user != null',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'hooks' => [
+                    'some_hook' => [
+                        'some_hookable' => [
+                            'type' => 'template',
+                            'context' => [],
+                            'configuration' => [],
+                            'priority' => null,
+                            'enabled' => true,
+                            'component' => null,
+                            'template' => 'some_target.html.twig',
+                            'props' => [],
+                            'condition' => '@=user != null',
+                        ],
+                    ],
+                ],
+            ],
+            'hooks.*',
+        );
+    }
+
+    public function testItThrowsExceptionWhenConditionDoesNotStartWithExpressionPrefix(): void
+    {
+        $this->assertConfigurationIsInvalid(
+            [
+                [
+                    'hooks' => [
+                        'some_hook' => [
+                            'some_hookable' => [
+                                'template' => 'some_target.html.twig',
+                                'condition' => 'user is not null',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'must be an expression prefixed with "@=".',
         );
     }
 

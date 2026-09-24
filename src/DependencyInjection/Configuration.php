@@ -129,6 +129,24 @@ final class Configuration implements ConfigurationInterface
                                     ->prototype('variable')->end()
                                 ->end()
                                 ->integerNode('priority')->defaultNull()->end()
+                                ->scalarNode('condition')
+                                    ->defaultNull()
+                                    ->validate()
+                                        ->always(function ($value) {
+                                            if (null === $value) {
+                                                return $value;
+                                            }
+
+                                            if (!is_string($value) || !str_starts_with($value, '@=')) {
+                                                throw new \InvalidArgumentException(
+                                                    sprintf('The "condition" value must be an expression prefixed with "@=". Got "%s".', get_debug_type($value)),
+                                                );
+                                            }
+
+                                            return $value;
+                                        })
+                                    ->end()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()

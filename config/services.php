@@ -18,6 +18,8 @@ use Sylius\TwigHooks\Hook\Normalizer\Name\NameNormalizerInterface;
 use Sylius\TwigHooks\Hook\Normalizer\Prefix\CompositePrefixNormalizer;
 use Sylius\TwigHooks\Hook\Normalizer\Prefix\PrefixNormalizerInterface;
 use Sylius\TwigHooks\Hook\Normalizer\Prefix\RemoveSectionPartNormalizer;
+use Sylius\TwigHooks\Hookable\Checker\HookableConditionChecker;
+use Sylius\TwigHooks\Hookable\Checker\HookableConditionCheckerInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadataFactory;
 use Sylius\TwigHooks\Provider\ComponentPropsProvider;
 use Sylius\TwigHooks\Provider\DefaultConfigurationProvider;
@@ -52,6 +54,13 @@ return static function (ContainerConfigurator $configurator): void {
         ])
     ;
     $services->alias(TemplateConfigurationProviderInterface::class, 'sylius_twig_hooks.provider.template_configuration');
+
+    $services->set('sylius_twig_hooks.checker.hookable_condition', HookableConditionChecker::class)
+        ->args([
+            inline_service(ExpressionLanguage::class),
+        ])
+    ;
+    $services->alias(HookableConditionCheckerInterface::class, 'sylius_twig_hooks.checker.hookable_condition');
 
     $services->set('sylius_twig_hooks.registry.hookables', HookablesRegistry::class)
         ->args([

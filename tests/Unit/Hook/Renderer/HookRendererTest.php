@@ -17,6 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sylius\TwigHooks\Hook\Renderer\HookRenderer;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
+use Sylius\TwigHooks\Hookable\Checker\HookableConditionCheckerInterface;
 use Sylius\TwigHooks\Hookable\Metadata\HookableMetadataFactoryInterface;
 use Sylius\TwigHooks\Hookable\Renderer\HookableRendererInterface;
 use Sylius\TwigHooks\Provider\ConfigurationProviderInterface;
@@ -41,6 +42,9 @@ final class HookRendererTest extends TestCase
     /** @var HookableMetadataFactoryInterface&MockObject */
     private HookableMetadataFactoryInterface $hookableMetadataFactory;
 
+    /** @var HookableConditionCheckerInterface&MockObject */
+    private HookableConditionCheckerInterface $hookableConditionChecker;
+
     protected function setUp(): void
     {
         $this->hookablesRegistry = $this->createMock(HookablesRegistry::class);
@@ -48,6 +52,7 @@ final class HookRendererTest extends TestCase
         $this->contextProvider = $this->createMock(ContextProviderInterface::class);
         $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
         $this->hookableMetadataFactory = $this->createMock(HookableMetadataFactoryInterface::class);
+        $this->hookableConditionChecker = $this->createMock(HookableConditionCheckerInterface::class);
     }
 
     public function testItReturnsRenderedHookables(): void
@@ -58,6 +63,7 @@ final class HookRendererTest extends TestCase
         $this->hookablesRegistry->method('getEnabledFor')->willReturn([$hookableOne, $hookableTwo]);
         $this->contextProvider->method('provide')->willReturn([]);
         $this->configurationProvider->method('provide')->willReturn([]);
+        $this->hookableConditionChecker->method('isEnabled')->willReturn(true);
 
         $this->hookableRenderer->expects($this->exactly(2))->method('render')->willReturnCallback(
             static fn (AbstractHookable $hookable): string => match ($hookable) {
@@ -86,6 +92,26 @@ final class HookRendererTest extends TestCase
         $this->assertSame('', $result);
     }
 
+    public function testItSkipsHookablesThatAreNotEnabledByTheirCondition(): void
+    {
+        $hookableOne = HookableTemplateMotherObject::withName('first_hook');
+        $hookableTwo = HookableTemplateMotherObject::withName('second_hook');
+
+        $this->hookablesRegistry->method('getEnabledFor')->willReturn([$hookableOne, $hookableTwo]);
+        $this->contextProvider->method('provide')->willReturn([]);
+        $this->configurationProvider->method('provide')->willReturn([]);
+
+        $this->hookableConditionChecker->expects($this->exactly(2))->method('isEnabled')->willReturnCallback(
+            static fn (AbstractHookable $hookable): bool => $hookable === $hookableOne,
+        );
+
+        $this->hookableRenderer->expects($this->once())->method('render')->willReturn('hookable_one_rendered');
+
+        $result = $this->getTestSubject()->render(['hook_name']);
+
+        $this->assertSame('hookable_one_rendered', $result);
+    }
+
     private function getTestSubject(): HookRenderer
     {
         return new HookRenderer(
@@ -94,6 +120,7 @@ final class HookRendererTest extends TestCase
             $this->contextProvider,
             $this->configurationProvider,
             $this->hookableMetadataFactory,
+            $this->hookableConditionChecker,
         );
     }
 }
