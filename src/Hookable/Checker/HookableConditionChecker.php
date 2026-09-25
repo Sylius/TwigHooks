@@ -17,6 +17,7 @@ use Sylius\TwigHooks\Bag\DataBag;
 use Sylius\TwigHooks\Hookable\AbstractHookable;
 use Sylius\TwigHooks\Provider\Exception\InvalidExpressionException;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class HookableConditionChecker implements HookableConditionCheckerInterface
@@ -24,6 +25,7 @@ final class HookableConditionChecker implements HookableConditionCheckerInterfac
     public function __construct(
         private readonly ExpressionLanguage $expressionLanguage,
         private readonly ?AuthorizationCheckerInterface $authorizationChecker = null,
+        private readonly ?TokenStorageInterface $tokenStorage = null,
     ) {
     }
 
@@ -38,7 +40,10 @@ final class HookableConditionChecker implements HookableConditionCheckerInterfac
             return true;
         }
 
-        $values = array_merge($context, ['_context' => new DataBag($context)]);
+        $values = array_merge($context, [
+            'user' => $this->tokenStorage?->getToken()?->getUser(),
+            '_context' => new DataBag($context),
+        ]);
 
         $expressionLanguage = clone $this->expressionLanguage;
         $expressionLanguage->register('is_granted', static fn (string ...$arguments): string => sprintf('is_granted(%s)', implode(', ', $arguments)), function (array $variables, string $attribute, mixed $subject = null): bool {
