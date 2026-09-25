@@ -58,6 +58,7 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set('sylius_twig_hooks.checker.hookable_condition', HookableConditionChecker::class)
         ->args([
             inline_service(ExpressionLanguage::class),
+            service('security.authorization_checker')->nullOnInvalid(),
         ])
     ;
     $services->alias(HookableConditionCheckerInterface::class, 'sylius_twig_hooks.checker.hookable_condition');
